@@ -1,11 +1,18 @@
 //Buyer or Seller
-var question = 'Are you a Buyer or Seller?'
-console.log(question)
+var readline = require('readline');
 
-var choice = require(choice)
+var rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout
+});
 
-if (toString(choice) == 'Buyer') {
-    console.log('You are a Buyer')
-} else if (toString(choice) == 'Seller') {
-	console.log('You are a Seller')
-}
+rl.question("Are you a Buyer or Seller?", function(answer) {
+	if (answer == 'Buyer') {
+    	console.log('You are a Buyer')
+	} else if (answer == 'Seller') {
+		console.log('You are a Seller')
+	} else {
+		console.log('Take a hike!')
+	}
+	rl.close();
+});
