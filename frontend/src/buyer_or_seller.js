@@ -66,9 +66,3 @@ function Seller() {
 	Total = Total + Sub_Total;
 	console.log('Total: '+Total); */
 }
-
-
-
-
-
-
