@@ -1,7 +1,21 @@
 doctype html
 html
   head
-    title= title
+    title #{title} - Mushrooms
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    header
+      h1 Mushrooms
+    .container
+      .main-content
+        block content
+      .sidebar
+        block sidebar
+
+ 
+
+  footer
+      p Contact us for more details 
+      
+      Australia Brazil Canada China France Germany India Italy Japan Mexico Netherlands Spain 
+
