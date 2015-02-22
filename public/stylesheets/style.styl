@@ -8,10 +8,12 @@
  */
 @import url('http://fonts.googleapis.com/css?family=Quicksand')
 
+
 /*
  * Nib provides a CSS reset
  */
 global-reset()
+
 
 /*
  * Store the main color and
@@ -19,17 +21,22 @@ global-reset()
  */
 main-color = #fa5b4d
 background-color = #faf9f0
+second-color =  #1a1a1a
 
 body
   font-family 'Georgia'
   background-color background-color
   color #444
+  height 10%
+
+
+
 
 header
   font-family 'Quicksand'
   padding 50px 10px
   color #fff
-  font-size 25px
+  font-size 45px
   text-align center
 
   /*
@@ -41,7 +48,8 @@ header
   text-shadow 0px -1px 0px darken(main-color, 30%)
 
 .container
-  width 500px
+  width 800px
+  max-width 90%
   margin 50px auto
   overflow hidden
 
@@ -54,7 +62,7 @@ header
 
 .sidebar
   float left
-  width 200px
+  width 300px
 
   .widget
 
@@ -85,9 +93,52 @@ header
 p
   line-height 1.8
 
+
 footer
-  width 500px
-  margin 50px auto
-  border-top 1px dotted #ccc
-  padding-top 5px
-  font-size 13px
+
+  margin 0px 0px
+  height 50%
+  padding-bottom 0px 0px
+  background-color second-color
+  font-family 'Quicksand'
+  padding 50px 10px
+  color #fff
+  font-size 15px
+  text-align center
+
+  /*
+   * Note the use of the `main-color`
+   * variable and the `darken` function
+   */
+  border-bottom 1px solid lighten(main-color, 50%)
+
+  .facebook
+    padding-top 7px
+    display inline-block
+    width 29px
+    height 29px
+    margin 0 10px 0 0
+    text-indent -9999px
+    background url("/img/small-facebook.png") no-repeat
+
+  .twitter
+    padding-top 7px
+    display inline-block
+    width 29px
+    height 29px
+    margin 0 10px 0 0
+    text-indent -9999px
+    &:last-child
+      margin-right 0
+    &.rss
+      background url("/img/small-rss.png") no-repeat
+    background url("/img/small-twitter.png") no-repeat
+footer a, footer a:link, footer a:focus
+  color #999
+  -webkit-transition all 0.3s ease-in-out
+  -moz-transition all 0.3s ease-in-out
+  -o-transition all 0.3s ease-in-out
+  -ms-transition all 0.3s ease-in-out
+  transition all 0.3s ease-in-out
+
+  
