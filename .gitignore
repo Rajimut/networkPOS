@@ -7,3 +7,5 @@ config/*.ns
 *.ns
 *.lock
 *.git-log
+sftp-config.json
+

@@ -1,0 +1,160 @@
+/*
+ * Import nib
+ */
+@import 'nib'
+
+/*
+ * Grab a custom font from Google
+ */
+
+@import url('http://fonts.googleapis.com/css?family=Quicksand')
+
+
+/*
+ * Nib provides a CSS reset
+ */
+
+global-reset()
+
+
+/*
+ * Store the main color and
+ * background color as variables
+ */
+
+main-color = #fa5b4d
+background-color = #faf9f0
+second-color =  #1a1a1a
+
+html
+  position relative
+  min-height 100%
+
+/* THE ABOVE CODE OS USED FOR MAKING - STICKY FOOTER */
+
+body
+  margin 0 0 100px
+  /* used for making bottom = footer height - STICKY FOOTER */
+  font-family 'Georgia'
+  background-color background-color
+  color #444
+
+
+
+
+header
+  font-family 'Quicksand'
+  padding 50px 10px
+  color #fff
+  font-size 45px
+  text-align center
+
+  /*
+   * Note the use of the `main-color`
+   * variable and the `darken` function
+   */
+  background-color main-color
+  border-bottom 1px solid darken(main-color, 30%)
+  text-shadow 0px -1px 0px darken(main-color, 30%)
+
+.container
+  width 800px
+  height auto
+  max-width 90%
+  margin 50px auto
+  overflow hidden
+
+.main-content
+  float left
+  width 300px
+  padding-bottom 3em
+
+  p
+    margin-bottom 20px
+
+.sidebar
+  float left
+  width 300px
+
+  .widget
+
+    /*
+     * Note the lack of vendor
+     * prefixes here. Nib will
+     * add them for us
+     */
+    
+    border-radius 3px
+    border 1px solid #ccc
+    margin-left 20px
+    background-color background-color
+    box-shadow inset 0px 0px 0px 3px rgba(#fff, 0.8), 0px 3px 0px -2px rgba(#000, 0.1)
+
+    h1
+      font-family 'Quicksand'
+      margin 13px 10px 4px
+      padding-bottom 10px
+      border-bottom 1px dotted #ddd
+      border-radius 2px 2px 0px 0px
+      margin-bottom 10px
+
+    p
+      font-size 13px
+      padding 0px 10px
+      margin-bottom 10px
+
+p
+  line-height 1.8
+
+footer
+
+  position absolute /* STICKY FOOTER */
+  height 100px      /* STICKY FOOTER */
+  width 100%        /* STICKY FOOTER */
+  left 0            /* STICKY FOOTER */
+  bottom 0          /* STICKY FOOTER  */
+
+  
+  background-color second-color
+  font-family 'Quicksand'
+  padding 30px 0px
+  color #fff
+  font-size 15px
+  text-align center
+
+  /*
+   * Note the use of the `main-color`
+   * variable and the `darken` function
+   */
+  border-bottom 1px solid lighten(main-color, 50%)
+
+  .facebook
+    padding-top 7px
+    display inline-block
+    width 29px
+    height 29px
+    margin 0 10px 0 0
+    text-indent -9999px
+    background url("/img/small-facebook.png") no-repeat
+
+  .twitter
+    padding-top 7px
+    display inline-block
+    width 29px
+    height 29px
+    margin 0 10px 0 0
+    text-indent -9999px
+    &:last-child
+      margin-right 0
+    &.rss
+      background url("/img/small-rss.png") no-repeat
+    background url("/img/small-twitter.png") no-repeat
+footer a, footer a:link, footer a:focus
+  color #999
+  -webkit-transition all 0.3s ease-in-out
+  -moz-transition all 0.3s ease-in-out
+  -o-transition all 0.3s ease-in-out
+  -ms-transition all 0.3s ease-in-out
+  transition all 0.3s ease-in-out
+
+  
