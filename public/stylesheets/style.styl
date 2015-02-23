@@ -6,12 +6,14 @@
 /*
  * Grab a custom font from Google
  */
+
 @import url('http://fonts.googleapis.com/css?family=Quicksand')
 
 
 /*
  * Nib provides a CSS reset
  */
+
 global-reset()
 
 
@@ -19,15 +21,23 @@ global-reset()
  * Store the main color and
  * background color as variables
  */
+
 main-color = #fa5b4d
 background-color = #faf9f0
 second-color =  #1a1a1a
 
+html
+  position relative
+  min-height 100%
+
+/* THE ABOVE CODE OS USED FOR MAKING - STICKY FOOTER */
+
 body
+  margin 0 0 100px
+  /* used for making bottom = footer height - STICKY FOOTER */
   font-family 'Georgia'
   background-color background-color
   color #444
-  height 10%
 
 
 
@@ -49,6 +59,7 @@ header
 
 .container
   width 800px
+  height auto
   max-width 90%
   margin 50px auto
   overflow hidden
@@ -56,6 +67,7 @@ header
 .main-content
   float left
   width 300px
+  padding-bottom 3em
 
   p
     margin-bottom 20px
@@ -71,6 +83,7 @@ header
      * prefixes here. Nib will
      * add them for us
      */
+    
     border-radius 3px
     border 1px solid #ccc
     margin-left 20px
@@ -93,15 +106,18 @@ header
 p
   line-height 1.8
 
-
 footer
 
-  margin 0px 0px
-  height 50%
-  padding-bottom 0px 0px
+  position absolute /* STICKY FOOTER */
+  height 100px      /* STICKY FOOTER */
+  width 100%        /* STICKY FOOTER */
+  left 0            /* STICKY FOOTER */
+  bottom 0          /* STICKY FOOTER  */
+
+  
   background-color second-color
   font-family 'Quicksand'
-  padding 50px 10px
+  padding 30px 0px
   color #fff
   font-size 15px
   text-align center
