@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  ul.nav.nav-tabs
+    li(role='presentation')
+      a(href='/POSterminal')  Sample POS terminal
+      |   
+    li(role='presentation')
+        a(href='/login') My Dashboard
+      |   
+    li(role='presentation')
+        a(href='/login') Transactions
+      |   
+    li.active(role='presentation')
+        a(href='/graphicalview') Graphical View
+      |   
+    li(role='presentation')
+        a(href='/login') Applications hooked
+      |   
+    li(role='presentation')
+        a(href='/seller-profile') My Profile
+    
+
+  div.row-fluid
+    .page-header.h3 Graphs
+    .col-md-6
+      .panel.panel-default
+        .panel-heading
+          h3 Quarterly Sales
+        |                 
+        .panel-body
+          #quarterChart
+    |         
+    .col-md-6
+      .panel.panel-default
+        .panel-heading
+          h3 Details per quarter
+        |                 
+        #detailChart.panel-body
+    

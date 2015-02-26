@@ -1,7 +1,27 @@
 extends layout
 
 block content
-    div.row-fluid
+ 
+  ul.nav.nav-tabs(style='margin-left:11%; margin-right:11%;')
+    li(role='presentation')
+      a.h4(href='/myreceipts') My Receipts
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Today's expenditure
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Transactions
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Categories
+      |   
+    li(role='presentation')
+        a.h4(href='/login') My APIs
+      |   
+    li.active(role='presentation')
+        a.h4(href='/buyer-profile') My Profile    
+  
+  div.row-fluid
       .page-header.h3 My Profile
       form.login-form.form-horizontal(method='post', role='form')
         input(name='_csrf', type='hidden')
