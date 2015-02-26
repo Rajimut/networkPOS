@@ -4,8 +4,8 @@ block content
   h1= title
   p Welcome to #{title}
     form#formBuyerOrSeller(name="buyerorseller",method="post",action="/buyerorseller")
-        button.btn(data-action="Seller") Seller
-        button.btn(data-action="Buyer") Buyer
+        button.btn(value="Seller") Seller
+        button.btn(value="Buyer") Buyer
 
 block sidebar
   .widget

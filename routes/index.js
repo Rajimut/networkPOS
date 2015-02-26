@@ -10,18 +10,18 @@ router.get('/', function(req, res, next) {
 /* POST to find if customer is seller or buyer */
 router.post('/buyerorseller', function(req, res) {
 
-    res.location("login");
-    res.redirect("login");
+    //res.location("login");
+    //res.redirect("login");
     
-    /* if (req.data-action=="Buyer") {
-        res.location("buyer-login");
-        res.redirect("buyer-login");
+    if (req.session.value=="Buyer") {
+        /* res.location("buyer-login");
+        res.redirect("buyer-login"); */
     }
 
-    if (req.data-action=="Seller") {
-        res.location("seller-login");
-        res.redirect("seller-login");
-    } */
+    if (req.session.value=="Seller") {
+        res.location("login");
+        res.redirect("login");
+    }
 
     /* var actions = {
         clickSeller: function() {

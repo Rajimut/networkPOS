@@ -1,5 +1,5 @@
 var express = require('express');
-var  stylus = require('stylus');
+var stylus = require('stylus');
 var nib = require('nib');
 
 var path = require('path');
@@ -64,7 +64,6 @@ require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
-//app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({ secret: 'ilovemushrooms' })); // session secret
