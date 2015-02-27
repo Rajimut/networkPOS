@@ -10,18 +10,18 @@ router.get('/', function(req, res, next) {
 /* POST to find if customer is seller or buyer */
 router.post('/buyerorseller', function(req, res) {
 
-    //res.location("login");
-    //res.redirect("login");
+    res.location("login");
+    res.redirect("login");
     
-    if (req.session.value=="Buyer") {
+    /* if (req.session.value=="Buyer") {
         /* res.location("buyer-login");
-        res.redirect("buyer-login"); */
+        res.redirect("buyer-login");
     }
 
     if (req.session.value=="Seller") {
         res.location("login");
         res.redirect("login");
-    }
+    } */
 
     /* var actions = {
         clickSeller: function() {
@@ -85,6 +85,30 @@ router.get('/profile', isLoggedIn, function(req, res) {
     });
 });
 
+router.get('/buyer-profile', isLoggedIn, function(req, res) {
+    res.render('buyer-profile.jade', {
+        user : req.user // get the user out of session and pass to template
+    });
+});
+
+router.get('/seller-profile', isLoggedIn, function(req, res) {
+    res.render('seller-profile.jade', {
+        user : req.user // get the user out of session and pass to template
+    });
+});
+
+router.get('/graphicalview', isLoggedIn, function(req, res) {
+    res.render('graphicalview.jade', {
+        user : req.user // get the user out of session and pass to template
+    });
+});
+
+router.get('/myreceipts', isLoggedIn, function(req, res) {
+    res.render('myreceipts.jade', {
+        user : req.user // get the user out of session and pass to template
+    });
+});
+
 // =====================================
 // LOGOUT ==============================
 // =====================================
@@ -106,8 +130,13 @@ function isLoggedIn(req, res, next) {
 
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
-    res.render('helloworld', { title: 'Hello, World!' })
+    res.render('helloworld', { title: 'Hello, World!' });
 });
+
+router.get('/POSterminal', isLoggedIn, function(req, res) {
+    res.render('POSterminal', { user : req.user, title: 'POSterminal' });
+});
+
 
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {

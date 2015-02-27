@@ -1,23 +1,23 @@
-doctype html
+
 html
   head
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    header
+      p Mushrooms
     title #{title} - Mushrooms
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css',rel='stylesheet')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
+
+  
   body
-    header
-      h1 Mushrooms
-    .container
-      .main-content
-        block content
-      .sidebar
-        block sidebar
+    div.container
+      block content  
     
-    
-
-  footer
-    .facebook
-    .twitter
-    p Contact us for more details 
-
-    Australia Brazil Canada China France Germany India Italy Japan Mexico Netherlands Spain 
-
+    #footer.footer
+      .facebook
+      .twitter
+      p 
+        span.large Australia Brazil Canada China France Germany India Italy Japan Mexico Netherlands Spain

@@ -1,0 +1,55 @@
+extends layout
+
+block content
+  ul.nav.nav-tabs
+    li.active(role='presentation')
+      a(href='/POSterminal')  Sample POS terminal
+      |   
+    li(role='presentation')
+        a(href='/login') My Dashboard
+      |   
+    li(role='presentation')
+        a(href='/login') Transactions
+      |   
+    li(role='presentation')
+        a(href='/graphicalview') Graphical View
+      |   
+    li(role='presentation')
+        a(href='/login') Applications hooked
+      |   
+    li(role='presentation')
+        a(href='/seller-profile') My Profile
+
+  div.row-fluid
+      .page-header.h3 Enter product details
+      form.form-horizontal(method='post', role='form')
+        input(name='_csrf', type='hidden')
+        .form-group
+          label.col-sm-2 Item Code
+          .col-sm-4
+            input.form-control(placeholder='e.g 56779GH7', required='required', name='ItemNumber', type='text')
+        .form-group
+          label.col-sm-2 Item Name
+          .col-sm-4
+            input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
+        .form-group
+          label.col-sm-2 Quantity
+          .col-sm-4
+            input.form-control(placeholder='e.g. 12', required='required', name='quantity', type='text')
+        .form-group
+          label.col-sm-2 Subtotal
+          .col-sm-4
+            input.form-control(placeholder=' ', required='required', name='Subtotal', type='text')
+        .form-group
+          label.col-sm-2 VAT
+          .col-sm-4
+            input.form-control(placeholder='e.g. 5%', required='required', name='VAT percentage', type='text')
+        .form-group
+          label.col-sm-2 Total
+          .col-sm-4
+            input.form-control(placeholder=' ', required='required', name='Total', type='text')
+        .form-group
+          .col-sm-offset-4.col-sm-8
+            button.login.btn.btn-primary.btn-lg(type='submit') Print
+        .pull-right
+          a(href='/') Return to home page      

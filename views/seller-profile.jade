@@ -1,7 +1,27 @@
 extends layout
 
 block content
-    div.row-fluid
+  ul.nav.nav-tabs
+    li(rle='presentation')
+      a(href='/POSterminal')  Sample POS terminal
+      |   
+    li(role='presentation')
+        a(href='/login') My Dashboard
+      |   
+    li(role='presentation')
+        a(href='/login') Transactions
+      |   
+    li(role='presentation')
+        a(href='/graphicalview') Graphical View
+      |   
+    li(role='presentation')
+        a(href='/login') Applications hooked
+      |   
+    li.active(role='presentation')
+        a(href='/seller-profile') My Profile
+
+
+  div.row-fluid
       .page-header.h3 My Profile
       form.login-form.form-horizontal(method='post', role='form')
         input(name='_csrf', type='hidden')

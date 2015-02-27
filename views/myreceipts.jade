@@ -1,0 +1,108 @@
+extends layout
+
+block content
+ 
+  ul.nav.nav-tabs
+    li.active(role='presentation')
+      a.h4(href='/myreceipts') My Receipts
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Today's expenditure
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Transactions
+      |   
+    li(role='presentation')
+        a.h4(href='/login') Categories
+      |   
+    li(role='presentation')
+        a.h4(href='/login') My APIs
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-profile') My Profile
+  
+
+  .col-md-2
+    .btn-group
+      .btn-group.btn-block
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Location
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Location')
+          li
+            a(role='menuitem', tabindex='-1',href='#') Austin
+          |       
+          li
+            a(role='menuitem', tabindex='-1',href='#') Houston
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') San Jose
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Chennai
+
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Categories
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Categories')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Restaurants
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cafes
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Pharmacy
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Clothing
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Salons
+
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Payment type
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Creditcard
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Visa
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cash
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Apple Pay    
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Amount
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+          li
+            a(role='menuitem', tabindex='-2',href='#') $0 - $5
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $6 - $10
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $11 - $15  
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $16 - $20  
+
+
+  .col-md-9 
+    .panel.panel-default
+      .panel-heading My latest receipts
+      |   
+      .panel-body
+        p     
+        table.table.table-striped

@@ -1,13 +1,12 @@
 extends layout
 
 block content
-    h1.
-    #title Mushrooms' User List
+    .page-header.h3 Mushrooms' User List
     ul
         each user, i in userlist
             li
-            table
-                a(href="mailto:#{user.email}")= user.username
+            table.table
+                a.h4(href="mailto:#{user.email}")= user.username
 
    
 block sidebar

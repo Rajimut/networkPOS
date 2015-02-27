@@ -1,18 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-    form#formBuyerOrSeller(name="buyerorseller",method="post",action="/buyerorseller")
-        button.btn(value="Seller") Seller
-        button.btn(value="Buyer") Buyer
-
-block sidebar
-  .widget
-    h1 About us
-    p
-      | asadsfdsfdfdfdfdcxcxxfdghf
-      | jhgjhhnbnbnbnbnbnb
-    p
-      | Vivamus hgh jhjghg jhjhghg
-      | Vivamus hgh jhjghg jhjhghg
+    h1= title
+    p Welcome to #{title}
+      form#formBuyerOrSeller(name="buyerorseller",method="post",action="/buyerorseller")
+          div.col-md-2
+            button.btn.btn-warning.btn-lg.btn-block(data-action="Seller")	Seller
+          div.col-md-2
+            button.btn.btn-warning.btn-lg.btn-block(data-action="Buyer")	Buyer
+            
+            //button.btn(data-action="Seller") Seller
+            //button.btn(data-action="Buyer") Buyer
+      div.col-md-4
+          div.widget
+            h1 About us
+            p
+              | asadsfdsfdfdfdfdcxcxxfdghf
+              | jhgjhhnbnbnbnbnbnb
+            p
+              | Vivamus hgh jhjghg jhjhghg
+              | Vivamus hgh jhjghg jhjhgh
