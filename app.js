@@ -45,7 +45,6 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use('/img', express.static('/public/img'));
 
-
 app.use(stylus.middleware( //added by RAJI
   { src: path.join(__dirname, '/public'),
   compile: compile //added by RAJI
@@ -62,7 +61,6 @@ mongoose.connect(configDB.url); //connect to the configDB
 
 require('./config/passport')(passport); // pass passport for configuration
 
-
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 
@@ -74,6 +72,12 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 //require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
+// Make our passport accessible to our router
+app.use(function(req,res,next){
+    req.passport = passport;
+    next();
+});
 
 // Make our db accessible to our router
 app.use(function(req,res,next){

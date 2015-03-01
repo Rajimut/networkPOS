@@ -45,34 +45,38 @@ router.post('/buyerorseller', function(req, res) {
 
 /* POST to Seller login form */
 router.get('/login', function(req, res) {
-
     // render the page and pass in any flash data if it exists
     res.render('login', { message: req.flash('loginMessage') }); 
 });
 
 // Process the login form
-router.post('/login', passport.authenticate('local-login', {
+router.post('/login', function(req, res) {
+    var passport = req.passport;
+    passport.authenticate('local-login', {
         successRedirect : '/profile', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-}));
+    });
+});
 
 // =====================================
 // SIGNUP ==============================
 // =====================================
 // show the signup form
 router.get('/signup', function(req, res) {
-
     // render the page and pass in any flash data if it exists
     res.render('signup', { message: req.flash('signupMessage') });
 });
 
 // Process the signup form
-router.post('/signup', passport.authenticate('local-signup', {
+router.post('/signup', function(req, res) {
+    var passport = req.passport;
+    passport.authenticate('local-signup', {
         successRedirect : '/profile', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-}));
+    });
+});
 
 // =====================================
 // PROFILE SECTION =====================
