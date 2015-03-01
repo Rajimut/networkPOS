@@ -52,7 +52,7 @@ router.get('/login', function(req, res) {
 
 // Process the login form
 router.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
@@ -62,14 +62,14 @@ router.post('/login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/signup', function(req, res) {
-
+    res.render('signup.jade')
     // render the page and pass in any flash data if it exists
-    res.render('signup', { message: req.flash('signupMessage') });
+    //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 // Process the signup form
 router.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
@@ -79,11 +79,6 @@ router.post('/signup', passport.authenticate('local-signup', {
 // =====================================
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
-router.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.jade', {
-        user : req.user // get the user out of session and pass to template
-    });
-});
 
 router.get('/buyer-profile', isLoggedIn, function(req, res) {
     res.render('buyer-profile.jade', {
