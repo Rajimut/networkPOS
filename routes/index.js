@@ -9,52 +9,41 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-/* POST to find if customer is seller or buyer */
-router.post('/buyerorseller', function(req, res) {
-
-    res.location("login");
-    res.redirect("login");
-    
-    /* if (req.session.value=="Buyer") {
-        /* res.location("buyer-login");
-        res.redirect("buyer-login");
-    }
-
-    if (req.session.value=="Seller") {
-        res.location("login");
-        res.redirect("login");
-    } */
-
-    /* var actions = {
-        clickSeller: function() {
-            res.redirect("seller-login");
-        },
-        clickBuyer: function() {
-            res.redirect("buyer-login");   
-        }
-    } */
-
-    // Customer is a seller
-    // $('[data-action="Seller"]').click(actions.clickSeller());
-    // $('[data-action="Buyer"]').click(actions.clickBuyer());
-    
-    /* Customer is a buyer
-    $('[data-action="Buyer"]').click({
-        res.location("buyer-login");
-        res.redirect("buyer-login");
-    }); */
+/* POST customer is a Buyer */
+router.post('/buyer', function(req, res) {
+    res.location("buyer-login");
+    res.redirect("buyer-login");
 });
 
-/* POST to Seller login form */
-router.get('/login', function(req, res) {
+/* POST customer is a Seller */
+router.post('/seller', function(req, res) {
+    res.location("seller-login");
+    res.redirect("seller-login");
+});
+
+/* POST to Buyer login form */
+router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('login', { message: req.flash('loginMessage') });
+    res.render('buyer-login', { message: req.flash('loginMessage') });
 });
 
 // Process the login form
-router.post('/login', passport.authenticate('local-login', {
+router.post('/buyer-login', passport.authenticate('local-login', {
         successRedirect : '/myreceipts', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureRedirect : '/buyer-login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+}));
+
+/* POST to Seller login form */
+router.get('/seller-login', function(req, res) {
+    // render the page and pass in any flash data if it exists
+    res.render('seller-login', { message: req.flash('loginMessage') });
+});
+
+// Process the login form
+router.post('/seller-login', passport.authenticate('local-login', {
+        successRedirect : '/seller-profile', // redirect to the secure profile section
+        failureRedirect : '/seller-login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
 

@@ -3,14 +3,12 @@ extends layout
 block content
     h1= title
     p Welcome to #{title}
-      form#formBuyerOrSeller(name="buyerorseller",method="post",action="/buyerorseller")
+      form#formSeller(name="seller",method="post",action="/seller")
           div.col-md-2
             button.btn.btn-warning.btn-lg.btn-block(data-action="Seller")	Seller
+      form#formBuyer(name="buyer",method="post",action="/buyer")
           div.col-md-2
             button.btn.btn-warning.btn-lg.btn-block(data-action="Buyer")	Buyer
-            
-            //button.btn(data-action="Seller") Seller
-            //button.btn(data-action="Buyer") Buyer
       div.col-md-4
           div.widget
             h1 About us
