@@ -47,7 +47,7 @@ router.post('/buyerorseller', function(req, res) {
 router.get('/login', function(req, res) {
 
     // render the page and pass in any flash data if it exists
-    res.render('login', { message: req.flash('loginMessage') }); 
+    res.render('login', { message: req.flash('loginMessage') });
 });
 
 // Process the login form
@@ -62,7 +62,7 @@ router.post('/login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/signup', function(req, res) {
-    res.render('signup.jade')
+    res.render('signup.jade');
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
