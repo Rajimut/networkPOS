@@ -1,6 +1,8 @@
 var express = require('express');
-var router = express.Router();
+var router = express();
 var passport = require('passport');
+
+module.exports = function (router, passport) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,48 +48,38 @@ router.post('/buyerorseller', function(req, res) {
 /* POST to Seller login form */
 router.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('login', { message: req.flash('loginMessage') }); 
+    res.render('login', { message: req.flash('loginMessage') });
 });
 
 // Process the login form
-router.post('/login', function(req, res) {
-    var passport = req.passport;
-    passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
+router.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-    });
-});
+}));
 
 // =====================================
 // SIGNUP ==============================
 // =====================================
 // show the signup form
 router.get('/signup', function(req, res) {
+    res.render('signup.jade');
     // render the page and pass in any flash data if it exists
-    res.render('signup', { message: req.flash('signupMessage') });
+    //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 // Process the signup form
-router.post('/signup', function(req, res) {
-    var passport = req.passport;
-    passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
+router.post('/signup', passport.authenticate('local-signup', {
+        successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
-    });
-});
+}));
 
 // =====================================
 // PROFILE SECTION =====================
 // =====================================
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
-router.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.jade', {
-        user : req.user // get the user out of session and pass to template
-    });
-});
 
 router.get('/buyer-profile', isLoggedIn, function(req, res) {
     res.render('buyer-profile.jade', {
@@ -170,7 +162,7 @@ router.post('/adduser', function(req, res) {
 
     // Set our collection
     var collection = db.get('usercollection');
-
+    console.log(collection + "username: " + userName + " email: " + userEmail);
     // Submit to the DB
     collection.insert({
         "username" : userName,
@@ -188,5 +180,4 @@ router.post('/adduser', function(req, res) {
         }
     });
 });
-
-module.exports = router;
+}

@@ -1,44 +1,45 @@
-doctype html
+extends layout
 
-html
-  head
-    title Node Authentication
-    |     
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
-    // load bootstrap css
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
-    // load fontawesome
-    style.
-      body        { padding-top:80px; }
-  body
-    .main-content
-      .col-sm-6.col-sm-offset-3
-        h1
-          span.fa.fa-sign-in
-          |  Signup
-        |     
-        form(action='/signup', method='post')
-          .form-group
-            label Email
-            |             
-            input.form-control(type='text', name='email')
-          |         
-          .form-group
-            label Password
-            |             
-            input.form-control(type='password', name='password')
-          |         
-          button.btn.btn-warning.btn-lg(type='submit') Signup
-        |     
-        hr
-        |     
-        p
-          | Already have an account? 
-          a(href='/login') Login
-        |     
-        p
-          | Or go 
-          a(href='/') home
-          | .
-
- 
+block content
+    div.row-fluid
+      .page-header.h3 My Profile
+      form.login-form.form-horizontal(method='post', role='form')
+        input(name='_csrf', type='hidden')
+        .form-group
+          label.col-sm-4 Email
+          .col-sm-8
+              input.form-control(placeholder='Set your username', required='required', type='text', name='email')
+        .form-group
+          label.col-sm-4 Password
+          .col-sm-8
+              input.form-control(placeholder='Set your password', required='required', type='password', name='password')    
+        .form-group
+          label.col-sm-4 First Name
+          .col-sm-8
+            input.form-control(placeholder='Your first name', required='required', name='givenName', type='text')
+        .form-group
+          label.col-sm-4 Last Name
+          .col-sm-8
+            input.form-control(placeholder='Your last name', required='required', name='surname', type='text')
+        .form-group
+          label.col-sm-4 Street address
+          .col-sm-8
+            input.form-control(placeholder='e.g. 123 Sunny Ave', required='required', name='streetAddress', type='text')
+        .form-group
+          label.col-sm-4 City
+          .col-sm-8
+            input.form-control(placeholder='e.g. City', required='required', name='city', type='text')
+        .form-group
+          label.col-sm-4 State
+          .col-sm-8
+            input.form-control(placeholder='e.g. CA', required='required', name='state', type='text')
+        .form-group
+          label.col-sm-4 ZIP
+          .col-sm-8
+            input.form-control(placeholder='e.g. 94116', required='required', name='zip', type='text')
+        .form-group
+          .col-sm-offset-4.col-sm-8
+            //button.login.btn.btn-primary(type='submit') Save
+            button.btn.btn-primary.btn-lg(type='submit') Signup
+        .pull-right
+          a(href='/') Return to home page

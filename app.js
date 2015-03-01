@@ -71,13 +71,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-//require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
-
-// Make our passport accessible to our router
-app.use(function(req,res,next){
-    req.passport = passport;
-    next();
-});
+require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
