@@ -22,7 +22,7 @@ block content
 
   div.row-fluid
       .page-header.h3 Enter product details
-      form.form-horizontal(method='post', role='form')
+      form.form-horizontal(method='post', role='form', action='/print')
         input(name='_csrf', type='hidden')
         .form-group
           label.col-sm-2 Item Code
@@ -43,7 +43,7 @@ block content
         .form-group
           label.col-sm-2 VAT
           .col-sm-4
-            input.form-control(placeholder='e.g. 5%', required='required', name='VAT percentage', type='text')
+            input.form-control(placeholder='e.g. 5%', required='required', name='VATpercentage', type='text')
         .form-group
           label.col-sm-2 Total
           .col-sm-4
