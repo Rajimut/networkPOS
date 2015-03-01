@@ -2,7 +2,7 @@ extends layout
 
 block content
     div.row-fluid
-      .page-header.h3 My Profile
+      .page-header.h3 Signup
       form.login-form.form-horizontal(method='post', role='form')
         input(name='_csrf', type='hidden')
         .form-group
@@ -43,3 +43,14 @@ block content
             button.btn.btn-primary.btn-lg(type='submit') Signup
         .pull-right
           a(href='/') Return to home page
+
+      p
+      | Already have an account? 
+      a(href='/seller-login') Login
+      |     
+      p
+      | Or go 
+      a(href='/') home
+      | .
+    
+    

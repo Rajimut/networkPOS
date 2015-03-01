@@ -51,16 +51,28 @@ router.post('/seller-login', passport.authenticate('local-login', {
 // SIGNUP ==============================
 // =====================================
 // show the signup form
-router.get('/signup', function(req, res) {
-    res.render('signup.jade');
+router.get('/seller-signup', function(req, res) {
+    res.render('seller-signup.jade');
+    // render the page and pass in any flash data if it exists
+    //res.render('signup', { message: req.flash('signupMessage') });
+});
+
+router.get('/buyer-signup', function(req, res) {
+    res.render('buyer-signup.jade');
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 // Process the signup form
-router.post('/signup', passport.authenticate('local-signup', {
+router.post('/seller-signup', passport.authenticate('local-signup', {
+        successRedirect : '/POSterminal', // redirect to the secure profile section
+        failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+}));
+
+router.post('/buyer-signup', passport.authenticate('local-signup', {
         successRedirect : '/myreceipts', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
+        failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
 
