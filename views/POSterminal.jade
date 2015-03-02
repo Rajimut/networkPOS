@@ -20,6 +20,7 @@ block content
     li(role='presentation')
         a(href='/seller-profile') My Profile
 
+
   
   .row
     .col-xs-12
@@ -144,6 +145,31 @@ block content
         .form-group
           input#date.form-control(type='text', required='', placeholder='Enter a date', name='date')
         |             
+
+  div.row-fluid
+      .page-header.h3 Enter product details
+      form.form-horizontal(method='post', role='form', action='/print')
+        input(name='_csrf', type='hidden')
+        .form-group
+          label.col-sm-2 Item Code
+          .col-sm-4
+            input.form-control(placeholder='e.g 56779GH7', required='required', name='ItemNumber', type='text')
+        .form-group
+          label.col-sm-2 Item Name
+          .col-sm-4
+            input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
+        .form-group
+          label.col-sm-2 Quantity
+          .col-sm-4
+            input.form-control(placeholder='e.g. 12', required='required', name='quantity', type='text')
+        .form-group
+          label.col-sm-2 Subtotal
+          .col-sm-4
+            input.form-control(placeholder=' ', required='required', name='Subtotal', type='text')
+        .form-group
+          label.col-sm-2 VAT
+          .col-sm-4
+            input.form-control(placeholder='e.g. 5%', required='required', name='VATpercentage', type='text')
         .form-group
           label(for='time') @
         |             

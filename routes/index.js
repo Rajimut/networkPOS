@@ -134,6 +134,41 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
     res.render('POSterminal', { user : req.user, title: 'POSterminal' });
 });
 
+router.post('/print', function(req, res) {
+    // Set our internal DB variable
+    var db = req.db;
+
+    // Get our form values. These rely on the "name" attributes
+    var itemCode = req.body.ItemNumber;
+    var itemName = req.body.itemName;
+    var quantity = req.body.quantity;
+    var subTotal = req.body.Subtotal;
+    var vatPercentage = req.body.VATpercentage;
+    var Total = req.body.Total;
+
+    // Set our collection
+    var collection = db.get('item-details');
+    // Submit to the DB
+    collection.insert({
+        "itemcode" : itemCode,
+        "itemname" : itemName,
+        "quantity" : quantity,
+        "subtotal" : subTotal,
+        "vatpercentage" : vatPercentage,
+        "total" : Total
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // If it worked, set the header so the address bar doesn't still say /adduser
+            res.location("/POSterminal");
+            // And forward to success page
+            res.redirect("POSterminal");
+        }
+    });
+});
 
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {
