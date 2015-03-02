@@ -20,55 +20,53 @@ block content
     li(role='presentation')
         a(href='/seller-profile') My Profile
 
-
+  .col-md-12
+          h2 POS terminal
+          h3.pull-right Receipt # 12345
+        |               
   
-  .row
-    .col-xs-12
-      .invoice-title
-        h2 POS terminal
-        h3.pull-right Receipt # 12345
-      |     &#x9;&#x9;
-      hr
-      |    
-      
-    .col-xs-12
-        address
+  .row.form-inline
+    .col-md-12
+     fieldset
+      .form-group
+        address.text-center
           strong Order Date:
           br
-          |     &#x9;&#x9;&#x9;&#x9;&#x9;March 7, 2014 
-  .row.form-inline
-    fieldset
-      .col-md-3
+          button.btn.btn-default(type='button') March 7 2015
+      .form-group 
+          label(for='time')   
+        |              
       .form-group
-        address
-        strong Payment Method:
-        br
-        |  
-        .btn-group  
-          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-            | Payment type
-            span.caret
-          |     
-          ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
-            li
-              a(role='menuitem', tabindex='-2',href='#') Creditcard
-            |       
-            li
-              a(role='menuitem', tabindex='-2',href='#') Visa
-            |       
-            li
-              a(role='menuitem', tabindex='-2',href='#') Cash
-            |       
-            li
-              a(role='menuitem', tabindex='-2',href='#') Apple Pay 
-            |  
+        address.text-center
+          strong Billed To:
+          br
+          input.form-control(type='text', name='email1')
+          |                              
       .form-group
-        label(for='time') @
+          label(for='time')     
+        |             
       .form-group
-        address
-        strong Billed To:
-        br
-        input.form-control(type='text', name='email1')  
+        address.text-center
+          strong Payment Method:
+          br 
+          .btn-group  
+            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+              | Payment type
+              span.caret
+            |     
+            ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
+              li
+                a(role='menuitem', tabindex='-2',href='#') Creditcard
+              |       
+              li
+                a(role='menuitem', tabindex='-2',href='#') Visa
+              |       
+              li
+                a(role='menuitem', tabindex='-2',href='#') Cash
+              |       
+              li
+                a(role='menuitem', tabindex='-2',href='#') Apple Pay 
+              |          
   .row
     .col-md-12
       .panel.panel-default
@@ -81,7 +79,7 @@ block content
             table.table.table-condensed
               thead
                 tr
-                  td
+                  td.text-center
                     strong Item
                   |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.text-center
@@ -90,10 +88,10 @@ block content
                   td.text-center
                     strong Quantity
                   |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                  td.text-right
+                  td.text-center
                     strong Totals
               |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-              tbody
+              tbody.expandable
                 tr
                   td
                     input.form-control(type='text')
@@ -137,41 +135,3 @@ block content
                   strong Total
                 |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                 td.no-line.text-right $685.99
-  .row.form-inline
-    fieldset
-        .col-md-12
-          label(for='date') Date &amp; Time
-        |             
-        .form-group
-          input#date.form-control(type='text', required='', placeholder='Enter a date', name='date')
-        |             
-
-  div.row-fluid
-      .page-header.h3 Enter product details
-      form.form-horizontal(method='post', role='form', action='/print')
-        input(name='_csrf', type='hidden')
-        .form-group
-          label.col-sm-2 Item Code
-          .col-sm-4
-            input.form-control(placeholder='e.g 56779GH7', required='required', name='ItemNumber', type='text')
-        .form-group
-          label.col-sm-2 Item Name
-          .col-sm-4
-            input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
-        .form-group
-          label.col-sm-2 Quantity
-          .col-sm-4
-            input.form-control(placeholder='e.g. 12', required='required', name='quantity', type='text')
-        .form-group
-          label.col-sm-2 Subtotal
-          .col-sm-4
-            input.form-control(placeholder=' ', required='required', name='Subtotal', type='text')
-        .form-group
-          label.col-sm-2 VAT
-          .col-sm-4
-            input.form-control(placeholder='e.g. 5%', required='required', name='VATpercentage', type='text')
-        .form-group
-          label(for='time') @
-        |             
-        .form-group
-          input#time.form-control(type='text', required='', placeholder='Enter a time', name='time')
