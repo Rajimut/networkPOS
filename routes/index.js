@@ -100,10 +100,25 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
+var config = require( __dirname + '/receipt.json');
+
+
+var file = __dirname + '/receipt.json';
+
+var fs = require("fs");
+var data = JSON.parse(fs.readFileSync(file, "utf8"));
+console.dir(data);
+data = JSON.stringify(data);
+
+var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
+
+// Myreceipt_data = JSON.stringify(Myreceipt_data);
 router.get('/myreceipts', isLoggedIn, function(req, res) {
-    res.render('myreceipts.jade', {
-        user : req.user // get the user out of session and pass to template
-    });
+    res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+});
+
+router.get('/buyer-dashboard', isLoggedIn, function(req, res) {
+    res.render('buyer-dashboard', {json_data: data});
 });
 
 // =====================================

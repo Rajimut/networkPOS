@@ -3,266 +3,189 @@ extends layout
 block content
  
   ul.nav.nav-tabs
+    li(role='presentation')
+      a.h4(href='/buyer-dashboard') My Dashboard
+      |    
     li.active(role='presentation')
       a.h4(href='/myreceipts') My Receipts
+      |  
+    li(role='presentation')
+      a.h4(href='/buyer-login') Today's expenditure
       |   
     li(role='presentation')
-        a.h4(href='/buyer-login') Today's expenditure
+      a.h4(href='/buyer-login') Transactions
+      |  
+    li(role='presentation')
+      a.h4(href='/buyer-login') Categories
       |   
     li(role='presentation')
-        a.h4(href='/buyer-login') Transactions
+      a.h4(href='/buyer-login') My APIs
       |   
     li(role='presentation')
-        a.h4(href='/buyer-login') Categories
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-login') My APIs
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-profile') My Profile
+      a.h4(href='/buyer-profile') My Profile
+
+block holder
+  div.one-time
+    each val in [1, 2, 3, 4, 5]    
+      |             
+      div.well.col-xs-12.col-sm-12.col-md-6
+        .text-center
+          h3 Receipt
+        .row
+          .col-xs-6.col-sm-6.col-md-6
+            address
+              strong #{val}
+              |                         
+              br
+              |2135 Sunset Blvd
+              br
+              | Los Angeles, CA 9002
+              |                         
+              br
+              |                        
+              abbr(title='Phone') P:
+              |  (213) 484-6829
+              |                
+          .col-xs-6.col-sm-6.col-md-6.text-right
+            p
+              em Date: 1st November, 2013
+              |              
+        button.btn.btn-success.btn-lg.btn-block(type='button')
+          |  Click to see in detail 
+
   
+  script(type='text/javascript').
+    $(document).ready(function(){
+    $('.one-time').slick({ dots: false,
+      infinite: true,
+      speed: 300,
+      slidesToShow: 3,
+      slidesToScroll: 3, 
+      responsive: [
+      {breakpoint: 1024,settings:{
+      slidesToShow: 2,
+      slidesToScroll: 2,infinite: true,dots: false
+      }},
+      {
+      breakpoint: 600,
+      settings: {
+      slidesToShow: 1,
+      slidesToScroll: 1
+        }
+        },
+        {
+        breakpoint: 480,settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+          }
+          }
+          ]
+          });});
 
-  .col-md-2
-    .btn-group
-      .btn-group.btn-block
-        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-          | Location
-          span.caret
-        |     
-        ul.dropdown-menu(role='menu', aria-labelledby='Location')
-          li
-            a(role='menuitem', tabindex='-1',href='#') Austin
-          |       
-          li
-            a(role='menuitem', tabindex='-1',href='#') Houston
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') San Jose
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Chennai
-
-      .btn-group.btn-block    
-        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-          | Categories
-          span.caret
-        |     
-        ul.dropdown-menu(role='menu', aria-labelledby='Categories')
-          li
-            a(role='menuitem', tabindex='-2',href='#') Restaurants
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Cafes
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Pharmacy
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Clothing
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Salons
-
-      .btn-group.btn-block    
-        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-          | Payment type
-          span.caret
-        |     
-        ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
-          li
-            a(role='menuitem', tabindex='-2',href='#') Creditcard
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Visa
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Cash
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') Apple Pay    
-      .btn-group.btn-block    
-        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-          | Amount
-          span.caret
-        |     
-        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
-          li
-            a(role='menuitem', tabindex='-2',href='#') $0 - $5
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') $6 - $10
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') $11 - $15  
-          |       
-          li
-            a(role='menuitem', tabindex='-2',href='#') $16 - $20  
-
-
-  .col-md-9 
-    .panel.panel-default
-      .panel-heading My latest receipts
-      |   
-      .panel-body
-        p     
-
-        .table-responsive
-          table.table.table-condensed
-            thead
-              tr
-                td.text-center
-                  strong Date
-                |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                td.text-center
-                  strong Receipt Number
-                |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                td.text-center
-                  strong Shop Name
-                |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                td.text-center
-                  strong Amount
-                |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                td.text-center
-                  strong Payment Type
-                |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-            tbody.expandable
-              tr
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |     
-              tr
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |            
-                td
-                  input.form-control(type='text')
-                |       
-
-  .well.col-xs-15.col-sm-15.col-md-11
-    .text-center
-        h3 My last Receipt
-    .row
-      .col-xs-6.col-sm-6.col-md-6
-        address
-          strong Elf Cafe
-          |                         
-          br
-          |2135 Sunset Blvd
-          br
-          | Los Angeles, CA 90026
-          |                         
-          br
-          |                         
-          abbr(title='Phone') P:
-          |  (213) 484-6829
-      |                 
-      .col-xs-6.col-sm-6.col-md-6.text-right
-        p
-          em Date: 1st November, 2013
-        |                     
-        p
-          em Receipt #: 34522677W
-    |             
-    .row
-      .text-center
-        h1 Receipt
-      |                 
-      |                 
-      table.table.table-hover
-        thead
-          tr
-            th Product
-            |                             
-            th #
-            |                             
-            th.text-center Price
-            |                             
-            th.text-center Total
-        |                     
-        tbody
-          tr
-            td.col-md-9
-              em Baked Rodopa Sheep Feta
-            |                             
-            td.col-md-1(style='text-align: center')  2 
-            |                             
-            td.col-md-1.text-center $13
-            |                             
-            td.col-md-1.text-center $26
-          |                         
-          tr
-            td.col-md-9
-              em Lebanese Cabbage Salad
-            |                             
-            td.col-md-1(style='text-align: center')  1 
-            |                             
-            td.col-md-1.text-center $8
-            |                             
-            td.col-md-1.text-center $8
-          |                         
-          tr
-            td.col-md-9
-              em Baked Tart with Thyme and Garlic
-            |                             
-            td.col-md-1(style='text-align: center')  3 
-            |                             
-            td.col-md-1.text-center $16
-            |                             
-            td.col-md-1.text-center $48
-          |                         
-          tr
-            td  &nbsp; 
-            |                             
-            td  &nbsp; 
-            |                             
-            td.text-right
-              p
-                strong Subtotal:&nbsp;
-              |                             
-              p
-                strong Tax:&nbsp;
-            |                             
-            td.text-center
-              p
-                strong $6.94
-              |                             
-              p
-                strong $6.94
-          |                         
-          tr
-            td  &nbsp; 
-            |                             
-            td  &nbsp; 
-            |                             
-            td.text-right
-              h4
-                strong Total:&nbsp;
-            |                             
-            td.text-center.text-danger
-              h4
-                strong $31.53
-      |                 
-      button.btn.btn-success.btn-lg.btn-block(type='button')
-        |  XXXXXX My return label XXXXXXXXXX &nbsp;&nbsp;&nbsp;
-        // span.glyphicon.glyphicon-chevron-right
+//- .well.col-xs-15.col-sm-15.col-md-6.col-xs-offset-1.col-sm-offset-1.col-md-offset-3
+//-       .text-center
+//-           h3 My last Receipt
+//-       .row
+//-         .col-xs-6.col-sm-6.col-md-6
+//-           address
+//-             strong Elf Cafe
+//-             |                         
+//-             br
+//-             |2135 Sunset Blvd
+//-             br
+//-             | Los Angeles, CA 90026
+//-             |                         
+//-             br
+//-             |                         
+//-             abbr(title='Phone') P:
+//-             |  (213) 484-6829
+//-         |                 
+//-         .col-xs-6.col-sm-6.col-md-6.text-right
+//-           p
+//-             em Date: 1st November, 2013
+//-           |                     
+//-           p
+//-             em Receipt #: #{val}
+//-       |             
+//-       .row
+//-         .text-center
+//-           h1 Receipt
+//-         |                 
+//-         |                 
+//-         table.table.table-hover
+//-           thead
+//-             tr
+//-               th Product
+//-               |                             
+//-               th #
+//-               |                             
+//-               th.text-center Price
+//-               |                             
+//-               th.text-center Total
+//-           |                     
+//-           tbody
+//-             tr
+//-               td.col-md-9
+//-                 em Baked Rodopa Sheep Feta
+//-               |                             
+//-               td.col-md-1(style='text-align: center')  2 
+//-               |                             
+//-               td.col-md-1.text-center $13
+//-               |                             
+//-               td.col-md-1.text-center $26
+//-             |                         
+//-             tr
+//-               td.col-md-9
+//-                 em Lebanese Cabbage Salad
+//-               |                             
+//-               td.col-md-1(style='text-align: center')  1 
+//-               |                             
+//-               td.col-md-1.text-center $8
+//-               |                             
+//-               td.col-md-1.text-center $8
+//-             |                         
+//-             tr
+//-               td.col-md-9
+//-                 em Baked Tart with Thyme and Garlic
+//-               |                             
+//-               td.col-md-1(style='text-align: center')  3 
+//-               |                             
+//-               td.col-md-1.text-center $16
+//-               |                             
+//-               td.col-md-1.text-center $48
+//-             |                         
+//-             tr
+//-               td  &nbsp; 
+//-               |                             
+//-               td  &nbsp; 
+//-               |                             
+//-               td.text-right
+//-                 p
+//-                   strong Subtotal:&nbsp;
+//-                 |                             
+//-                 p
+//-                   strong Tax:&nbsp;
+//-               |                             
+//-               td.text-center
+//-                 p
+//-                   strong $6.94
+//-                 |                             
+//-                 p
+//-                   strong $6.94
+//-             |                         
+//-             tr
+//-               td  &nbsp; 
+//-               |                             
+//-               td  &nbsp; 
+//-               |                             
+//-               td.text-right
+//-                 h4
+//-                   strong Total:&nbsp;
+//-               |                             
+//-               td.text-center.text-danger
+//-                 h4
+//-                   strong $31.53
+//-         |                 
+//-         button.btn.btn-success.btn-lg.btn-block(type='button')
+//-           |  XXXX   My Return Label    XXXX &nbsp;&nbsp;&nbsp;
+//-           // span.glyphicon.glyphicon-chevron-right

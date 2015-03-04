@@ -1,0 +1,129 @@
+extends layout
+
+block content
+ 
+  ul.nav.nav-tabs
+    li.active(role='presentation')
+      a.h4(href='/buyer-dashboard') My Dashboard
+      |   
+    li(role='presentation')
+        a.h4(href='/myreceipts') My Receipts
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-login') Today's expenditure
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-login') Transactions
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-login') Categories
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-login') My APIs
+      |   
+    li(role='presentation')
+        a.h4(href='/buyer-profile') My Profile
+
+   
+  
+  //- for pd in config
+  //-   pd.id 
+  //- for tyt in json_data
+  //-      p #{tyt.name}
+  
+
+
+  .col-md-2
+    .btn-group
+      .btn-group.btn-block
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Location
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Location')
+          li
+            a(role='menuitem', tabindex='-1',href='#') Austin
+          |       
+          li
+            a(role='menuitem', tabindex='-1',href='#') Houston
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') San Jose
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Chennai
+
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Categories
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Categories')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Restaurants
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cafes
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Pharmacy
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Clothing
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Salons
+
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Payment type
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Creditcard
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Visa
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cash
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Apple Pay    
+      .btn-group.btn-block    
+        button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
+          | Amount
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+          li
+            a(role='menuitem', tabindex='-2',href='#') $0 - $5
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $6 - $10
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $11 - $15  
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $16 - $20  
+
+  
+  .col-md-9
+    .panel.panel-default
+      .panel-heading My latest receipts  
+      .panel-body
+        table#receipts(data-height='400', data-search='true', data-show-columns= 'true')
+          thead
+              tr
+                th(data-field='id') Item ID
+                |             
+                th(data-field='Receipt #') Item Name
+                |             
+                th(data-field='Amount') Item Price
+        script(type='text/javascript').
+          $('#receipts').bootstrapTable({showColumns:true, showRefresh: true, smartDisplay:true,
+            pagination:true,sidePagination:true,clickToSelect: true,
+            data: !{json_data}
+            });

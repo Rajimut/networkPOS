@@ -1,0 +1,12 @@
+[
+    {
+        "receipt_no": 0,
+        "Store_name": "Item 0",
+        "pur_Date": "Jan 01 2015"
+    },
+    {
+        "receipt_no": 1,
+        "Store_name": "Item 1",
+        "pur_Date": "Dec 31 2014"
+    }
+]
