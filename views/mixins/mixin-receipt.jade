@@ -1,0 +1,108 @@
+mixin receipt_template(navlist) 
+ .well
+   .text-center
+       h3 My last Receipt
+   .row
+     .col-xs-6.col-sm-6.col-md-6
+       address
+         strong Elf Cafe
+         |                         
+         br
+         |2135 Sunset Blvd
+         br
+         | Los Angeles, CA 90026
+         |                         
+         br
+         |                         
+         abbr(title='Phone') P:
+         |  (213) 484-6829
+     |                 
+     .col-xs-6.col-sm-6.col-md-6.text-right
+       p
+         em Date: 1st November, 2013
+       |                     
+       p
+         em Receipt #: #{val}
+   |             
+   .row
+     .text-center
+       h1 Receipt
+     |                 
+     |                 
+     table.table.table-hover
+       thead
+         tr
+           th Product
+           |                             
+           th #
+           |                             
+           th.text-center Price
+           |                             
+           th.text-center Total
+       |                     
+       tbody
+         tr
+           td.col-md-9
+             em Baked Rodopa Sheep Feta
+           |                             
+           td.col-md-1(style='text-align: center')  2 
+           |                             
+           td.col-md-1.text-center $13
+           |                             
+           td.col-md-1.text-center $26
+         |                         
+         tr
+           td.col-md-9
+             em Lebanese Cabbage Salad
+           |                             
+           td.col-md-1(style='text-align: center')  1 
+           |                             
+           td.col-md-1.text-center $8
+           |                             
+           td.col-md-1.text-center $8
+         |                         
+         tr
+           td.col-md-9
+             em Baked Tart with Thyme and Garlic
+           |                             
+           td.col-md-1(style='text-align: center')  3 
+           |                             
+           td.col-md-1.text-center $16
+           |                             
+           td.col-md-1.text-center $48
+         |                         
+         tr
+           td  &nbsp; 
+           |                             
+           td  &nbsp; 
+           |                             
+           td.text-right
+             p
+               strong Subtotal:&nbsp;
+             |                             
+             p
+               strong Tax:&nbsp;
+           |                             
+           td.text-center
+             p
+               strong $6.94
+             |                             
+             p
+               strong $6.94
+         |                         
+         tr
+           td  &nbsp; 
+           |                             
+           td  &nbsp; 
+           |                             
+           td.text-right
+             h4
+               strong Total:&nbsp;
+           |                             
+           td.text-center.text-danger
+             h4
+               strong $31.53
+     |                 
+     button.btn.btn-success.btn-lg.btn-block(type='button')
+       |  XXXX   My Return Label    XXXX &nbsp;&nbsp;&nbsp;
+       // span.glyphicon.glyphicon-chevron-right

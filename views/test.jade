@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	div.test
+		a.btn.btn-lg.btn-success(href='#basicModal', data-toggle='modal', data-target='#basicModal') Click to open Modal
+		#basicModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal', aria-hidden='true') &amp;times;
+						h4#myModalLabel.modal-title Modal title
+					.modal-body
+						h3 Modal Body
+					.modal-footer
+						button.btn.btn-default(type='button', data-dismiss='modal') Close
+						button.btn.btn-primary(type='button') Save 

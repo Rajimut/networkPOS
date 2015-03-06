@@ -24,6 +24,28 @@ block content
 		li(role='presentation')
 			a.h4(href='/buyer-profile') My Profile
 
+		//- div
+		//- 	a(href='#',data-toggle='lightbox', data-title='random', id="mylink") Open Lightbox
+		//- 		img(src='img/h1.png')
+		//- 		|    
+		//- 		.lightbox-caption
+		//- 			p Your caption here
+	//- script(type='text/javascript').
+	//- 	$('#demoLightbox').lightbox({backdrop:true, keyboard:true})
+	div.test
+		a.btn.btn-lg.btn-success(href='#', data-toggle='modal', data-target='#basicModal') Click to open Modal
+			#basicModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
+				.modal-dialog
+					.modal-content
+						.modal-header
+							button.close(type='button', data-dismiss='modal', aria-hidden='true') &amp;times;
+							h4#myModalLabel.modal-title Modal title
+						.modal-body
+							h3 Modal Body
+						.modal-footer
+							button.btn.btn-default(type='button', data-dismiss='modal') Close
+							button.btn.btn-primary(type='button') Save changes
+
 block holder
 	div.one-time
 		each val in [1, 2, 3, 4, 5]    

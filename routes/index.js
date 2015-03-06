@@ -88,6 +88,8 @@ router.get('/buyer-profile', isLoggedIn, function(req, res) {
     });
 });
 
+
+
 router.get('/seller-profile', isLoggedIn, function(req, res) {
     res.render('seller-profile.jade', {
         user : req.user // get the user out of session and pass to template
@@ -117,6 +119,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
 });
 
+
 router.get('/buyer-dashboard', isLoggedIn, function(req, res) {
     res.render('buyer-dashboard', {json_data: data});
 });
@@ -142,7 +145,7 @@ function isLoggedIn(req, res, next) {
 
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
-    res.render('helloworld', { title: 'Hello, World!' });
+    res.render('test', { title: 'Hello, World!' });
 });
 
 router.get('/POSterminal', isLoggedIn, function(req, res) {
