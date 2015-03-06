@@ -1,0 +1,54 @@
+mixin seller-nav(navlist) 
+  .navbar.navbar-inverse.navbar-static-top
+    .container-fluid
+      a.navbar-brand(href='#') Home
+      |                                
+      |                                 
+      button.navbar-toggle(data-toggle='collapse', data-target='.navHeaderCollapse')
+        span.icon-bar
+        |                                         
+        span.icon-bar
+        |                                         
+        span.icon-bar
+      |                                
+      |                                 
+      .collapse.navbar-collapse.navHeaderCollapse
+        ul.nav.navbar-nav.navbar-right
+          li(class=navlist[0])
+            a(href='/seller-dashboard') My Dashboard
+          |                                                 
+          li(class=navlist[1])
+            a(href='/myreceipts') My Receipts
+          | 
+          li(class=navlist[2])
+            a(href='/buyer-login') Today's expenditure
+          |   
+          li(class=navlist[3])
+            a(href='/buyer-login') Transactions
+          |     
+          li(class=navlist[4])
+            a(href='/buyer-login') Categories
+          | 
+          li(class=navlist[5])
+            a(href='/buyer-login') My APIs
+          | 
+          li(class=navlist[6])
+            a(href='/seller-profile') My Profile
+          |                                              
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | Social Media 
+              b.caret
+            |                                                         
+            ul.dropdown-menu
+              li
+                a(href='#') Twitter
+              |                                                                 
+              li
+                a(href='#') Facebook
+              |                                                                 
+              li
+                a(href='#') Google+
+              |                                                                 
+              li
+                a(href='#') Instagram

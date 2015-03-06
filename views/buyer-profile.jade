@@ -1,28 +1,7 @@
 extends layout
-
+include mixins/navbar-buyer.jade
 block content
- 
-  ul.nav.nav-tabs
-    li(role='presentation')
-      a.h4(href='/buyer-dashboard') My Dashboard
-      |                 
-    li(role='presentation')
-      a.h4(href='/myreceipts') My Receipts
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-login') Today's expenditure
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-login') Transactions
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-login') Categories
-      |   
-    li(role='presentation')
-        a.h4(href='/buyer-login') My APIs
-      |   
-    li.active(role='presentation')
-        a.h4(href='/buyer-profile') My Profile    
+  +buyer-nav(['','','','','','active'])
   
   div.row-fluid
       .page-header.h3 My Profile

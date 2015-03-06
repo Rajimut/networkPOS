@@ -1,0 +1,61 @@
+mixin buyer-nav(navlist) 
+  .navbar.navbar-inverse.navbar-static-top
+    .container-fluid
+      a.navbar-brand(href='/')
+        span.icon-bar.fa.fa-home.fa-lg
+      button.navbar-toggle(data-toggle='collapse', data-target='.navHeaderCollapse')
+        span.icon-bar
+        |                                         
+        span.icon-bar
+        |                                         
+        span.icon-bar
+      |                                
+      |                                 
+      .collapse.navbar-collapse.navHeaderCollapse
+        ul.nav.navbar-nav.navbar-right
+          li(class=navlist[0])
+            a(href='/buyer-dashboard') My Dashboard
+          |                                                 
+          li(class=navlist[1])
+            a(href='/myreceipts') My Receipts
+          | 
+          li(class=navlist[2])
+            a(href='/buyer-login') Recent Transactions
+          |   
+          li(class=navlist[3])
+            a(href='/buyer-login') Insights
+          |     
+          li(class=navlist[4])
+            a(href='/buyer-login') My APPs
+          | 
+          li(class=navlist[5])
+            a(href='/buyer-profile') Profile
+
+  script(type='text/javascript').
+    $(document).scroll(function(e){
+    var scrollTop = $(document).scrollTop();
+    if(scrollTop > 0){
+    console.log(scrollTop);
+    $('.navbar').removeClass('navbar-static-top').addClass('navbar-fixed-top');
+    } else {
+    $('.navbar').removeClass('navbar-fixed-top').addClass('navbar-static-top');
+    }
+    });
+          //- |                                              
+          //- li.dropdown
+          //-   a.dropdown-toggle(href='#', data-toggle='dropdown')
+          //-     | Social Media 
+          //-     b.caret
+          //-   |                                                         
+          //-   ul.dropdown-menu
+          //-     li
+          //-       a(href='#') Twitter
+          //-     |                                                                 
+          //-     li
+          //-       a(href='#') Facebook
+          //-     |                                                                 
+          //-     li
+          //-       a(href='#') Google+
+          //-     |                                                                 
+          //-     li
+          //-       a(href='#') Instagram
