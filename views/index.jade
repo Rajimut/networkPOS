@@ -1,20 +1,23 @@
 extends layout
 
-block content
-    h1= title
-    p Welcome to #{title}
+block holder
+  div.row
+    div.top-buffer.col-xs-12.col-sm-12.col-md-12.text-center
+      h1= title
+  div.row
+    div.col-xs-12.col-sm-12.col-md-6.text-center
       form#formSeller(name="seller",method="post",action="/seller")
-          div.col-md-2
-            button.btn.btn-warning.btn-lg.btn-block(data-action="Seller")	Seller
+          button.btn.btn-success.btn-xl.btn-block(data-action="Seller")	Seller
+    div.col-xs-12.col-sm-12.col-md-6.text-center
       form#formBuyer(name="buyer",method="post",action="/buyer")
-          div.col-md-2
-            button.btn.btn-warning.btn-lg.btn-block(data-action="Buyer")	Buyer
-      div.col-md-4
-          div.widget
-            h1 About us
-            p
-              | asadsfdsfdfdfdfdcxcxxfdghf
-              | jhgjhhnbnbnbnbnbnb
-            p
-              | Vivamus hgh jhjghg jhjhghg
-              | Vivamus hgh jhjghg jhjhgh
+          button.btn.btn-info.btn-xl.btn-block(data-action="Buyer")	Buyer
+  div.row
+    div.top-buffer
+      div.col-md-12.text-center
+          h1 About us
+          p
+            | asadsfdsfdfdfdfdcxcxxfdghf
+            | jhgjhhnbnbnbnbnbnb
+          p
+            | Vivamus hgh jhjghg jhjhghg
+            | Vivamus hgh jhjghg jhjhgh

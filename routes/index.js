@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express.io');
 var router = express();
 var passport = require('passport');
 
@@ -6,7 +6,7 @@ module.exports = function (router, passport) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Welcome' });
 });
 
 /* POST customer is a Buyer */

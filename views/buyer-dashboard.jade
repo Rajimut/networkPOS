@@ -32,7 +32,7 @@ block content
   //-      p #{tyt.name}
   
 
-
+block holder
   .col-md-2
     .btn-group
       .btn-group.btn-block
@@ -117,11 +117,11 @@ block content
         table#receipts(data-height='400', data-search='true', data-show-columns= 'true')
           thead
               tr
-                th(data-field='id') Item ID
+                th(data-field='id', data-align='center', data-sortable='true') Date
                 |             
-                th(data-field='Receipt #') Item Name
+                th(data-field='Receipt #', data-align='center', data-sortable='true') Receipt #
                 |             
-                th(data-field='Amount') Item Price
+                th(data-field='Amount', data-align='center', data-sortable='true') Amount
         script(type='text/javascript').
           $('#receipts').bootstrapTable({showColumns:true, showRefresh: true, smartDisplay:true,
             pagination:true,sidePagination:true,clickToSelect: true,
