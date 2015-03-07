@@ -22,7 +22,7 @@ block content
 
   div.row-fluid
       .page-header.h3 Enter product details
-      form.form-horizontal(method='post', role='form', action='/print')
+      form.form-horizontal(method='post', role='form', action='/next-item')
         input(name='_csrf', type='hidden')
         .form-group
           label.col-sm-2 Item Code
@@ -33,23 +33,24 @@ block content
           .col-sm-4
             input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
         .form-group
+          label.col-sm-2 Unit Price
+          .col-sm-4
+            input.form-control(placeholder='e.g. 12', required='required', name='UnitPrice', type='number')
+        .form-group
           label.col-sm-2 Quantity
           .col-sm-4
-            input.form-control(placeholder='e.g. 12', required='required', name='quantity', type='text')
+            input.form-control(placeholder='e.g. 12', required='required', name='Quantity', type='number')
         .form-group
           label.col-sm-2 Subtotal
           .col-sm-4
-            input.form-control(placeholder=' ', required='required', name='Subtotal', type='text')
-        .form-group
-          label.col-sm-2 VAT
-          .col-sm-4
-            input.form-control(placeholder='e.g. 5%', required='required', name='VATpercentage', type='text')
-        .form-group
-          label.col-sm-2 Total
-          .col-sm-4
-            input.form-control(placeholder=' ', required='required', name='Total', type='text')
+            input.form-control(placeholder=' ', required='required', name='Subtotal', type='number')
         .form-group
           .col-sm-offset-4.col-sm-8
-            button.login.btn.btn-primary.btn-lg(type='submit') Print
+            button.login.btn.btn-primary.btn-lg(type='submit') Next Item
+      form.form-horizontal(method='post', role='form', action='/stop-billing')
+        input(name='_csrf', type='hidden')
+        .form-group
+          .col-sm-offset-4.col-sm-8
+            button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
         .pull-right
-          a(href='/') Return to home page      
+          a(href='/') Return to home page     

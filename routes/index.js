@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express();
 var passport = require('passport');
+//var underscore = require('underscore.js');
+
+//Define Models for each Schema created
+var InvoiceDetails = require('../models/invoice-details');
 
 module.exports = function (router, passport) {
 
@@ -125,44 +129,66 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
-/* GET Hello World page. */
-router.get('/helloworld', function(req, res) {
-    res.render('helloworld', { title: 'Hello, World!' });
-});
-
 router.get('/POSterminal', isLoggedIn, function(req, res) {
     res.render('POSterminal', { user : req.user, title: 'POSterminal' });
 });
 
-router.post('/print', function(req, res) {
-    // Set our internal DB variable
-    var db = req.db;
+//Notification that billing has started - start building json object
+/* router.post('/start-billing', function(req, res) {
 
-    // Get our form values. These rely on the "name" attributes
-    var itemCode = req.body.ItemNumber;
-    var itemName = req.body.itemName;
-    var quantity = req.body.quantity;
-    var subTotal = req.body.Subtotal;
-    var vatPercentage = req.body.VATpercentage;
-    var Total = req.body.Total;
+    // Create an instance of the Invoice Details Schema
+    var temp_invoice_details = new InvoiceDetails();
 
-    // Set our collection
-    var collection = db.get('item-details');
-    // Submit to the DB
-    collection.insert({
-        "itemcode" : itemCode,
-        "itemname" : itemName,
-        "quantity" : quantity,
-        "subtotal" : subTotal,
-        "vatpercentage" : vatPercentage,
-        "total" : Total
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
+    temp_invoice_details.seller_username = req.user._id;    //extract currently logged in seller
+    //temp_invoice_details.buyer_username = <Needs to be filled somehow>; //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.transaction_id = Date.now();       //uniquely generate transaction id - time based
+    temp_invoice_details.transaction_date = new Date();     //Get current date for date for transaction
+
+    req.session.current_transaction = temp_seller_data.transaction_id;
+    console.log("Start billing: " + req.session.current_transaction);
+
+    temp_seller_data.save(function(error, data){
+        if(error){
+            res.json(error);
         }
-        else {
-            // If it worked, set the header so the address bar doesn't still say /adduser
+        else{
+            //temp_seller_data.close();
+            res.location("/POSterminal");
+            // And forward to success page
+            res.redirect("POSterminal");
+        }
+    });
+}); */
+
+//Notification that next item on bill has been entered - continue to build json
+router.post('/next-item', function(req, res) {
+    
+    // Create an instance of the Invoice Details Schema
+    var temp_invoice_details = new InvoiceDetails();
+
+    if (req.session.current_transaction == null) {
+        //First item in transaction - Store it in the session variable for future retrieval.
+        req.session.current_transaction = Date.now();       //uniquely generate transaction id - time based      
+    }
+    
+    // Store transaction id into item pertaining to this invoice
+    temp_invoice_details.transaction_id = req.session.current_transaction;
+    
+    //extract information from form
+    temp_invoice_details.seller_username    = req.user._id;    //extract currently logged in seller
+    //temp_invoice_details.buyer_username   = <Needs to be filled somehow>; //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.transaction_date   = new Date();     //Get current date for date for transaction
+    temp_invoice_details.itemcode           = req.body.ItemNumber;
+    temp_invoice_details.itemname           = req.body.ItemName;
+    temp_invoice_details.unitprice          = req.body.UnitPrice;
+    temp_invoice_details.quantity           = req.body.Quantity;
+    temp_invoice_details.subtotal           = req.body.Subtotal;
+
+    temp_invoice_details.save(function(error, data){
+        if(error){
+            res.json(error);
+        }
+        else{
             res.location("/POSterminal");
             // And forward to success page
             res.redirect("POSterminal");
@@ -170,9 +196,26 @@ router.post('/print', function(req, res) {
     });
 });
 
+//Notification that billing has stopped - insert json into db
+router.post('/stop-billing', function(req, res) {
+
+    //Generate the receipt in the proprietary format
+    InvoiceDetails.find({'transaction_id' : req.session.current_transaction}, function(err,invoice) {
+        console.log(invoice);
+    });
+
+    //Null the current transaction in the session variable since this transaction has been completed.
+    req.session.current_transaction = null;
+
+    res.location("/POSterminal");
+    // And forward to success page
+    res.redirect("POSterminal");
+});
+
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {
     var db = req.db;
+    console.log("DB name :" + db);
     var collection = db.get('usercollection');
     collection.find({},{},function(e,docs){
         res.render('userlist', {
