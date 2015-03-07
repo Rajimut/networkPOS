@@ -1,26 +1,10 @@
 extends layout
 
+include mixins/navbar-seller.jade
 block content
-  ul.nav.nav-tabs
-    li.active(role='presentation')
-      a(href='/POSterminal')  Sample POS terminal
-      |   
-    li(role='presentation')
-        a(href='/seller-login') My Dashboard
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Transactions
-      |   
-    li(role='presentation')
-        a(href='/graphicalview') Graphical View
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Applications hooked
-      |   
-    li(role='presentation')
-        a(href='/seller-profile') My Profile
+  +seller-nav(['active','','','','',''])
 
-
+block holder
   .col-md-12
           h2 POS terminal
           h3.pull-right Receipt # 12345
@@ -169,6 +153,4 @@ block content
         .form-group
           .col-sm-offset-4.col-sm-8
             button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
-        .pull-right
-          a(href='/') Return to home page     
 

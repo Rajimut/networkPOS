@@ -1,25 +1,8 @@
 extends layout
 
+include mixins/navbar-seller.jade
 block content
-  ul.nav.nav-tabs
-    li(role='presentation')
-      a(href='/POSterminal')  Sample POS terminal
-      |   
-    li(role='presentation')
-        a(href='/seller-login') My Dashboard
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Transactions
-      |   
-    li.active(role='presentation')
-        a(href='/graphicalview') Graphical View
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Applications hooked
-      |   
-    li(role='presentation')
-        a(href='/seller-profile') My Profile
-    
+  +seller-nav(['','','','active','',''])
 
   div.row-fluid
     .page-header.h3 Graphs

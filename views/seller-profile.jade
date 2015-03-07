@@ -1,26 +1,10 @@
 extends layout
 
+include mixins/navbar-seller.jade
 block content
-  ul.nav.nav-tabs
-    li(rle='presentation')
-      a(href='/POSterminal')  Sample POS terminal
-      |   
-    li(role='presentation')
-        a(href='/seller-login') My Dashboard
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Transactions
-      |   
-    li(role='presentation')
-        a(href='/graphicalview') Graphical View
-      |   
-    li(role='presentation')
-        a(href='/seller-login') Applications hooked
-      |   
-    li.active(role='presentation')
-        a(href='/seller-profile') My Profile
+  +seller-nav(['','','','','','active'])
 
-
+block holder
   div.row-fluid
       .page-header.h3 My Profile
       form.login-form.form-horizontal(method='post', role='form')
@@ -52,5 +36,3 @@ block content
         .form-group
           .col-sm-offset-4.col-sm-8
             button.login.btn.btn-primary(type='submit') Save
-        .pull-right
-          a(href='/') Return to home page
