@@ -30,6 +30,10 @@ mixin buyer-nav(navlist)
           | 
           li(class=navlist[5])
             a(href='/buyer-profile') Profile
+          li
+            a(href='/logout') Logout 
+              span  
+              span.icon-bar.fa.fa-sign-out.fa-lg  
 
   script(type='text/javascript').
     $(document).scroll(function(e){

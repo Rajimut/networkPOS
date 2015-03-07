@@ -30,6 +30,10 @@ mixin seller-nav(navlist)
           | 
           li(class=navlist[5])
             a(href='/seller-profile') My Profile
+          li
+            a(href='/logout') Logout 
+              span  
+              span.icon-bar.fa.fa-sign-out.fa-lg  
 
   script(type='text/javascript').
     $(document).scroll(function(e){
