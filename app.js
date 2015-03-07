@@ -24,13 +24,16 @@ var db = monk('localhost:27020/mushrooms');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var app = express();
-// tAdded by Raji- To include stylus - RAJI
+// Added by Raji- To include stylus - RAJI
 function compile(str, path) {
   return stylus(str)
     .set('filename', path)
     .use(nib());
 }
+
+console.log("Entering application\n")
+
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +44,7 @@ app.set('view engine', 'jade');
 // EDIT BY MUTHU RAJI
 
 // uncomment after placing your favicon in public
-//app.use(favicon(__dirname + 'public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use('/img', express.static('/public/img'));
 
@@ -56,9 +59,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuration
-mongoose.connect(configDB.url); //connect to the configDB
-
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
@@ -70,14 +70,14 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// routes ======================================================================
-require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
-
 // Make our db accessible to our router
 app.use(function(req,res,next){
     req.db = db;
     next();
 });
+
+// routes ======================================================================
+require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 app.use('/', routes);
 app.use('/users', users);

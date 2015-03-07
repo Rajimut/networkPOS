@@ -20,6 +20,7 @@ block content
     li(role='presentation')
         a(href='/seller-profile') My Profile
 
+
   .col-md-12
           h2 POS terminal
           h3.pull-right Receipt # 12345
@@ -135,3 +136,39 @@ block content
                   strong Total
                 |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                 td.no-line.text-right $685.99
+
+  div.row-fluid
+      .page-header.h3 Enter product details
+      form.form-horizontal(method='post', role='form', action='/next-item')
+        input(name='_csrf', type='hidden')
+        .form-group
+          label.col-sm-2 Item Code
+          .col-sm-4
+            input.form-control(placeholder='e.g 56779GH7', required='required', name='ItemNumber', type='text')
+        .form-group
+          label.col-sm-2 Item Name
+          .col-sm-4
+            input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
+        .form-group
+          label.col-sm-2 Unit Price
+          .col-sm-4
+            input.form-control(placeholder='e.g. 12', required='required', name='UnitPrice', type='number')
+        .form-group
+          label.col-sm-2 Quantity
+          .col-sm-4
+            input.form-control(placeholder='e.g. 12', required='required', name='Quantity', type='number')
+        .form-group
+          label.col-sm-2 Subtotal
+          .col-sm-4
+            input.form-control(placeholder=' ', required='required', name='Subtotal', type='number')
+        .form-group
+          .col-sm-offset-4.col-sm-8
+            button.login.btn.btn-primary.btn-lg(type='submit') Next Item
+      form.form-horizontal(method='post', role='form', action='/stop-billing')
+        input(name='_csrf', type='hidden')
+        .form-group
+          .col-sm-offset-4.col-sm-8
+            button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
+        .pull-right
+          a(href='/') Return to home page     
+
