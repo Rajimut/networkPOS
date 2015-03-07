@@ -124,8 +124,8 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
 });
 
 
-router.get('/buyer-dashboard', isLoggedIn, function(req, res) {
-    res.render('buyer-dashboard', {json_data: data});
+router.get('/buyer-transactions', isLoggedIn, function(req, res) {
+    res.render('buyer-transactions', {json_data: data});
 });
 
 // =====================================
@@ -185,7 +185,8 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
 
 //Notification that next item on bill has been entered - continue to build json
 router.post('/next-item', function(req, res) {
-    
+    // NEEDS TO BE AJAXIFIED SO THE PAGE IS NOT REALOADED
+    // OR UPLOAD EVERYTHING IN ONE SHOT
     // Create an instance of the Invoice Details Schema
     var temp_invoice_details = new InvoiceDetails();
 
