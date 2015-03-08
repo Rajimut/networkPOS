@@ -83,32 +83,32 @@ block holder
                           |      
 
               tbody.expandable
-                tr#addr4
-                form.form-horizontal(method='post', role='form', action='/next-item')
-                  input(name='_csrf', type='hidden') 
-                  td
-                    input.form-control(placeholder='e.g 56779GH7', name='ItemNumber', type='text')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g Cafe Latte', name='ItemName', type='text')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g. 12', name='UnitPrice', type='number')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g. 2', name='Quantity', type='number')
-                  |            
-                  td
-                    input.form-control(type='number', placeholder='-', name='Subtotal')
-                  |           
-                  td.text-center
-                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
-                      button#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
-                  |    
-                  td.text-center
-                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
-                      a#add_row.btn.btn-success.btn-sm.pull-right +   
                 tr#addr0
+                  form.form-horizontal(method='post', role='form', action='/next-item')
+                    input(name='_csrf', type='hidden') 
+                    td
+                      input.form-control(placeholder='e.g 56779GH7', name='ItemNumber', type='text')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g Cafe Latte', name='ItemName', type='text')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g. 12', name='UnitPrice', type='number')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g. 2', name='Quantity', type='number')
+                    |            
+                    td
+                      input.form-control(type='number', placeholder='-', name='Subtotal')
+                    |           
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
+                    |    
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#add_row.btn.btn-success.btn-sm.pull-right +   
+                tr#subtotal
                   td.thick-line
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.thick-line
@@ -120,7 +120,7 @@ block holder
                   |  
                   td.thick-line.text-right $670.99
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                tr#addr1
+                tr
                   td.no-line
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.no-line
@@ -132,7 +132,7 @@ block holder
                   |   
                   td.no-line.text-right $2.5
                 |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                tr#addr1
+                tr
                   td.no-line
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.no-line
@@ -155,23 +155,30 @@ block holder
 
         script(type='text/javascript').
           $(document).ready(function(){
-              var i=4;
+            var i=1;
           $("#add_row").on("click", function(){
-            console.log('#i')
-              $('#addr'+i).html("<td><input name='ItemNumber"+i+"' type='text' placeholder='e.g AAA56779GH7' class='form-control input-md' /> </td>"
-                  + " <td><input  name='ItemName"+i+"' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
-                  + "<td><input  name='UnitPrice"+i+"' type='number' placeholder='e.g. 12'  class='form-control input-md'></td>"
-                  + "<td><input  name='Quantity"+i+"' type='number' placeholder='e.g. 2'  class='form-control input-md'></td>"
-                  + "<td><input  name='Subtotal"+i+"' type='number' placeholder='-'  class='form-control input-md'></td>"
-                  + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
-              console.log('hi')
-              $('#addr'+i).before('<tr id="addr'+(i+1)+'"></tr>');
-              i++; 
-              });
+                console.log(i)
+                $('#subtotal').before('<tr id="addr'+(i)+'"></tr>');
+                $('#addr'+(i)).html("<td><input name='ItemNumber"+i+"' type='text' placeholder='e.g AAA56779GH7' class='form-control input-md' /> </td>"
+                    + "<td><input  name='ItemName"+i+"' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
+                    + "<td><input  name='UnitPrice"+i+"' type='number' placeholder='e.g. 12'  class='form-control input-md'></td>"
+                    + "<td><input  name='Quantity"+i+"' type='number' placeholder='e.g. 2'  class='form-control input-md'></td>"
+                    + "<td><input  name='Subtotal"+i+"' type='number' placeholder='-'  class='form-control input-md'></td>"
+                    + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>"
+                    + "<td class='text-center'><a id='add_row' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
+                console.log('hi');
+                i++;
+
+            });
           });
+
           $(document).on("click",'[id^=delete_row]',function(){
               var i = $(this).attr('id').replace(/delete_row_/, '');
+              console.log(i);
               if(i>=1){
               $("#addr"+(i)).html('');
+              }
+              else{
+              $("#addr0").find('input').val('');
               }
               });
