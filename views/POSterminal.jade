@@ -61,7 +61,7 @@ block holder
         |     &#x9;&#x9;&#x9;
         .panel-body
           .table-responsive
-            table.table.table-condensed
+            table#tab_logic.table.table-bordered.table-hover
               thead
                 tr
                   td.text-center
@@ -78,31 +78,37 @@ block holder
                   |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.text-center
                     strong Subtotal
-              |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  th.text-center
+                          |      
+
               tbody.expandable
-                tr
-                form.form-horizontal(method='post', role='form', action='/next-item')
-                  input(name='_csrf', type='hidden') 
-                  td
-                    input.form-control(placeholder='e.g 56779GH7', name='ItemNumber', type='text')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g Cafe Latte', name='ItemName', type='text')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g. 12', name='UnitPrice', type='number')
-                  |            
-                  td
-                    input.form-control(placeholder='e.g. 2', name='Quantity', type='number')
-                  |            
-                  td
-                    input.form-control(type='number')
-                  |           
-                  td
-                    button.login.btn.btn-primary.btn-sm( name='Subtotal', type='submit') Next Item
-                  |   
-                      
-                tr
+                tr#addr0
+                  form.form-horizontal(method='post', role='form', action='/next-item')
+                    input(name='_csrf', type='hidden') 
+                    td
+                      input.form-control(placeholder='e.g 56779GH7', name='ItemNumber', type='text')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g Cafe Latte', name='ItemName', type='text')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g. 12', name='UnitPrice', type='number')
+                    |            
+                    td
+                      input.form-control(placeholder='e.g. 2', name='Quantity', type='number')
+                    |            
+                    td
+                      input.form-control(type='number', placeholder='-', name='Subtotal')
+                    |           
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
+                    |    
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#add_row.btn.btn-success.btn-sm.pull-right +   
+                tr#subtotal
                   td.thick-line
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.thick-line
@@ -111,13 +117,9 @@ block holder
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.thick-line.text-center
                     strong Subtotal
-                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                  td.thick-line.text-center
                   |  
                   td.thick-line.text-right $670.99
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                  td.thick-line
-                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                 tr
                   td.no-line
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
@@ -127,9 +129,7 @@ block holder
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.no-line.text-center
                     strong Tax
-                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                  td.no-line
-                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  |   
                   td.no-line.text-right $2.5
                 |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                 tr
@@ -142,49 +142,43 @@ block holder
                   td.no-line.text-center
                     strong Total
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                  td.no-line
-                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   td.no-line.text-right $685.99
+
         div.row-fluid
          form.form-horizontal(method='post', role='form', action='/stop-billing')
             input(name='_csrf', type='hidden')
             .form-group
               .col-md-12.text-center
                 button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
+                  |   
           
 
+        script(type='text/javascript').
+          $(document).ready(function(){
+            var i=1;
+          $("#add_row").on("click", function(){
+                console.log(i)
+                $('#subtotal').before('<tr id="addr'+(i)+'"></tr>');
+                $('#addr'+(i)).html("<td><input name='ItemNumber"+i+"' type='text' placeholder='e.g AAA56779GH7' class='form-control input-md' /> </td>"
+                    + "<td><input  name='ItemName"+i+"' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
+                    + "<td><input  name='UnitPrice"+i+"' type='number' placeholder='e.g. 12'  class='form-control input-md'></td>"
+                    + "<td><input  name='Quantity"+i+"' type='number' placeholder='e.g. 2'  class='form-control input-md'></td>"
+                    + "<td><input  name='Subtotal"+i+"' type='number' placeholder='-'  class='form-control input-md'></td>"
+                    + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>"
+                    + "<td class='text-center'><a id='add_row' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
+                console.log('hi');
+                i++;
 
+            });
+          });
 
-  //- div.row-fluid
-  //-     .page-header.h3 Enter product details
-  //-     form.form-horizontal(method='post', role='form', action='/next-item')
-  //-       input(name='_csrf', type='hidden')
-  //-       .form-group
-  //-         label.col-sm-2 Item Code
-  //-         .col-sm-4
-  //-           input.form-control(placeholder='e.g 56779GH7', required='required', name='ItemNumber', type='text')
-  //-       .form-group
-  //-         label.col-sm-2 Item Name
-  //-         .col-sm-4
-  //-           input.form-control(placeholder='e.g Cafe Latte', required='required', name='ItemName', type='text')
-  //-       .form-group
-  //-         label.col-sm-2 Unit Price
-  //-         .col-sm-4
-  //-           input.form-control(placeholder='e.g. 12', required='required', name='UnitPrice', type='number')
-  //-       .form-group
-  //-         label.col-sm-2 Quantity
-  //-         .col-sm-4
-  //-           input.form-control(placeholder='e.g. 12', required='required', name='Quantity', type='number')
-  //-       .form-group
-  //-         label.col-sm-2 Subtotal
-  //-         .col-sm-4
-  //-           input.form-control(placeholder=' ', required='required', name='Subtotal', type='number')
-  //-       .form-group
-  //-         .col-sm-offset-4.col-sm-8
-  //-           button.login.btn.btn-primary.btn-lg(type='submit') Next Item
-  //-     form.form-horizontal(method='post', role='form', action='/stop-billing')
-  //-       input(name='_csrf', type='hidden')
-  //-       .form-group
-  //-         .col-sm-offset-4.col-sm-8
-  //-           button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
-
+          $(document).on("click",'[id^=delete_row]',function(){
+              var i = $(this).attr('id').replace(/delete_row_/, '');
+              console.log(i);
+              if(i>=1){
+              $("#addr"+(i)).html('');
+              }
+              else{
+              $("#addr0").find('input').val('');
+              }
+              });

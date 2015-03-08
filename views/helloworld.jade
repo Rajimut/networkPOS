@@ -1,110 +1,60 @@
 extends layout
-
-block content
- 
-	ul.nav.nav-tabs
-		li(role='presentation')
-			a.h4(href='/buyer-dashboard') My Dashboard
-			|    
-		li.active(role='presentation')
-			a.h4(href='/myreceipts') My Receipts
-			|  
-		li(role='presentation')
-			a.h4(href='/buyer-login') Today's expenditure
-			|   
-		li(role='presentation')
-			a.h4(href='/buyer-login') Transactions
-			|  
-		li(role='presentation')
-			a.h4(href='/buyer-login') Categories
-			|   
-		li(role='presentation')
-			a.h4(href='/buyer-login') My APIs
-			|   
-		li(role='presentation')
-			a.h4(href='/buyer-profile') My Profile
-
-		//- div
-		//- 	a(href='#',data-toggle='lightbox', data-title='random', id="mylink") Open Lightbox
-		//- 		img(src='img/h1.png')
-		//- 		|    
-		//- 		.lightbox-caption
-		//- 			p Your caption here
-	//- script(type='text/javascript').
-	//- 	$('#demoLightbox').lightbox({backdrop:true, keyboard:true})
-	div.test
-		a.btn.btn-lg.btn-success(href='#', data-toggle='modal', data-target='#basicModal') Click to open Modal
-			#basicModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
-				.modal-dialog
-					.modal-content
-						.modal-header
-							button.close(type='button', data-dismiss='modal', aria-hidden='true') &amp;times;
-							h4#myModalLabel.modal-title Modal title
-						.modal-body
-							h3 Modal Body
-						.modal-footer
-							button.btn.btn-default(type='button', data-dismiss='modal') Close
-							button.btn.btn-primary(type='button') Save changes
-
 block holder
-	div.one-time
-		each val in [1, 2, 3, 4, 5]    
-			|             
-			div.well.col-xs-12.col-sm-12.col-md-6
-				.text-center
-					h3 Receipt
-				.row
-					.col-xs-6.col-sm-6.col-md-6
-						address
-							strong #{val}
-							|                         
-							br
-							|2135 Sunset Blvd
-							br
-							| Los Angeles, CA 9002
-							|                         
-							br
-							|                        
-							abbr(title='Phone') P:
-							|  (213) 484-6829
-							|                
-					.col-xs-6.col-sm-6.col-md-6.text-right
-						p
-							em Date: 1st November, 2013
-							|              
-				button.btn.btn-success.btn-lg.btn-block(type='button')
-					|  Click to see in detail 
+    .row.clearfix
+        .col-md-12.column
+            table#tab_logic.table.table-bordered.table-hover
+                thead
+                    tr
+                        th.text-center
+                            | Name
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          | Mail
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          | Mobile
+                        | &#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          |     
+                tbody
+                  tr#addr0
+                    td
+                      input.form-control(type='text', name='name0', placeholder='Naaaaame')
+                    |    
+                    td
+                      input.form-control(type='text', name='mail0', placeholder='Mail')
+                    |     
+                    td
+                      input.form-control(type='text', name='mobile0', placeholder='Mobile')
+                    |    
+                    td.text-center
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                      button#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
+                    |                      
+                  tr#addr2
+                  tr#addr3
+                    td
+                    |      
+            | &#x9;
+            a#add_row.btn.btn-success.btn-lg.pull-right Add Row
+    
+    //a#delete_row.pull-right.fa.fa-trash
 
-	
-	script(type='text/javascript').
-		$(document).ready(function(){
-		$('.one-time').slick({ dots: false,
-			infinite: true,
-			speed: 300,
-			slidesToShow: 3,
-			slidesToScroll: 3, 
-			responsive: [
-			{breakpoint: 1024,settings: {
-			slidesToShow: 2,
-			slidesToScroll: 2,infinite: true,dots: false
-			}},
-			{
-			breakpoint: 600,
-			settings: {
-			slidesToShow: 1,
-			slidesToScroll: 1
-				}
-				},
-				{
-				breakpoint: 480,settings: {
-				slidesToShow: 1,
-				slidesToScroll: 1
-					}
-					}
-					]
-					});});
-
-						
-				// can unslick at a given breakpoint now by adding:
-			    // settings: "unslick"
-			    // instead of a settings objec
+    script(type='text/javascript').
+        $(document).ready(function(){
+            var i=1;
+        $("#add_row").on("click", function(){
+            $('#addr'+i).html("<td><input name='name"+i+"' type='text' placeholder='Name' class='form-control input-md' /> </td>"
+                + " <td><input  name='mail"+i+"' type='text' placeholder='Mail'  class='form-control input-md'></td>"
+                + "<td><input  name='mobile"+i+"' type='text' placeholder='Mobile'  class='form-control input-md'></td>"
+                + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
+            $('#tab_logic').append('<tr id="addr'+(i)+'"></tr>');
+            i++; 
+            });
+        });
+        $(document).on("click",'[id^=delete_row]',function(){
+            var i = $(this).attr('id').replace(/delete_row_/, '');
+            if(i>=0){
+            $("#addr"+(i)).html('');
+            }
+            });
