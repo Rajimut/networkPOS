@@ -19,7 +19,6 @@ var mongoose = require('mongoose');
 // Linking to Mongo
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27020/mushrooms');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -70,11 +69,11 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// Make our db accessible to our router
+/* Make our db accessible to our router
 app.use(function(req,res,next){
     req.db = db;
     next();
-});
+}); */
 
 // routes ======================================================================
 require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport

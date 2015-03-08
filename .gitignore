@@ -1,6 +1,6 @@
 .DS_Store
-data/*.0
-data/*.ns
+invoice/*.0
+invoice/*.ns
 config/*.0
 config/*.ns
 *.0

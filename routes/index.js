@@ -1,10 +1,11 @@
 var express = require('express.io');
 var router = express();
 var passport = require('passport');
-//var underscore = require('underscore.js');
+var _ = require('underscore');
 
 //Define Models for each Schema created
-var InvoiceDetails = require('../models/invoice-details');
+var InvoiceDetail = require('../models/invoice-detail');
+var Receipt = require('../models/receipt');
 
 module.exports = function (router, passport) {
 
@@ -92,8 +93,6 @@ router.get('/buyer-profile', isLoggedIn, function(req, res) {
     });
 });
 
-
-
 router.get('/seller-profile', isLoggedIn, function(req, res) {
     res.render('seller-profile.jade', {
         user : req.user // get the user out of session and pass to template
@@ -118,8 +117,25 @@ data = JSON.stringify(data);
 
 var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
 
-// Myreceipt_data = JSON.stringify(Myreceipt_data);
+// Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
+
+    // Create an instance of the Invoice Details Schema
+    //var temp_invoice_details = new InvoiceDetails();
+
+    // Create an array of the Receipt Schema
+    //var receipt = [new Receipt()];
+
+    console.log("Buyer : " + req.user.local.email);
+
+    // Look up the invoice database using the buyer's username
+    InvoiceDetail.find({ 'buyer_username' : req.user.local.email }, function(err,invoice) {
+        console.log(invoice);
+        _.each([1, 2, 3], function(num) {
+            console.log("invoice[" + num + "]: " + this[num]);
+        }, invoice);
+    });
+
     res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
 });
 
@@ -188,7 +204,7 @@ router.post('/next-item', function(req, res) {
     // NEEDS TO BE AJAXIFIED SO THE PAGE IS NOT REALOADED
     // OR UPLOAD EVERYTHING IN ONE SHOT
     // Create an instance of the Invoice Details Schema
-    var temp_invoice_details = new InvoiceDetails();
+    var temp_invoice_details = new InvoiceDetail();
 
     if (req.session.current_transaction === null) {
         //First item in transaction - Store it in the session variable for future retrieval.
@@ -199,16 +215,16 @@ router.post('/next-item', function(req, res) {
     temp_invoice_details.transaction_id = req.session.current_transaction;
     
     //extract information from form
-    temp_invoice_details.seller_username    = req.user._id;    //extract currently logged in seller
-    //temp_invoice_details.buyer_username   = <Needs to be filled somehow>; //For future updates. Needs flash login of Buyer.
-    temp_invoice_details.transaction_date   = new Date();     //Get current date for date for transaction
+    temp_invoice_details.seller_username    = req.user._id;         //extract currently logged in seller
+    temp_invoice_details.buyer_username     = req.body.email1;      //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
     temp_invoice_details.itemcode           = req.body.ItemNumber;
     temp_invoice_details.itemname           = req.body.ItemName;
     temp_invoice_details.unitprice          = req.body.UnitPrice;
     temp_invoice_details.quantity           = req.body.Quantity;
     temp_invoice_details.subtotal           = req.body.Subtotal;
 
-    temp_invoice_details.save(function(error, data){
+    InvoiceDetail.save(temp_invoice_details, function(error, data) {
         if(error){
             res.json(error);
         }
@@ -218,13 +234,24 @@ router.post('/next-item', function(req, res) {
             res.redirect("POSterminal");
         }
     });
+
+    /* temp_invoice_details.save(function(error, data){
+        if(error){
+            res.json(error);
+        }
+        else{
+            res.location("/POSterminal");
+            // And forward to success page
+            res.redirect("POSterminal");
+        }
+    }); */
 });
 
 //Notification that billing has stopped - insert json into db
 router.post('/stop-billing', function(req, res) {
 
     //Generate the receipt in the proprietary format
-    InvoiceDetails.find({'transaction_id' : req.session.current_transaction}, function(err,invoice) {
+    InvoiceDetail.find({'transaction_id' : req.session.current_transaction}, function(err,invoice) {
         console.log(invoice);
     });
 
