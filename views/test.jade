@@ -1,16 +1,57 @@
 extends layout
+block holder
+    .row.clearfix
+        .col-md-12.column
+            table#tab_logic.table.table-bordered.table-hover
+                thead
+                    tr
+                        th.text-center
+                            | Name
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          | Mail
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          | Mobile
+                        | &#x9;&#x9;&#x9;&#x9;
+                        th.text-center
+                          |     
+                tbody
+                  tr#addr0
+                    td
+                      input.form-control(type='text', name='name0', placeholder='Name')
+                    |    
+                    td
+                      input.form-control(type='text', name='mail0', placeholder='Mail')
+                    |     
+                    td
+                      input.form-control(type='text', name='mobile0', placeholder='Mobile')
+                    |    
+                    td.text-center
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                      button#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
+                    |                      
+                  tr#addr1
+            | &#x9;
+            a#add_row.btn.btn-success.btn-lg.pull-right Add Row
+    
+    //a#delete_row.pull-right.fa.fa-trash
 
-block content
-	div.test
-		a.btn.btn-lg.btn-success(href='#basicModal', data-toggle='modal', data-target='#basicModal') Click to open Modal
-		#basicModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
-			.modal-dialog
-				.modal-content
-					.modal-header
-						button.close(type='button', data-dismiss='modal', aria-hidden='true') &amp;times;
-						h4#myModalLabel.modal-title Modal title
-					.modal-body
-						h3 Modal Body
-					.modal-footer
-						button.btn.btn-default(type='button', data-dismiss='modal') Close
-						button.btn.btn-primary(type='button') Save 
+    script(type='text/javascript').
+        $(document).ready(function(){
+            var i=1;
+        $("#add_row").on("click", function(){
+            $('#addr'+i).html("<td><input name='name"+i+"' type='text' placeholder='Name' class='form-control input-md' /> </td>"
+                + " <td><input  name='mail"+i+"' type='text' placeholder='Mail'  class='form-control input-md'></td>"
+                + "<td><input  name='mobile"+i+"' type='text' placeholder='Mobile'  class='form-control input-md'></td>"
+                + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
+            $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+            i++; 
+            });
+        });
+        $(document).on("click",'[id^=delete_row]',function(){
+            var i = $(this).attr('id').replace(/delete_row_/, '');
+            if(i>=0){
+            $("#addr"+(i)).html('');
+            }
+            });
