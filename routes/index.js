@@ -128,12 +128,30 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
 
     console.log("Buyer : " + req.user.local.email);
 
-    // Look up the invoice database using the buyer's username
+    /* var myReceipts = function(req) {
+        InvoiceDetail.aggregate([
+            { $match: { "_id": 1 , "buyer_username": req.user.local.email } }
+            ,{ $group: { transaction_id: "" } } ],
+            function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    console.log(result);
+            });
+    } */
+
+    //Look up the invoice database using the buyer's username
     InvoiceDetail.find({ 'buyer_username' : req.user.local.email }, function(err,invoice) {
-        console.log(invoice);
-        _.each([1, 2, 3], function(num) {
-            console.log("invoice[" + num + "]: " + this[num]);
-        }, invoice);
+        console.log(invoice + "Length: " + invoice.length);
+        _.chain(invoice)
+         .groupBy("transaction_id")
+         .value();
+        console.log("grouped_invoice length: " + invoice);
+
+        /* for(var i = 0; i < grouped_invoice.length;i++) {
+            console.log("grouped_invoice[" + i + "]: " + grouped_invoice[i]);
+        } */
     });
 
     res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
@@ -206,7 +224,7 @@ router.post('/next-item', function(req, res) {
     // Create an instance of the Invoice Details Schema
     var temp_invoice_details = new InvoiceDetail();
 
-    if (req.session.current_transaction === null) {
+    if (req.session.current_transaction == null) {
         //First item in transaction - Store it in the session variable for future retrieval.
         req.session.current_transaction = Date.now();       //uniquely generate transaction id - time based      
     }
@@ -220,6 +238,8 @@ router.post('/next-item', function(req, res) {
     temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
     temp_invoice_details.itemcode           = req.body.ItemNumber;
     temp_invoice_details.itemname           = req.body.ItemName;
+    //Uncomment below once Category is in place.
+    //temp_invoice_details.category           = req.body.Category;
     temp_invoice_details.unitprice          = req.body.UnitPrice;
     temp_invoice_details.quantity           = req.body.Quantity;
     temp_invoice_details.subtotal           = req.body.Subtotal;
