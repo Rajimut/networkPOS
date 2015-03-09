@@ -224,7 +224,7 @@ router.post('/next-item', function(req, res) {
     temp_invoice_details.quantity           = req.body.Quantity;
     temp_invoice_details.subtotal           = req.body.Subtotal;
 
-    InvoiceDetail.save(temp_invoice_details, function(error, data) {
+    temp_invoice_details.save(function(error, data){
         if(error){
             res.json(error);
         }
@@ -234,17 +234,6 @@ router.post('/next-item', function(req, res) {
             res.redirect("POSterminal");
         }
     });
-
-    /* temp_invoice_details.save(function(error, data){
-        if(error){
-            res.json(error);
-        }
-        else{
-            res.location("/POSterminal");
-            // And forward to success page
-            res.redirect("POSterminal");
-        }
-    }); */
 });
 
 //Notification that billing has stopped - insert json into db
