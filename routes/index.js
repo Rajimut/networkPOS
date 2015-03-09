@@ -124,7 +124,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     //var temp_invoice_details = new InvoiceDetails();
 
     // Create an array of the Receipt Schema
-    //var receipt = [new Receipt()];
+    var receipt = new Receipt();
 
     console.log("Buyer : " + req.user.local.email);
 
@@ -142,11 +142,15 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     } */
 
     //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({ 'buyer_username' : req.user.local.email }, function(err,invoice) {
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email }, function(err,invoice) {
         console.log(invoice + "Length: " + invoice.length);
-        _.chain(invoice)
+        
+        receipt.seller_name = 
+
+        _.groupBy(invoice, 'buyer_username');
+        /* _.chain(invoice)
          .groupBy("transaction_id")
-         .value();
+         .value(); */
         console.log("grouped_invoice length: " + invoice);
 
         /* for(var i = 0; i < grouped_invoice.length;i++) {
@@ -233,8 +237,8 @@ router.post('/next-item', function(req, res) {
     temp_invoice_details.transaction_id = req.session.current_transaction;
     
     //extract information from form
-    temp_invoice_details.seller_username    = req.user._id;         //extract currently logged in seller
-    temp_invoice_details.buyer_username     = req.body.email1;      //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.seller_name        = req.user._id;         //extract currently logged in seller name from Seller DB.
+    temp_invoice_details.buyer_name         = req.body.email1;      //For future updates. Needs flash login of Buyer.
     temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
     temp_invoice_details.itemcode           = req.body.ItemNumber;
     temp_invoice_details.itemname           = req.body.ItemName;
@@ -249,9 +253,9 @@ router.post('/next-item', function(req, res) {
             res.json(error);
         }
         else{
-            res.location("/POSterminal");
+            /* res.location("/POSterminal");
             // And forward to success page
-            res.redirect("POSterminal");
+            res.redirect("POSterminal"); */
         }
     });
 });

@@ -10,8 +10,8 @@ invoice_db.once('open', function callback () {
 
 // define the schema for our invoice details model
 var invoicedetailSchema = new Schema({
-    seller_username  :   String,
-    buyer_username   :   String,
+    seller_name      :   String,
+    buyer_name       :   String,
     transaction_id   :   Number,
     transaction_date :   Date,
     itemcode         :   Number,
