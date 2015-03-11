@@ -222,11 +222,11 @@ block holder
             $('form#trans_complete').bind('submit', function(event){
             event.preventDefault();
             if ($('#tab_logic  #total').text()== '$ 0.00') return true;
-            console.log($('#tab_logic  #total').text());
+            //console.log($('#tab_logic  #total').text());
 
 
 
-            var bill_detail =[];
+            var bill_detail = new Object();
             var table = $('form#trans_complete[name]').serialize();
             var item_data = [];
             var row_patt = /\[(\d+)\]$/; // Gets the row number inside []
@@ -243,9 +243,10 @@ block holder
                   }
                 // Get the name of input and row number
                 if ( row_patt.exec($(this).attr('name')) === null)  {
-                  var obj={};
-                  obj[$(this).attr('name')] = el_val;
-                  bill_detail.push(obj);
+                  //var obj={};
+                  
+                  bill_detail[$(this).attr('name')] = el_val;
+                  //bill_detail.push(obj);
 
                 } // USE IT FOR REGULAR USE
               else
@@ -260,9 +261,9 @@ block holder
                 item_data[rowNum][name] = el_val;
                 }
             });
-            var obj={};
-            obj['item_details']=item_data;
-            bill_detail.push(obj);
+  
+            bill_detail['item_details']=item_data;
+            //bill_detail.push(obj);
             //-  PUSH AJAX
             //UPON SUCCESS - REMOVE CONTENT AND GIVE SUCCESS MESSAGE
             console.log('JSON ' + JSON.stringify(bill_detail));
