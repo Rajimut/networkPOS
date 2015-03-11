@@ -257,9 +257,59 @@ router.post('/next-item', function(req, res) {
 });
 
 //Notification that billing has stopped - insert json into db
-router.post('/stop-billing', function(req, res) {
+router.post('/stop-billing', express.bodyParser(), function(req, res) {
+    console.log('body: ' + JSON.stringify(req.body));
+    //res.send(req.body);
+    var temp_invoice_details = new InvoiceDetail();
+    temp_invoice_details = req.body;
+    temp_invoice_details.save(function(error, data){
+        if(error){
+            res.send(error);
+        }
+        else{
+            res.send("success");
+            // And forward to success page
+            //res.redirect("POSterminal");
+        }
+    });
 
-    //Generate the receipt in the proprietary format
+
+    // Create an instance of the Invoice Details Schema
+    // var temp_invoice_details = new InvoiceDetail();
+
+    // temp_invoice_details.transaction_id = Date.now();  //uniquely generate transaction id - time based
+    
+    // //extract information from form
+    // temp_invoice_details.seller_username    = req.user._id;         //extract currently logged in seller
+    // temp_invoice_details.buyer_username     = req.body.email1;      //For future updates. Needs flash login of Buyer.
+    // temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
+    // console.log('item number ' + req.body.email1 + ' '  + req.body.ItemName0 + ' ' + req.body.ItemName1);
+    // temp_invoice_details.item_details[0].itemname =req.body.ItemName0;
+    // temp_invoice_details.item_details[1].itemname =req.body.ItemName1;
+    // // for (var i = 0; i < 2; i=i+1) {
+    // //     // temp_invoice_details.item_details[i].itemcode           = req.body.ItemNumber[i];
+    // //     // temp_invoice_details.item_details[i].itemname           = req.body.ItemName[i];
+    // //     // temp_invoice_details.item_details[i].category           = req.body.Category[i];
+    // //     // temp_invoice_details.item_details[i].unitprice          = req.body.UnitPrice[i];
+    // //     // temp_invoice_details.item_details[i].quantity           = req.body.Quantity[i];
+    // //     // temp_invoice_details.item_details[i].subtotal           = req.body.Subtotal[i];
+    // //     // temp_invoice_details.item_details[i].tax                = req.body.Tax[i];
+    // //     // temp_invoice_details.item_details[i].total              = req.body.Total[i];
+    // // }
+    // // 
+
+    // temp_invoice_details.save(function(error, data){
+    //     if(error){
+    //         res.json(error);
+    //     }
+    //     else{
+    //         res.location("/POSterminal");
+    //         // And forward to success page
+    //         res.redirect("POSterminal");
+    //     }
+    });
+
+    /*Generate the receipt in the proprietary format
     InvoiceDetail.find({'transaction_id' : req.session.current_transaction}, function(err,invoice) {
         console.log(invoice);
     });
@@ -269,8 +319,8 @@ router.post('/stop-billing', function(req, res) {
 
     res.location("/POSterminal");
     // And forward to success page
-    res.redirect("POSterminal");
-});
+    res.redirect("POSterminal"); */
+
 
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {

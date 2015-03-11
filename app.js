@@ -46,13 +46,20 @@ app.set('view engine', 'jade');
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use('/img', express.static('/public/img'));
+app.use(
+  function crossOrigin(req,res,next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    return next();
+  }
+);
 
 app.use(stylus.middleware( //added by RAJI
   { src: path.join(__dirname, '/public'),
   compile: compile //added by RAJI
   }
 ));
-
+app.use(bodyParser({ mapParams: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
