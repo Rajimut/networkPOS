@@ -141,7 +141,6 @@ block holder
           $(document).ready(function(){
             var i=1;
           $("#add_row").on("click", function(){
-                console.log(i)
                 $('#summaryrow').before('<tr id="addr'+(i)+'"></tr>');
                 $('#addr'+(i)).html("<td><input name='itemcode["+i+"]' type='text' placeholder='  AAA56779GH7' class='form-control input-md' /> </td>"
                     + "<td><input  name='itemname["+i+"]' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
@@ -149,9 +148,9 @@ block holder
                     + "<td><div class='input-group'><span class ='input-group-addon'>$</span><input  name='unitprice["+i+"]'  placeholder='$12.00'  class='price form-control input-md'></div></td>"
                     + "<td><input  name='quantity["+i+"]' placeholder='2'  value='1' class='qty form-control input-md'></td>"
                     + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00'  class='subtotal Text-right form-control input-md'></div></td>"
-                    + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>"
-                    + "<td class='text-center'><a id='add_row' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
-                console.log('hi');
+                    + "<td class='text-center'><a id='delete_row_"+i+"'  type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
+                    //- + "<td class='text-center'><a id='add_row'  type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
+
                 i++;
 
 
@@ -160,7 +159,7 @@ block holder
 
           $(document).on("click",'[id^=delete_row]',function(){
               var i = $(this).attr('id').replace(/delete_row_/, '');
-              console.log(i);
+
               if(i>=1){
               $("#addr"+(i)).html('');
               }
@@ -168,18 +167,24 @@ block holder
               $("#addr0").find('input').val('');
               $("#addr0").find('.subtotal').text('0.00');
               }
-               var total = 0;
+
+              var total = 0;
               $('#tab_logic  .subtotal').each(function(){
-               total += parseFloat(this.innerHTML)
+              var subT = parseFloat($(this).text());
+              if (! $.isNumeric(subT))
+               {
+               $(this).text('0.00');
+               }
+               total += parseFloat($(this).text());
                });
-              console.log(total);
-               $('#tab_logic  #subtotal').text('$' + total.toFixed(2));
-               $('#tab_logic  #taxline').text('$' + (0.0875*total).toFixed(2));
-               $('#tab_logic  #total').text('$' + (1.0875*total).toFixed(2));
+
+               $('#tab_logic  #subtotal').text('$ ' + total.toFixed(2));
+               $('#tab_logic  #taxline').text('$ ' + (0.0875*total).toFixed(2));
+               $('#tab_logic  #total').text('$ ' + (1.0875*total).toFixed(2));
               });
 
           $(document).on("keyup",'#tab_logic .qty, #tab_logic .price',function(){
-            console.log('test');
+
             this.value = this.value.replace(/[^0-9\.]/g,'');
             //- this.value=parseFloat($.trim(this));
             //- console.log((this).text());
@@ -197,7 +202,7 @@ block holder
               $('#tab_logic  .subtotal').each(function(){
                total += parseFloat(this.innerHTML)
                });
-              console.log(total);
+
                $('#tab_logic  #subtotal').text('$ ' + total.toFixed(2));
                $('#tab_logic  #taxline').text('$ ' + (0.0875*total).toFixed(2));
                $('#tab_logic  #total').text('$ ' + (1.0875*total).toFixed(2));
@@ -224,8 +229,9 @@ block holder
 
             $(document).on('ready', function() {
             $('form#trans_complete').bind('submit', function(event){
-              event.preventDefault();
-              if ($('#tab_logic  #total').text()== '$ 0.00') return true;
+            event.preventDefault();
+            if ($('#tab_logic  #total').text()== '$ 0.00') return true;
+            console.log($('#tab_logic  #total').text());
 
 
 
