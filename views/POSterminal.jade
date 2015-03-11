@@ -185,7 +185,7 @@ block holder
 
           $(document).on("keyup",'#tab_logic .qty, #tab_logic .price',function(){
 
-            this.value = this.value.replace(/[^0-9\.]/g,'');
+            this.value = this.value.replace(/[^0-9\.]/g,''); // TO ENSURE NUMERIC IS ENTERED
             //- this.value=parseFloat($.trim(this));
             //- console.log((this).text());
             var E=jQuery(this).parents('tr').filter(':first');
@@ -216,16 +216,7 @@ block holder
               .children( '.dropdown-toggle' ).dropdown( 'toggle' );
               return false;
               });
-            function ConvertFormToJSON(form){
-            var array = $(form).serializeArray();
-            var json = {};
-            
-            $.each(array, function() {
-                json[this.name] = this.value || '';
-            });
-            
-            return json;
-            }
+
 
             $(document).on('ready', function() {
             $('form#trans_complete').bind('submit', function(event){
