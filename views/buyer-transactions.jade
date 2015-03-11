@@ -1,7 +1,7 @@
 extends layout
 include mixins/navbar-buyer.jade
 block content
-  +buyer-nav(['active','','','','',''])
+  +buyer-nav(['','','active','','',''])
 
 
 block holder
@@ -11,8 +11,8 @@ block holder
       .panel-body
         div.row
           .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
-            button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-              | Location
+            button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+              span(data-bind='label') Location
               span.caret
             |     
             ul.dropdown-menu(role='menu', aria-labelledby='Location')
@@ -29,8 +29,8 @@ block holder
                 a(role='menuitem', tabindex='-2',href='#') Chennai
 
           .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
-            button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-              | Categories
+            button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+              span(data-bind='label') Categories
               span.caret
             |     
             ul.dropdown-menu(role='menu', aria-labelledby='Categories')
@@ -50,8 +50,8 @@ block holder
                 a(role='menuitem', tabindex='-2',href='#') Salons
 
           .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
-            button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-              | Payment type
+            button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+              span(data-bind='label') Payment type
               span.caret
             |     
             ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
@@ -67,8 +67,8 @@ block holder
               li
                 a(role='menuitem', tabindex='-2',href='#') Apple Pay    
           .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
-            button.btn.btn-block.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-              | Amount
+            button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+              span(data-bind='label') Amount
               span.caret
             |     
             ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
@@ -97,3 +97,11 @@ block holder
             pagination:true,sidePagination:true,clickToSelect: true,
             data: !{json_data}
             });
+          $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+              var $target = $( event.currentTarget );
+              $target.closest( '.btn-group' )
+              .find( '[data-bind="label"]' ).text( $target.text() )
+              .end()
+              .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+              return false;
+              });

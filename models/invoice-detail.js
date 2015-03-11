@@ -8,18 +8,25 @@ invoice_db.on('error', console.error.bind(console, 'connection error:'));
 invoice_db.once('open', function callback () {
 });
 
+var itemdetailSchema = new Schema({
+    itemcode         :   Number,
+    itemname         :   String,
+    category         :   String,
+    unitprice        :   Number,
+    quantity         :   Number,
+    subtotal_ln      :   Number
+});
+
 // define the schema for our invoice details model
 var invoicedetailSchema = new Schema({
     seller_name      :   String,
     buyer_name       :   String,
     transaction_id   :   Number,
     transaction_date :   Date,
-    itemcode         :   Number,
-    itemname         :   String,
-    category         :   String,
-    unitprice        :   Number,
-    quantity         :   Number,
-    subtotal         :   Number
+    item_details     :   [itemdetailSchema],
+    tax              :   Number,
+    beforetax        :   Number,
+    aftertax         :   Number
 });
 
 // create the model for seller and expose it to our app

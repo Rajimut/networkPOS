@@ -2,216 +2,284 @@ extends layout
 
 include mixins/navbar-seller.jade
 block content
-		+seller-nav(['active','','','','',''])
+  +seller-nav(['active','','','','',''])
 
 block holder
-		.col-md-12
-										h2 POS terminal
-										h3.pull-right Receipt # 12345
-								|               
-		form.form(method='post', role='form', action='/next-item')
-				.row.form-inline
-						.col-md-12
-							fieldset
-								.form-group
-										address.text-center
-												strong Order Date:
-												br
-												button.btn.btn-default(type='button') March 7 2015
-								.form-group 
-												label(for='time')   
-										|              
-								.form-group
-										address.text-center
-												strong Billed To:
-												br
-												input.form-control(type='text', name='email1')
-												|                              
-								.form-group
-												label(for='time')     
-										|             
-								.form-group
-										address.text-center
-												strong Payment Method:
-												br 
-												.btn-group  
-														button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-																| Payment type
-																span.caret
-														|     
-														ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
-																li
-																		a(role='menuitem', tabindex='-2',href='#') Creditcard
-																|       
-																li
-																		a(role='menuitem', tabindex='-2',href='#') Visa
-																|       
-																li
-																		a(role='menuitem', tabindex='-2',href='#') Cash
-																|       
-																li
-																		a(role='menuitem', tabindex='-2',href='#') Apple Pay 
-																|          
-				.row
-						.col-md-12
-								.panel.panel-default
-										.panel-heading
-												h3.panel-title
-														strong Order summary
-										|     &#x9;&#x9;&#x9;
-										.panel-body
-												.table-responsive
-														table#tab_logic.table.table-bordered.table-hover
-																thead
-																		tr
-																				td.text-center
-																						strong Item Code
-																				|         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.text-center
-																						strong Item Name
-																				|         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.text-center
-																						strong Category
-																				|         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.text-center
-																						strong Unit Price
-																				|         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.text-center
-																						strong Quantity
-																				|         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.text-center
-																						strong Subtotal
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				th.text-center
-																												|      
 
-																tbody.expandable
-																		tr#addr0
-																				input(name='_csrf', type='hidden') 
-																				td
-																						input.form-control(placeholder='e.g 56779GH7', name='ItemNumber', type='text')
-																				|            
-																				td
-																						input.form-control(placeholder='e.g Cafe Latte', name='ItemName', type='text')			
-																				| 
-																				td
-																						.btn-group  
-																							.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true')
-																									|    Category      
-																									span.caret
-																							|     
-																							ul.dropdown-menu(role='menu', aria-labelledby='Category')
-																									li
-																											a(role='menuitem', tabindex='-2',href='#') Groceries
-																									|       
-																									li
-																											a(role='menuitem', tabindex='-2',href='#') Electronics
-																									|       
-																									li
-																											a(role='menuitem', tabindex='-2',href='#') Household
-																									|       
-																									li
-																											a(role='menuitem', tabindex='-2',href='#') Books 
-																									|                    
-																									li
-																											a(role='menuitem', tabindex='-2',href='#') Others 
-																									|                               
-																				td
-																						input.form-control.price(placeholder='e.g. 12', name='UnitPrice', type='number')
-																				|   
-																				td
-																						input.form-control.qty(placeholder='e.g. 2', name='Quantity', type='number')
-																				|            
-																				td
-																						div.form-control.subtotal( placeholder='', name='Subtotal')
-																				|           
-																				td.text-center
-																								| &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
-																								a#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
-																				|    
-																				td.text-center
-																								| &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
-																								button#add_row.btn.btn-success.btn-sm.pull-right +   
-																		tr#subtotal
-																				td.thick-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.thick-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.thick-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.thick-line.text-center
-																						strong Subtotal
-																				|  
-																				td.thick-line.text-right $670.99
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																		tr
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line.text-center
-																						strong Tax
-																				|   
-																				td.no-line.text-right $2.5
-																		|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																		tr
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line.text-center
-																						strong Total
-																				|     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-																				td.no-line.text-right $685.99
+  .col-md-12
+          h2 POS terminal
+          h3.pull-right Receipt # 12345
+        |               
+  form#trans_complete.form(method='post', role='form', action= '/stop-billing')
+    .row.form-inline
+      .col-md-12
+       fieldset
+        .form-group
+          label.text-center
+            strong Order Date:
+            br
+            div.form-control(type='text', name='transaction_date') March 7 2015 
+        .form-group 
+            label(for='time')   
+          |              
+        .form-group
+          label.text-center
+            strong Billed To:
+            br
+            input.form-control(type='text', name='buyer_username')
+            |                              
+        .form-group
+            label(for='time')     
+          |             
+        .form-group
+          label.text-center
+            strong Payment Method:
+            br 
+            select.form-control(name='paymenttype')
+              option Creditcard
+              |   
+              option Visa
+              |   
+              option Cash
+              |   
+              option Apple Pay
+              |   
+              option Wallet
+                       
+    .row
+      .col-md-12
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title
+              strong Order summary
+          |     &#x9;&#x9;&#x9;
+          .panel-body
+            .table-responsive
+              table#tab_logic.table.table-bordered.table-hover
+                thead
+                  tr
+                    td.text-center.col-md-2
+                      strong Item Code
+                    |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    td.text-center.col-md-3
+                      strong Item Name
+                    |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    td.text-center.col-md-2
+                      strong Category
+                    |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    td.text-center.col-md-2                    
+                      strong Unit Price
+                    |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    td.text-center.col-md-1
+                      strong Quantity
+                    |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    td.text-center.col-md-2
+                      strong Subtotal
+                    |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                    th.text-center
+                            |      
 
-																				div.row-fluid
-		form.form-horizontal(method='post', role='form', action='/stop-billing')
-					.form-group
-							.col-md-12.text-center
-									button.login.btn.btn-primary.btn-lg(type='submit') Transaction Complete
-					|   
-												
-			script(type='text/javascript').
-				$(document).ready(function(){
-						var i=1;
-				$("#add_row").on("click", function(){
-					console.log(i)
-					$('#subtotal').before('<tr id="addr'+(i)+'"></tr>');
-					$('#addr'+(i)).html("<td><input name='ItemNumber"+i+"' type='text' placeholder='e.g AAA56779GH7' class='form-control input-md' /> </td>"
-									+ "<td><input  name='ItemName"+i+"' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
-									+ "<td><div class="btn-group"><div class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">Category<span class="caret"></span></div><ul class="dropdown-menu" aria-labelledby="Category" role="menu"><li><a href="#" tabindex="-2" role="menuitem">Groceries</a></li><li><a href="#" tabindex="-2" role="menuitem">Electronics</a></li><li><a href="#" tabindex="-2" role="menuitem">Household</a></li><li><a href="#" tabindex="-2" role="menuitem">Books</a></li><li><a href="#" tabindex="-2" role="Others">Groceries</a></li></ul></div></td>"
-									+ "<td><input  name='UnitPrice"+i+"' type='number' placeholder='e.g. 12'  class='price form-control input-md'></td>"
-									+ "<td><input  name='Quantity"+i+"' type='number' placeholder='e.g. 2'  class='qty form-control input-md'></td>"
-									+ "<td><input  name='Subtotal"+i+"' type='number' placeholder='-'  class='subtotal form-control input-md'></td>"
-									+ "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>"
-									+ "<td class='text-center'><a id='add_row' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
-					console.log('hi');
-					i++;
+                tbody.expandable
+                  tr#addr0
+                    //- input(name='_csrf', type='hidden') 
+                    td
+                      input.form-control(placeholder='56779GH7', name='itemcode[0]', type='text')
+                    |            
+                    td
+                      input.form-control(placeholder='Cafe Latte', name='itemname[0]', type='text')
+                    |            
+                    td
+                      div.form-control.category( placeholder='', name='category[0]')
+                    |            
+                    td
+                     .input-group
+                      span.input-group-addon $
+                      input.form-control.price(placeholder='$12.00', name='unitprice[0]')
+                    |            
+                    td
+                      input.form-control.qty(placeholder='2', name='quantity[0]', value=1)
+                    |            
+                    td
+                     .input-group
+                      span.input-group-addon $
+                      div.form-control.subtotal.text-right( placeholder='', name='subtotal_ln[0]')
+                    |           
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg
+                    |    
+                    td.text-center
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                        a#add_row.btn.btn-success.btn-sm.pull-right +   
+                  tr#summaryrow
+                    td.thick-line(colspan='5')
+                     strong.pull-right Subtotal
+                    |  
+                    td#subtotal.thick-line.text-right( name='beforetax') $ 0.00
+                    |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  tr
+                    td.thick-line(colspan='5')
+                     strong.pull-right Tax (8.75%)
+                    |  
+                    td#taxline.thick-line.text-right( name='tax') $ 0.00
+                    |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  tr
+                    td.thick-line(colspan='5')
+                     strong.pull-right Total
+                    |  
+                    td#total.thick-line.text-right( name='aftertax') $ 0.00
+                    |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+          div.row-fluid
+          .form-group
+            .col-md-12.text-center
+              button#transaction_btn.btn.btn-primary.btn-lg(type='submit') Transaction Complete
+                |   
+            
+
+        script(type='text/javascript').
+          $(document).ready(function(){
+            var i=1;
+          $("#add_row").on("click", function(){
+                console.log(i)
+                $('#summaryrow').before('<tr id="addr'+(i)+'"></tr>');
+                $('#addr'+(i)).html("<td><input name='itemcode["+i+"]' type='text' placeholder='  AAA56779GH7' class='form-control input-md' /> </td>"
+                    + "<td><input  name='itemname["+i+"]' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
+                    + "<td><div class='form-control category' name='category["+i+"]'></div></td>"
+                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><input  name='unitprice["+i+"]'  placeholder='$12.00'  class='price form-control input-md'></div></td>"
+                    + "<td><input  name='quantity["+i+"]' placeholder='2'  value='1' class='qty form-control input-md'></td>"
+                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00'  class='subtotal Text-right form-control input-md'></div></td>"
+                    + "<td class='text-center'><a id='delete_row_"+i+"' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>"
+                    + "<td class='text-center'><a id='add_row' name='mobile"+i+"' type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
+                console.log('hi');
+                i++;
 
 
-						});
-				});
+              });
+            });
+
+          $(document).on("click",'[id^=delete_row]',function(){
+              var i = $(this).attr('id').replace(/delete_row_/, '');
+              console.log(i);
+              if(i>=1){
+              $("#addr"+(i)).html('');
+              }
+              else{
+              $("#addr0").find('input').val('');
+              $("#addr0").find('.subtotal').text('0.00');
+              }
+               var total = 0;
+              $('#tab_logic  .subtotal').each(function(){
+               total += parseFloat(this.innerHTML)
+               });
+              console.log(total);
+               $('#tab_logic  #subtotal').text('$' + total.toFixed(2));
+               $('#tab_logic  #taxline').text('$' + (0.0875*total).toFixed(2));
+               $('#tab_logic  #total').text('$' + (1.0875*total).toFixed(2));
+              });
+
+          $(document).on("keyup",'#tab_logic .qty, #tab_logic .price',function(){
+            console.log('test');
+            this.value = this.value.replace(/[^0-9\.]/g,'');
+            //- this.value=parseFloat($.trim(this));
+            //- console.log((this).text());
+            var E=jQuery(this).parents('tr').filter(':first');
+            var subT=parseInt(E.find('.qty').val(),10) * parseFloat(E.find('.price').val());
+            if ($.isNumeric(subT))
+             {
+             E.find('.subtotal').text(subT.toFixed(2));
+             }
+            else
+             {
+             E.find('.subtotal').text('0.00');
+             }
+              var total = 0;
+              $('#tab_logic  .subtotal').each(function(){
+               total += parseFloat(this.innerHTML)
+               });
+              console.log(total);
+               $('#tab_logic  #subtotal').text('$ ' + total.toFixed(2));
+               $('#tab_logic  #taxline').text('$ ' + (0.0875*total).toFixed(2));
+               $('#tab_logic  #total').text('$ ' + (1.0875*total).toFixed(2));
+              
+              });
+            $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+              var $target = $( event.currentTarget );
+              $target.closest( '.btn-group' )
+              .find( '[data-bind="label"]' ).text( $target.text() )
+              .end()
+              .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+              return false;
+              });
+            function ConvertFormToJSON(form){
+            var array = $(form).serializeArray();
+            var json = {};
+            
+            $.each(array, function() {
+                json[this.name] = this.value || '';
+            });
+            
+            return json;
+            }
+
+            $(document).on('ready', function() {
+            $('form#trans_complete').bind('submit', function(event){
+              event.preventDefault();
+              if ($('#tab_logic  #total').text()== '$ 0.00') return true;
 
 
-				$(document).on("click",'[id^=delete_row]',function(){
-								var i = $(this).attr('id').replace(/delete_row_/, '');
-								console.log(i);
-								if(i>=1){
-								$("#addr"+(i)).html('');
-								}
-								else{
-								$("#addr0").find('input').val('');
-								}
-								});
 
-				$(document).on("keyup",'#tab_logic .qty',function(){
-						//- console.log((this).text());
-						var E=jQuery(this).parents('tr').filter(':first');
-						var subT=parseInt(E.find('.qty').val(),10) * parseFloat(E.find('.price').val());
-						E.find('.subtotal').text('$' + subT.toFixed(2));
-								});
+            var bill_detail =[];
+            var table = $('form#trans_complete[name]').serialize();
+            var item_data = [];
+            var row_patt = /\[(\d+)\]$/; // Gets the row number inside []
+            var name_patt = /^[^\[]+/; // Gets the name without the [0]
+
+            $('#trans_complete [name]').each( function(index, ele){
+                var el_val ='';
+                if (ele.tagName == "INPUT"  || ele.tagName == "SELECT"){
+                  el_val = ele.value;
+                  }
+                else
+                  {
+                  el_val = $(this).text();
+                  }
+                // Get the name of input and row number
+                if ( row_patt.exec($(this).attr('name')) === null)  {
+                  var obj={};
+                  obj[$(this).attr('name')] = el_val;
+                  bill_detail.push(obj);
+
+                } // USE IT FOR REGULAR USE
+              else
+                {
+                
+                var rowNum = parseInt(row_patt.exec($(this).attr('name'))[1]);
+                var name = name_patt.exec($(this).attr('name'));
+                 if( item_data[rowNum] === undefined ){
+                    item_data[rowNum] = {};
+                }
+
+                item_data[rowNum][name] = el_val;
+                }
+            });
+            var obj={};
+            obj['item_details']=item_data;
+            bill_detail.push(obj);
+            //-  PUSH AJAX
+            //UPON SUCCESS - REMOVE CONTENT AND GIVE SUCCESS MESSAGE
+            console.log('JSON ' + JSON.stringify(bill_detail));
+            $.ajax({
+            url: '/stop-billing',
+            type: 'POST',
+            dataType   : 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(bill_detail) ,
+            success: function(data){
+                console.log(data);
+            }
+            });
+
+              });
+            });
 
