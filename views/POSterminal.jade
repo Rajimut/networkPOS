@@ -113,22 +113,22 @@ block holder
                         a#add_row.btn.btn-success.btn-sm.pull-right +   
                   tr#summaryrow
                     td.thick-line(colspan='5')
-                     strong.pull-right Subtotal
+                     strong.pull-right Subtotal 
                     |  
-                    td#subtotal.thick-line.text-right( name='beforetax') $ 0.00
+                    td#subtotal.thick-line.text-right( name='beforetax') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
-                     strong.pull-right Tax (8.75%)
+                     strong.pull-right Tax (8.75%) 
                     |  
-                    td#taxline.thick-line.text-right( name='tax') $ 0.00
+                    td#taxline.thick-line.text-right( name='tax') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
                      strong.pull-right Total
                     |  
-                    td#total.thick-line.text-right( name='aftertax') $ 0.00
+                    td#total.thick-line.text-right( name='aftertax') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
           div.row-fluid
           .form-group
@@ -178,9 +178,9 @@ block holder
                total += parseFloat($(this).text());
                });
 
-               $('#tab_logic  #subtotal').text('$ ' + total.toFixed(2));
-               $('#tab_logic  #taxline').text('$ ' + (0.0875*total).toFixed(2));
-               $('#tab_logic  #total').text('$ ' + (1.0875*total).toFixed(2));
+               $('#tab_logic  #subtotal').text(total.toFixed(2));
+               $('#tab_logic  #taxline').text((0.0875*total).toFixed(2));
+               $('#tab_logic  #total').text((1.0875*total).toFixed(2));
               });
 
           $(document).on("keyup",'#tab_logic .qty, #tab_logic .price',function(){
@@ -203,9 +203,9 @@ block holder
                total += parseFloat(this.innerHTML)
                });
 
-               $('#tab_logic  #subtotal').text('$ ' + total.toFixed(2));
-               $('#tab_logic  #taxline').text('$ ' + (0.0875*total).toFixed(2));
-               $('#tab_logic  #total').text('$ ' + (1.0875*total).toFixed(2));
+               $('#tab_logic  #subtotal').text(total.toFixed(2));
+               $('#tab_logic  #taxline').text((0.0875*total).toFixed(2));
+               $('#tab_logic  #total').text((1.0875*total).toFixed(2));
               
               });
             $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
