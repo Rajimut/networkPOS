@@ -106,7 +106,7 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
-var config = require( __dirname + '/receipt.json');
+/* var config = require( __dirname + '/receipt.json');
 
 
 var file = __dirname + '/receipt.json';
@@ -116,52 +116,24 @@ var data = JSON.parse(fs.readFileSync(file, "utf8"));
 console.dir(data);
 data = JSON.stringify(data);
 
-var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
+var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8")); */
 
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
 
-    // Create an instance of the Invoice Details Schema
-    //var temp_invoice_details = new InvoiceDetails();
-
-    // Create an array of the Receipt Schema
-    var receipt = new Receipt();
-
     console.log("Buyer : " + req.user.local.email);
-
-    /* var myReceipts = function(req) {
-        InvoiceDetail.aggregate([
-            { $match: { "_id": 1 , "buyer_username": req.user.local.email } }
-            ,{ $group: { transaction_id: "" } } ],
-            function (err, result) {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    console.log(result);
-            });
-    } */
 
     //Look up the invoice database using the buyer's username
     InvoiceDetail.find({ 'buyer_name' : req.user.local.email }, function(err,invoice) {
-        console.log(invoice + "Length: " + invoice.length);
-        
-        //receipt.seller_name = 
-
-        _.groupBy(invoice, 'buyer_username');
-        /* _.chain(invoice)
-         .groupBy("transaction_id")
-         .value(); */
-        console.log("grouped_invoice length: " + invoice);
-
-        /* for(var i = 0; i < grouped_invoice.length;i++) {
-            console.log("grouped_invoice[" + i + "]: " + grouped_invoice[i]);
-        } */
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('myreceipts', {myreceipt_: invoice});        
+        }
     });
-
-    res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+    
+    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
 });
-
 
 router.get('/buyer-transactions', isLoggedIn, function(req, res) {
     res.render('buyer-transactions', {json_data: data});
@@ -185,11 +157,11 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
+
 /* GET Hello World page. */
 router.get('/helloworld', function(req, res) {
     res.render('helloworld', { title: 'Hello, World!' });
 });
-
 
 router.get('/POSterminal', isLoggedIn, function(req, res) {
     
