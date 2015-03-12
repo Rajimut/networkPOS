@@ -8,7 +8,7 @@ block holder
 
   .col-md-12
           h2 POS terminal
-          h3.pull-right Receipt # 12345
+          h3.pull-right Receipt # #{receipt_no}
         |               
   form#trans_complete.form(method='post', role='form', action= '/stop-billing')
     .row.form-inline
@@ -113,7 +113,7 @@ block holder
                         a#add_row.btn.btn-success.btn-sm.pull-right +   
                   tr#summaryrow
                     td.thick-line(colspan='5')
-                     strong.pull-right Subtotal
+                      strong.pull-right Subtotal
                     | 
                     td.thick-line.text-right
                       div.input-group
@@ -122,8 +122,8 @@ block holder
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
-                     strong.pull-right Tax (8.75%)
-                    |  
+                      strong.pull-right Tax (8.75%) 
+                    |    
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
@@ -131,7 +131,7 @@ block holder
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
-                     strong.pull-right Total
+                      strong.pull-right Total
                     |  
                     td.thick-line.text-right
                       div.input-group
@@ -213,8 +213,7 @@ block holder
                });
                $("#tab_logic  [name='beforetax']").text(total.toFixed(2));
                $("#tab_logic  [name='tax']").text( (0.0875*total).toFixed(2));
-               $("#tab_logic  [name='aftertax']").text((1.0875*total).toFixed(2));
-              
+               $("#tab_logic  [name='aftertax']").text((1.0875*total).toFixed(2));              
               });
             $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
               var $target = $( event.currentTarget );

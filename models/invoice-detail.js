@@ -19,10 +19,11 @@ var itemdetailSchema = new Schema({
 
 // define the schema for our invoice details model
 var invoicedetailSchema = new Schema({
-    seller_username  :   String,
-    buyer_username   :   String,
-    transaction_id   :   Number,
+    seller_name      :   String,
+    buyer_name       :   String,
+    transaction_id   :   String,
     transaction_date :   Date,
+    paymenttype      :   String,
     item_details     :   [itemdetailSchema],
     tax              :   Number,
     beforetax        :   Number,

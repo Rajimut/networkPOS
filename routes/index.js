@@ -1,7 +1,8 @@
-var express = require('express.io');
-var router = express();
-var passport = require('passport');
-var _ = require('underscore');
+var express     = require('express.io');
+var router      = express();
+var passport    = require('passport');
+var _           = require('underscore');
+var crypto      = require('crypto');
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
@@ -124,7 +125,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     //var temp_invoice_details = new InvoiceDetails();
 
     // Create an array of the Receipt Schema
-    //var receipt = [new Receipt()];
+    var receipt = new Receipt();
 
     console.log("Buyer : " + req.user.local.email);
 
@@ -142,11 +143,15 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     } */
 
     //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({ 'buyer_username' : req.user.local.email }, function(err,invoice) {
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email }, function(err,invoice) {
         console.log(invoice + "Length: " + invoice.length);
-        _.chain(invoice)
+        
+        //receipt.seller_name = 
+
+        _.groupBy(invoice, 'buyer_username');
+        /* _.chain(invoice)
          .groupBy("transaction_id")
-         .value();
+         .value(); */
         console.log("grouped_invoice length: " + invoice);
 
         /* for(var i = 0; i < grouped_invoice.length;i++) {
@@ -187,7 +192,11 @@ router.get('/helloworld', function(req, res) {
 
 
 router.get('/POSterminal', isLoggedIn, function(req, res) {
-    res.render('POSterminal', { user : req.user, title: 'POSterminal' });
+    
+    req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
+
+    console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
+    res.render('POSterminal', { 'receipt_no', { "receipt_no" : req.session.current_receipt_no }, title: 'POSterminal' });
 });
 
 //Notification that billing has started - start building json object
@@ -217,110 +226,41 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
     });
 }); */
 
-//Notification that next item on bill has been entered - continue to build json
-router.post('/next-item', function(req, res) {
-    // NEEDS TO BE AJAXIFIED SO THE PAGE IS NOT REALOADED
-    // OR UPLOAD EVERYTHING IN ONE SHOT
+//Notification that billing has stopped - insert json into db
+router.post('/stop-billing', function(req, res) {
+
     // Create an instance of the Invoice Details Schema
     var temp_invoice_details = new InvoiceDetail();
 
-    if (req.session.current_transaction == null) {
-        //First item in transaction - Store it in the session variable for future retrieval.
-        req.session.current_transaction = Date.now();       //uniquely generate transaction id - time based      
-    }
-    
-    // Store transaction id into item pertaining to this invoice
-    temp_invoice_details.transaction_id = req.session.current_transaction;
-    
-    //extract information from form
-    temp_invoice_details.seller_username    = req.user._id;         //extract currently logged in seller
-    temp_invoice_details.buyer_username     = req.body.email1;      //For future updates. Needs flash login of Buyer.
-    temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
-    temp_invoice_details.itemcode           = req.body.ItemNumber;
-    temp_invoice_details.itemname           = req.body.ItemName;
-    //Uncomment below once Category is in place.
-    //temp_invoice_details.category           = req.body.Category;
-    temp_invoice_details.unitprice          = req.body.UnitPrice;
-    temp_invoice_details.quantity           = req.body.Quantity;
-    temp_invoice_details.subtotal           = req.body.Subtotal;
+    temp_invoice_details.transaction_id     = req.session.current_receipt_no;  //uniquely generate transaction id - time based
 
+    // Set current_receipt_no in session variable to null since we store in the DB which is persistent.
+    req.session.current_receipt_no = null;
+
+    //extract information from form
+    temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
+    temp_invoice_details.seller_username    = req.user._id;             //extract currently logged in seller
+    temp_invoice_details.buyer_username     = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.paymenttype        = req.body.paymenttype;
+    temp_invoice_details.tax                = req.body.tax;    
+    temp_invoice_details.beforetax          = req.body.beforetax;
+    temp_invoice_details.aftertax           = req.body.aftertax;
+    temp_invoice_details.item_details       = req.body.item_details;
+
+    console.log("temp_invoice_details : " + temp_invoice_details);
+    
     temp_invoice_details.save(function(error, data){
-        if(error){
-            res.json(error);
-        }
-        else{
-            res.location("/POSterminal");
-            // And forward to success page
-            res.redirect("POSterminal");
-        }
+         if(error){
+             console.log("error case" + error);
+             res.send("There was a problem adding the information to the database." + error);
+         }
+         else{
+             res.location("POSterminal");
+             // And forward to success page
+             res.redirect("POSterminal");
+         }
     });
 });
-
-//Notification that billing has stopped - insert json into db
-router.post('/stop-billing', express.bodyParser(), function(req, res) {
-    console.log('body: ' + JSON.stringify(req.body));
-    //res.send(req.body);
-    var temp_invoice_details = new InvoiceDetail();
-    temp_invoice_details = req.body;
-    temp_invoice_details.save(function(error, data){
-        if(error){
-            res.send(error);
-        }
-        else{
-            res.send("success");
-            // And forward to success page
-            //res.redirect("POSterminal");
-        }
-    });
-
-
-    // Create an instance of the Invoice Details Schema
-    // var temp_invoice_details = new InvoiceDetail();
-
-    // temp_invoice_details.transaction_id = Date.now();  //uniquely generate transaction id - time based
-    
-    // //extract information from form
-    // temp_invoice_details.seller_username    = req.user._id;         //extract currently logged in seller
-    // temp_invoice_details.buyer_username     = req.body.email1;      //For future updates. Needs flash login of Buyer.
-    // temp_invoice_details.transaction_date   = new Date();           //Get current date for date for transaction
-    // console.log('item number ' + req.body.email1 + ' '  + req.body.ItemName0 + ' ' + req.body.ItemName1);
-    // temp_invoice_details.item_details[0].itemname =req.body.ItemName0;
-    // temp_invoice_details.item_details[1].itemname =req.body.ItemName1;
-    // // for (var i = 0; i < 2; i=i+1) {
-    // //     // temp_invoice_details.item_details[i].itemcode           = req.body.ItemNumber[i];
-    // //     // temp_invoice_details.item_details[i].itemname           = req.body.ItemName[i];
-    // //     // temp_invoice_details.item_details[i].category           = req.body.Category[i];
-    // //     // temp_invoice_details.item_details[i].unitprice          = req.body.UnitPrice[i];
-    // //     // temp_invoice_details.item_details[i].quantity           = req.body.Quantity[i];
-    // //     // temp_invoice_details.item_details[i].subtotal           = req.body.Subtotal[i];
-    // //     // temp_invoice_details.item_details[i].tax                = req.body.Tax[i];
-    // //     // temp_invoice_details.item_details[i].total              = req.body.Total[i];
-    // // }
-    // // 
-
-    // temp_invoice_details.save(function(error, data){
-    //     if(error){
-    //         res.json(error);
-    //     }
-    //     else{
-    //         res.location("/POSterminal");
-    //         // And forward to success page
-    //         res.redirect("POSterminal");
-    //     }
-    });
-
-    /*Generate the receipt in the proprietary format
-    InvoiceDetail.find({'transaction_id' : req.session.current_transaction}, function(err,invoice) {
-        console.log(invoice);
-    });
-
-    //Null the current transaction in the session variable since this transaction has been completed.
-    req.session.current_transaction = null;
-
-    res.location("/POSterminal");
-    // And forward to success page
-    res.redirect("POSterminal"); */
-
 
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {

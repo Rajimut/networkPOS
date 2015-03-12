@@ -15,7 +15,9 @@ var receiptdetailsSchema = new Schema({
 // define the schema for our receipt model
 var receiptSchema = new Schema({
     seller_name  	 	:   String,
+    seller_address      :   String,
     transaction_date 	:   Date,
+    transaction_id      :   String,
     category			: 	String,
     receipt_details		: 	[receiptdetailsSchema],
     total 				: 	Number,
