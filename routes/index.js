@@ -48,7 +48,7 @@ router.get('/seller-login', function(req, res) {
 
 // Process the login form
 router.post('/seller-login', passport.authenticate('local-login', {
-        successRedirect : '/seller-profile', // redirect to the secure profile section
+        successRedirect : '/POSterminal', // redirect to the secure profile section
         failureRedirect : '/seller-login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
