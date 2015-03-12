@@ -196,7 +196,7 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
 
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal', { 'receipt_no', { "receipt_no" : req.session.current_receipt_no }, title: 'POSterminal' });
+    res.render('POSterminal',  { "receipt_no" : req.session.current_receipt_no , title:'POSterminal' });
 });
 
 //Notification that billing has started - start building json object
@@ -242,7 +242,7 @@ router.post('/stop-billing', function(req, res) {
     temp_invoice_details.seller_username    = req.user._id;             //extract currently logged in seller
     temp_invoice_details.buyer_username     = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
-    temp_invoice_details.tax                = req.body.tax;    
+    temp_invoice_details.tax                = req.body.tax;
     temp_invoice_details.beforetax          = req.body.beforetax;
     temp_invoice_details.aftertax           = req.body.aftertax;
     temp_invoice_details.item_details       = req.body.item_details;
@@ -255,7 +255,7 @@ router.post('/stop-billing', function(req, res) {
              res.send("There was a problem adding the information to the database." + error);
          }
          else{
-             res.location("POSterminal");
+             //res.location("POSterminal");
              // And forward to success page
              res.redirect("POSterminal");
          }
