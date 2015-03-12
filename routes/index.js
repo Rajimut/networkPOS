@@ -196,7 +196,7 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
 
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal', { receipt_no : req.session.current_receipt_no, title: 'POSterminal' });
+    res.render('POSterminal', { 'receipt_no', { "receipt_no" : req.session.current_receipt_no }, title: 'POSterminal' });
 });
 
 //Notification that billing has started - start building json object

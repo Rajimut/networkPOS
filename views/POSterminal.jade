@@ -8,7 +8,7 @@ block holder
 
   .col-md-12
           h2 POS terminal
-          h3.pull-right Receipt # 12345
+          h3.pull-right Receipt # #{receipt_no}
         |               
   form#trans_complete.form(method='post', role='form', action= '/stop-billing')
     .row.form-inline
@@ -102,7 +102,7 @@ block holder
                     td
                      .input-group
                       span.input-group-addon $
-                      div.form-control.subtotal.text-right( placeholder='', name='subtotal_ln[0]')
+                      div.form-control.subtotal.text-right( placeholder='' ,name='subtotal_ln[0]') 0.00
                     |           
                     td.text-center
                         | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
@@ -113,22 +113,30 @@ block holder
                         a#add_row.btn.btn-success.btn-sm.pull-right +   
                   tr#summaryrow
                     td.thick-line(colspan='5')
-                     strong.pull-right Subtotal 
-                    |  
-                    td#subtotal.thick-line.text-right( name='beforetax') 0.00
+                      strong.pull-right Subtotal
+                    | 
+                    td.thick-line.text-right
+                      div.input-group
+                        span.input-group-addon $
+                        div.form-control(name='beforetax')
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
-                     strong.pull-right Tax (8.75%) 
-                    |  
-                    td#taxline.thick-line.text-right( name='tax') 0.00
-                    |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      strong.pull-right Tax (8.75%) 
+                    |    
+                    td.thick-line.text-right
+                      div.input-group
+                        span.input-group-addon $
+                        div.form-control(name='tax')
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
-                     strong.pull-right Total
+                      strong.pull-right Total
                     |  
-                    td#total.thick-line.text-right( name='aftertax') 0.00
+                    td.thick-line.text-right
+                      div.input-group
+                        span.input-group-addon $
+                        div.form-control(name='aftertax')
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
           div.row-fluid
           .form-group
@@ -147,7 +155,7 @@ block holder
                     + "<td><div class='form-control category' name='category["+i+"]'></div></td>"
                     + "<td><div class='input-group'><span class ='input-group-addon'>$</span><input  name='unitprice["+i+"]'  placeholder='$12.00'  class='price form-control input-md'></div></td>"
                     + "<td><input  name='quantity["+i+"]' placeholder='2'  value='1' class='qty form-control input-md'></td>"
-                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00'  class='subtotal Text-right form-control input-md'></div></td>"
+                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00'  class='subtotal Text-right form-control input-md'>0.00</div></td>"
                     + "<td class='text-center'><a id='delete_row_"+i+"'  type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
                     //- + "<td class='text-center'><a id='add_row'  type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
 
@@ -165,11 +173,12 @@ block holder
               }
               else{
               $("#addr0").find('input').val('');
+              $("#addr0").find("[name='quantity[0]']").val('1');
               $("#addr0").find('.subtotal').text('0.00');
               }
 
               var total = 0;
-              $('#tab_logic  .subtotal').each(function(){
+              $("#tab_logic  [name*='subtotal_ln']").each(function(){
               var subT = parseFloat($(this).text());
               if (! $.isNumeric(subT))
                {
@@ -178,18 +187,18 @@ block holder
                total += parseFloat($(this).text());
                });
 
-               $('#tab_logic  #subtotal').text(total.toFixed(2));
-               $('#tab_logic  #taxline').text((0.0875*total).toFixed(2));
-               $('#tab_logic  #total').text((1.0875*total).toFixed(2));
+               $("#tab_logic  [name='beforetax']").text( total.toFixed(2));
+               $("#tab_logic  [name='tax']").text( (0.0875*total).toFixed(2));
+               $("#tab_logic  [name='aftertax']").text((1.0875*total).toFixed(2));
               });
 
-          $(document).on("keyup",'#tab_logic .qty, #tab_logic .price',function(){
+          $(document).on("keyup","#tab_logic [name*='unitprice'], #tab_logic [name*='quantity']",function(){
 
             this.value = this.value.replace(/[^0-9\.]/g,''); // TO ENSURE NUMERIC IS ENTERED
             //- this.value=parseFloat($.trim(this));
             //- console.log((this).text());
             var E=jQuery(this).parents('tr').filter(':first');
-            var subT=parseInt(E.find('.qty').val(),10) * parseFloat(E.find('.price').val());
+            var subT=parseInt(E.find("[name*='quantity']").val(),10) * parseFloat(E.find("[name*='unitprice']").val());
             if ($.isNumeric(subT))
              {
              E.find('.subtotal').text(subT.toFixed(2));
@@ -199,14 +208,12 @@ block holder
              E.find('.subtotal').text('0.00');
              }
               var total = 0;
-              $('#tab_logic  .subtotal').each(function(){
+              $("#tab_logic  [name*='subtotal_ln']").each(function(){
                total += parseFloat(this.innerHTML)
                });
-
-               $('#tab_logic  #subtotal').text(total.toFixed(2));
-               $('#tab_logic  #taxline').text((0.0875*total).toFixed(2));
-               $('#tab_logic  #total').text((1.0875*total).toFixed(2));
-              
+               $("#tab_logic  [name='beforetax']").text(total.toFixed(2));
+               $("#tab_logic  [name='tax']").text( (0.0875*total).toFixed(2));
+               $("#tab_logic  [name='aftertax']").text((1.0875*total).toFixed(2));              
               });
             $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
               var $target = $( event.currentTarget );
@@ -221,7 +228,7 @@ block holder
             $(document).on('ready', function() {
             $('form#trans_complete').bind('submit', function(event){
             event.preventDefault();
-            if ($('#tab_logic  #total').text()== '$ 0.00') return true;
+            if ($('#tab_logic  #total').text()== '0.00') return true;
             //console.log($('#tab_logic  #total').text());
 
 
