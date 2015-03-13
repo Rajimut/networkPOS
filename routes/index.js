@@ -3,6 +3,7 @@ var router      = express();
 var passport    = require('passport');
 var _           = require('underscore');
 var crypto      = require('crypto');
+var MongoWatch = require 'mongo-watch';
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
@@ -121,6 +122,13 @@ var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
 
+    //Start listening port to receive notifications
+    watcher = new MongoWatch {format: 'pretty'}
+ 
+    watcher.watch('test.users', function(event) {
+        return console.log('something changed:', event);
+    });
+
     console.log("Buyer : " + req.user.local.email);
 
     //Look up the invoice database using the buyer's username
@@ -211,8 +219,8 @@ router.post('/stop-billing', function(req, res) {
 
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
-    temp_invoice_details.seller_username    = req.user._id;             //extract currently logged in seller
-    temp_invoice_details.buyer_username     = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.seller_name        = req.user._id;             //extract currently logged in seller
+    temp_invoice_details.buyer_name         = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
     temp_invoice_details.tax                = req.body.tax;    
     temp_invoice_details.beforetax          = req.body.beforetax;
