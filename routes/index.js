@@ -49,7 +49,7 @@ router.get('/seller-login', function(req, res) {
 
 // Process the login form
 router.post('/seller-login', passport.authenticate('local-login', {
-        successRedirect : '/seller-profile', // redirect to the secure profile section
+        successRedirect : '/POSterminal', // redirect to the secure profile section
         failureRedirect : '/seller-login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
@@ -107,17 +107,14 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
-/* var config = require( __dirname + '/receipt.json');
-
-
+var config = require( __dirname + '/receipt.json');
 var file = __dirname + '/receipt.json';
-
 var fs = require("fs");
 var data = JSON.parse(fs.readFileSync(file, "utf8"));
 console.dir(data);
 data = JSON.stringify(data);
 
-var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8")); */
+var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
 
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
@@ -133,11 +130,29 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     console.log("Buyer : " + req.user.local.email);
 
     //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({ 'buyer_name' : req.user.local.email }, function(err,invoice) {
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {
-            res.render('myreceipts', {myreceipt_: invoice});        
+            res.render('myreceipts', {myreceipt_: invoice});
+        }
+    });
+    
+    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+});
+
+router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
+    var receipt_id = req.params.transaction_id;
+    console.log('incoming id ' + req.params.transaction_id);
+//  finding by string not working from Browser. Using _id need to find a better approach. Uma
+    //Look up the invoice database using the buyer's username
+    InvoiceDetail.find({'transaction_id' :receipt_id}, function(err,invoice) {
+        // console.log('id is '+ invoice + ' kk ' + req.params._id);
+        if (err) {
+            return res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            
+            res.render('mixins/mixin-receipt.jade', {receipt: invoice[0]});
         }
     });
     
@@ -173,9 +188,7 @@ router.get('/helloworld', function(req, res) {
 });
 
 router.get('/POSterminal', isLoggedIn, function(req, res) {
-    
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
-
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
     res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
 });
@@ -221,11 +234,9 @@ router.post('/stop-billing', function(req, res) {
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
     temp_invoice_details.seller_name        = req.user._id;             //extract currently logged in seller
-    console.log("Buyer username : " + req.body.buyer_username);
-    temp_invoice_details.buyer_name         = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
-    console.log("Buyer name in DB : " + temp_invoice_details.buyer_name);
+    temp_invoice_details.buyer_name         = req.body.buyer_name;  //For future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
-    temp_invoice_details.tax                = req.body.tax;    
+    temp_invoice_details.tax                = req.body.tax;
     temp_invoice_details.beforetax          = req.body.beforetax;
     temp_invoice_details.aftertax           = req.body.aftertax;
     temp_invoice_details.item_details       = req.body.item_details;
@@ -238,7 +249,7 @@ router.post('/stop-billing', function(req, res) {
              res.send("There was a problem adding the information to the database." + error);
          }
          else{
-             res.location("POSterminal");
+             //res.location("POSterminal");
              // And forward to success page
              res.redirect("POSterminal");
          }

@@ -30,10 +30,13 @@ function compile(str, path) {
     .use(nib());
 }
 
-console.log("Entering application\n")
+
 
 var app = express();
-
+// NEEDED FOR BROWSER SIDE MANIPULATION
+app.locals._      = require('underscore');
+app.locals._.str  = require('underscore.string');
+app.locals.moment = require('moment');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 

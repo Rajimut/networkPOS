@@ -1,11 +1,16 @@
 extends layout
 include mixins/navbar-buyer.jade
-include mixins/mixin-receipt.jade
+//- include mixins/mixin-receipt.jade
 block content
   +buyer-nav(['','active','','','',''])
 
 
 block holder
+
+  //- div.test
+  //-   each val in myreceipt_
+  //-     each val_ in val.item_details
+  //-       div p #{val_}
   div#receiptModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
     .modal-dialog
       .modal-content
@@ -13,34 +18,51 @@ block holder
           button.close(type='button', data-dismiss='modal', aria-hidden='true')
           //- h4#myModalLabel.modal-title Modal title
         .modal-body
-          +receipt_template()
+          //- +receipt_template()
         .modal-footer
           .col-xs-12.col-sm-12.col-md-12.text-center
             button.btn.btn-default.text-center(type='button', data-dismiss='modal') Close
-          //- button.btn.btn-primary(type='button') Save
-        script(type='text/javascript').
-          $('#receiptModal').on('show.bs.modal', function () {
-            $('.modal .modal-body').css('overflow-y', 'auto'); 
-            $('.modal .modal-body').css('max-height', $(window).height() * 0.7);
-            });
+              //- button.btn.btn-primary(type='button') Save
+        //- script(type='text/javascript').
+        //-   $('#receiptModal').on('show.bs.modal', function () {
+        //-     $('.modal .modal-body').css('overflow-y', 'auto'); 
+        //-     $('.modal .modal-body').css('max-height', $(window).height() * 0.7);
+        //-     });
   div.one-time
-    each val in [1, 2, 3, 4, 5]    
+    each val in myreceipt_
       |             
       div.well.col-xs-12.col-sm-12.col-md-6.text-center
-        h3 Starbucks #{val} 
+        h3 S #{val.seller_name}
+        //-console.log(#{myreceipt_paymenttype})
         .col-xs-12.col-sm-12.col-md-12.text-center
-            h2 $#{val}             
+            h2 $#{val.aftertax}             
         .col-xs-12.col-sm-12.col-md-12.text-center
-            h3
-            |                         
-            | Date: 1st November, 2013
-            p                        
-            |       
+            h3                      
+            | #{val.transaction_date.toDateString()}
+            p
+            p
+            | #{val.paymenttype}
+            p
+            | Receipt: #{val.transaction_id}
+            p
+            |                               
+            |                                                                    
         .col-xs-12.col-sm-12.col-md-12.text-center        
           div
-            a.btn.btn-lg.btn-success(href='#receiptModal', data-toggle='modal', data-target='#receiptModal') Details
+            a.btn.btn-lg.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details
+              //- (href='#receiptModal', data-toggle='modal',data-receipt-id='#{val.transaction_id}', data-target='#receiptModal') Details
+    
 
 
+  script(type='text/javascript').
+    $(document).on('click', '.detailreceipt', function() {
+    //- e.preventDefault();
+    var receipt_ID = $(this).attr('receipt-id');
+    console.log('hel '+receipt_ID);
+    $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
+      $('#receiptModal').modal();
+    });
+    });
   script(type='text/javascript').
     $(document).ready(function(){
     $('.one-time').slick({ dots: true,

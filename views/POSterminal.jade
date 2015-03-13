@@ -18,7 +18,12 @@ block holder
           label.text-center
             strong Order Date:
             br
-            div.form-control(type='text', name='transaction_date') March 7 2015 
+            div.form-control(type='text', name='transaction_date') #{new Date().toLocaleDateString()}
+        .form-group
+          label.text-center
+            strong Time:
+            br
+            div.form-control(type='text', name='transaction_time') #{new Date().toLocaleTimeString()}
         .form-group 
             label(for='time')   
           |              
@@ -26,7 +31,7 @@ block holder
           label.text-center
             strong Billed To:
             br
-            input.form-control(type='text', name='buyer_username')
+            input.form-control(type='text', name='buyer_name')
             |                              
         .form-group
             label(for='time')     
@@ -118,7 +123,7 @@ block holder
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='beforetax')
+                        div.form-control(name='beforetax') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
@@ -127,7 +132,7 @@ block holder
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='tax')
+                        div.form-control(name='tax') 0.00
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
@@ -136,7 +141,7 @@ block holder
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='aftertax')
+                        div.form-control(name='aftertax') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
           div.row-fluid
           .form-group
@@ -228,7 +233,7 @@ block holder
             $(document).on('ready', function() {
             $('form#trans_complete').bind('submit', function(event){
             event.preventDefault();
-            if ($('#tab_logic  #total').text()== '0.00') return true;
+            if ($("#tab_logic  [name='aftertax']").text()== '0.00') return true;
             //console.log($('#tab_logic  #total').text());
 
 
