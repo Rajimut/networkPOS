@@ -221,7 +221,9 @@ router.post('/stop-billing', function(req, res) {
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
     temp_invoice_details.seller_name        = req.user._id;             //extract currently logged in seller
+    console.log("Buyer username : " + req.body.buyer_username);
     temp_invoice_details.buyer_name         = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
+    console.log("Buyer name in DB : " + temp_invoice_details.buyer_name);
     temp_invoice_details.paymenttype        = req.body.paymenttype;
     temp_invoice_details.tax                = req.body.tax;    
     temp_invoice_details.beforetax          = req.body.beforetax;
