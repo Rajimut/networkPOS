@@ -106,17 +106,14 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
-/* var config = require( __dirname + '/receipt.json');
-
-
+var config = require( __dirname + '/receipt.json');
 var file = __dirname + '/receipt.json';
-
 var fs = require("fs");
 var data = JSON.parse(fs.readFileSync(file, "utf8"));
 console.dir(data);
 data = JSON.stringify(data);
 
-var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8")); */
+var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
 
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
@@ -124,11 +121,29 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
     console.log("Buyer : " + req.user.local.email);
 
     //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({ 'buyer_name' : req.user.local.email }, function(err,invoice) {
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {
-            res.render('myreceipts', {myreceipt_: invoice});        
+            res.render('myreceipts', {myreceipt_: invoice});
+        }
+    });
+    
+    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+});
+
+router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
+    var receipt_id = req.params.transaction_id;
+    console.log('incoming id ' + req.params.transaction_id);
+//  finding by string not working from Browser. Using _id need to find a better approach. Uma
+    //Look up the invoice database using the buyer's username
+    InvoiceDetail.find({'transaction_id' :receipt_id}, function(err,invoice) {
+        // console.log('id is '+ invoice + ' kk ' + req.params._id);
+        if (err) {
+            return res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            
+            res.render('mixins/mixin-receipt.jade', {receipt: invoice[0]});
         }
     });
     
@@ -211,8 +226,8 @@ router.post('/stop-billing', function(req, res) {
 
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
-    temp_invoice_details.seller_username    = req.user._id;             //extract currently logged in seller
-    temp_invoice_details.buyer_username     = req.body.buyer_username;  //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.seller_name        = req.user._id;             //extract currently logged in seller
+    temp_invoice_details.buyer_name         = req.body.buyer_name;  //For future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
     temp_invoice_details.tax                = req.body.tax;
     temp_invoice_details.beforetax          = req.body.beforetax;

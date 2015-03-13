@@ -18,7 +18,12 @@ block holder
           label.text-center
             strong Order Date:
             br
-            div.form-control(type='text', name='transaction_date') #{new Date()}
+            div.form-control(type='text', name='transaction_date') #{new Date().toLocaleDateString()}
+        .form-group
+          label.text-center
+            strong Time:
+            br
+            div.form-control(type='text', name='transaction_time') #{new Date().toLocaleTimeString()}
         .form-group 
             label(for='time')   
           |              
@@ -26,7 +31,7 @@ block holder
           label.text-center
             strong Billed To:
             br
-            input.form-control(type='text', name='buyer_username')
+            input.form-control(type='text', name='buyer_name')
             |                              
         .form-group
             label(for='time')     
