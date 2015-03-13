@@ -3,7 +3,7 @@ var router      = express();
 var passport    = require('passport');
 var _           = require('underscore');
 var crypto      = require('crypto');
-var MongoWatch = require 'mongo-watch';
+var MongoWatch  = require('mongo-watch');
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
@@ -123,10 +123,11 @@ var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "
 router.get('/myreceipts', isLoggedIn, function(req, res) {
 
     //Start listening port to receive notifications
-    watcher = new MongoWatch {format: 'pretty'}
+    watcher = new MongoWatch({format: 'pretty'});
  
-    watcher.watch('test.users', function(event) {
-        return console.log('something changed:', event);
+    console.log("Setting up watcher to watch over for events");
+    watcher.watch('invoicedetail.invoicedetails', function(event) {
+        console.log('something changed:', event);
     });
 
     console.log("Buyer : " + req.user.local.email);
@@ -176,7 +177,7 @@ router.get('/POSterminal', isLoggedIn, function(req, res) {
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
 
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal', { 'receipt_no', { "receipt_no" : req.session.current_receipt_no }, title: 'POSterminal' });
+    res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
 });
 
 //Notification that billing has started - start building json object
