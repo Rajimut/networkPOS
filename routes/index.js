@@ -30,7 +30,16 @@ router.post('/seller', function(req, res) {
 /* POST to Buyer login form */
 router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
+    if (req.isAuthenticated())
+    {
+    res.location("myreceipts");
+    res.redirect("myreceipts");
+
+    }
+    else
+    {
     res.render('buyer-login', { message: req.flash('loginMessage') });
+}
 });
 
 // Process the login form
@@ -43,7 +52,17 @@ router.post('/buyer-login', passport.authenticate('local-login', {
 /* POST to Seller login form */
 router.get('/seller-login', function(req, res) {
     // render the page and pass in any flash data if it exists
+    if (req.isAuthenticated())
+    {
+    res.location("POSterminal");
+    res.redirect("POSterminal");
+
+    }
+    else
+    {
     res.render('seller-login', { message: req.flash('loginMessage') });
+    }
+   
 });
 
 // Process the login form
@@ -58,13 +77,32 @@ router.post('/seller-login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/seller-signup', function(req, res) {
+    if (req.isAuthenticated())
+    {
+    res.location("POSterminal");
+    res.redirect("POSterminal");
+
+    }
+    else
+    {
     res.render('seller-signup.jade');
+    }
+
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 router.get('/buyer-signup', function(req, res) {
+    if (req.isAuthenticated())
+    {
+    res.location("myreceipts");
+    res.redirect("myreceipts");
+
+    }
+    else
+    {
     res.render('buyer-signup.jade');
+    }
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
@@ -77,6 +115,7 @@ router.post('/seller-signup', passport.authenticate('local-signup', {
 }));
 
 router.post('/buyer-signup', passport.authenticate('local-signup', {
+
         successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages

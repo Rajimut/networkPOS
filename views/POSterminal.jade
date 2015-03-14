@@ -6,50 +6,35 @@ block content
 
 block holder
 
-  .col-md-12
-          h2 POS terminal
-          h3.pull-right Receipt # #{receipt_no}
-        |               
+  .row-fluid
+    div.col-md-4.col-xs-12.col-sm-6
+      h4 Receipt # #{receipt_no}
+    div.col-md-8.col-xs-12.col-sm-6
+      div.text-primary.text-right
+        h5 #{new Date().toLocaleDateString()}
+        h4#clock
+
   form#trans_complete.form(method='post', role='form', action= '/stop-billing')
-    .row.form-inline
-      .col-md-12
-       fieldset
-        .form-group
-          label.text-center
-            strong Order Date:
-            br
-            div.form-control(type='text', name='transaction_date') #{new Date().toLocaleDateString()}
-        .form-group
-          label.text-center
-            strong Time:
-            br
-            div.form-control(type='text', name='transaction_time') #{new Date().toLocaleTimeString()}
-        .form-group 
-            label(for='time')   
-          |              
-        .form-group
-          label.text-center
-            strong Billed To:
-            br
-            input.form-control(type='text', name='buyer_name')
-            |                              
-        .form-group
-            label(for='time')     
-          |             
-        .form-group
-          label.text-center
-            strong Payment Method:
-            br 
-            select.form-control(name='paymenttype')
-              option Creditcard
-              |   
-              option Visa
-              |   
-              option Cash
-              |   
-              option Apple Pay
-              |   
-              option Wallet
+    .row
+      .col-md-6.col-sm-6.text-left
+        div.input-group
+          span.input-group-addon
+            strong Billed to
+          input.form-control(type='text', name='buyer_name')
+      .col-md-6.col-sm-6.text-right        
+        div.input-group
+          span.input-group-addon
+            strong Method:
+          select.form-control(name='paymenttype')
+            option Creditcard
+            |   
+            option Visa
+            |   
+            option Cash
+            |   
+            option Apple Pay
+            |   
+            option Wallet
                        
     .row
       .col-md-12
@@ -151,7 +136,25 @@ block holder
             
 
         script(type='text/javascript').
+          function updateTime() {
+            var d = new Date;
+            var hours = d.getHours();
+            var mins = d.getMinutes();
+            var secs = d.getSeconds();
+            if(hours > 12){
+                var hour = (hours - 12);
+                var ampm = "PM";
+            }
+            else{
+                var hour = hours;
+                var ampm = "AM";
+            } 
+            var time = hour + ":" + mins + ':' + secs + ' ' + ampm;
+            $("#clock").html(time);
+            }
           $(document).ready(function(){
+            updateTime();
+            clock = window.setInterval(updateTime, 1000);
             var i=1;
           $("#add_row").on("click", function(){
                 $('#summaryrow').before('<tr id="addr'+(i)+'"></tr>');
