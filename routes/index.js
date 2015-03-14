@@ -31,7 +31,16 @@ router.post('/seller', function(req, res) {
 /* POST to Buyer login form */
 router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
+    if (req.isAuthenticated())
+    {
+    res.location("myreceipts");
+    res.redirect("myreceipts");
+
+    }
+    else
+    {
     res.render('buyer-login', { message: req.flash('loginMessage') });
+}
 });
 
 // Process the login form
@@ -44,7 +53,17 @@ router.post('/buyer-login', passport.authenticate('local-login', {
 /* POST to Seller login form */
 router.get('/seller-login', function(req, res) {
     // render the page and pass in any flash data if it exists
+    if (req.isAuthenticated())
+    {
+    res.location("POSterminal");
+    res.redirect("POSterminal");
+
+    }
+    else
+    {
     res.render('seller-login', { message: req.flash('loginMessage') });
+    }
+   
 });
 
 // Process the login form
@@ -59,13 +78,32 @@ router.post('/seller-login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/seller-signup', function(req, res) {
+    if (req.isAuthenticated())
+    {
+    res.location("POSterminal");
+    res.redirect("POSterminal");
+
+    }
+    else
+    {
     res.render('seller-signup.jade');
+    }
+
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 router.get('/buyer-signup', function(req, res) {
+    if (req.isAuthenticated())
+    {
+    res.location("myreceipts");
+    res.redirect("myreceipts");
+
+    }
+    else
+    {
     res.render('buyer-signup.jade');
+    }
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
@@ -78,6 +116,7 @@ router.post('/seller-signup', passport.authenticate('local-signup', {
 }));
 
 router.post('/buyer-signup', passport.authenticate('local-signup', {
+
         successRedirect : '/myreceipts', // redirect to the secure profile section
         failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
@@ -160,7 +199,14 @@ router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
 });
 
 router.get('/buyer-transactions', isLoggedIn, function(req, res) {
-    res.render('buyer-transactions', {json_data: data});
+    //res.render('buyer-transactions', {json_data: data});
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('buyer-transactions', {buyertransactions_: invoice});
+        }
+    });
 });
 
 // =====================================
@@ -233,7 +279,7 @@ router.post('/stop-billing', function(req, res) {
 
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
-    temp_invoice_details.seller_name        = req.user._id;             //extract currently logged in seller
+    temp_invoice_details.seller_name        = req.user.local.email;             //extract currently logged in seller
     temp_invoice_details.buyer_name         = req.body.buyer_name;  //For future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
     temp_invoice_details.tax                = req.body.tax;
@@ -251,6 +297,7 @@ router.post('/stop-billing', function(req, res) {
          else{
              //res.location("POSterminal");
              // And forward to success page
+             console.log("Transaction Completed");
              res.redirect("POSterminal");
          }
     });

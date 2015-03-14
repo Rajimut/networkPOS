@@ -1,26 +1,24 @@
 extends layout
 
-block content
+block holder
+  .col-sm-8.col-sm-offset-2
+    .row
+      h2
+        span.fa.fa-sign-in
+        |  Signup
     div.row-fluid
-      .page-header.h3 Signup
       form.login-form.form-horizontal(method='post', role='form')
         input(name='_csrf', type='hidden')
         .form-group
-          label.col-sm-4 Email
+          label.col-sm-4 Company Name
           .col-sm-8
-              input.form-control(placeholder='Set your username', required='required', type='text', name='email')
+            input.form-control(placeholder='Registered name of the Company', required='required', name='companyname', type='text')
         .form-group
-          label.col-sm-4 Password
+          label.col-sm-4 Company Logo
           .col-sm-8
-              input.form-control(placeholder='Set your password', required='required', type='password', name='password')    
-        .form-group
-          label.col-sm-4 First Name
-          .col-sm-8
-            input.form-control(placeholder='Your first name', required='required', name='givenName', type='text')
-        .form-group
-          label.col-sm-4 Last Name
-          .col-sm-8
-            input.form-control(placeholder='Your last name', required='required', name='surname', type='text')
+            .btn.btn-default.btn-sm.fileupload.fileupload-new(data-provides='fileupload')        
+              input(type='file', name='companylogo')    
+            a.close.fileupload-exists.pull-right(href='#', data-dismiss='fileupload', style='float: none') &times;
         .form-group
           label.col-sm-4 Street address
           .col-sm-8
@@ -38,19 +36,23 @@ block content
           .col-sm-8
             input.form-control(placeholder='e.g. 94116', required='required', name='zip', type='text')
         .form-group
+          label.col-sm-4 Company Location
+          .col-sm-8
+             .fileupload.fileupload-new(data-provides='fileupload')
+              span.btn.btn-default.btn-sm.btn-file
+                |          
+                input(type='file', name='location png')
+              |     
+              span.fileupload-preview
+              |     
+              a.close.fileupload-exists.pull-right(href='#', data-dismiss='fileupload', style='float: none') &times;  
+        .form-group
           .col-sm-offset-4.col-sm-8
             //button.login.btn.btn-primary(type='submit') Save
             button.btn.btn-primary.btn-lg(type='submit') Signup
         .pull-right
           a(href='/') Return to home page
-
       p
       | Already have an account? 
       a(href='/seller-login') Login
-      |     
-      p
-      | Or go 
-      a(href='/') home
-      | .
-    
     
