@@ -30,8 +30,6 @@ function compile(str, path) {
     .use(nib());
 }
 
-
-
 var app = express();
 // NEEDED FOR BROWSER SIDE MANIPULATION
 app.locals._      = require('underscore');

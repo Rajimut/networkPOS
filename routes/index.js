@@ -3,10 +3,10 @@ var router      = express();
 var passport    = require('passport');
 var _           = require('underscore');
 var crypto      = require('crypto');
+var MongoWatch  = require('mongo-watch');
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
-var Receipt = require('../models/receipt');
 
 module.exports = function (router, passport) {
 
@@ -30,16 +30,13 @@ router.post('/seller', function(req, res) {
 /* POST to Buyer login form */
 router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    if (req.isAuthenticated())
-    {
-    res.location("myreceipts");
-    res.redirect("myreceipts");
-
+    if (req.isAuthenticated()) {
+        req.login = "Buyer-Loggedin";
+        res.location("myreceipts");
+        res.redirect("myreceipts");
+    } else {
+        res.render('buyer-login', { message: req.flash('loginMessage') });
     }
-    else
-    {
-    res.render('buyer-login', { message: req.flash('loginMessage') });
-}
 });
 
 // Process the login form
@@ -52,17 +49,13 @@ router.post('/buyer-login', passport.authenticate('local-login', {
 /* POST to Seller login form */
 router.get('/seller-login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    if (req.isAuthenticated())
-    {
-    res.location("POSterminal");
-    res.redirect("POSterminal");
-
+    if (req.isAuthenticated()) {
+        req.login = "Seller-Loggedin";
+        res.location("POSterminal");
+        res.redirect("POSterminal");
+    } else {
+        res.render('seller-login', { message: req.flash('loginMessage') });
     }
-    else
-    {
-    res.render('seller-login', { message: req.flash('loginMessage') });
-    }
-   
 });
 
 // Process the login form
@@ -77,15 +70,13 @@ router.post('/seller-login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/seller-signup', function(req, res) {
-    if (req.isAuthenticated())
-    {
-    res.location("POSterminal");
-    res.redirect("POSterminal");
-
-    }
-    else
-    {
-    res.render('seller-signup.jade');
+    if (req.isAuthenticated()) {
+        req.login = "Seller-Loggedin";
+        res.location("POSterminal");
+        res.redirect("POSterminal");
+    } else {
+        req.login = "Seller-Signup";
+        res.render('seller-signup.jade');
     }
 
     // render the page and pass in any flash data if it exists
@@ -93,15 +84,13 @@ router.get('/seller-signup', function(req, res) {
 });
 
 router.get('/buyer-signup', function(req, res) {
-    if (req.isAuthenticated())
-    {
-    res.location("myreceipts");
-    res.redirect("myreceipts");
-
-    }
-    else
-    {
-    res.render('buyer-signup.jade');
+    if (req.isAuthenticated()) {
+        req.login = "Buyer-Loggedin";
+        res.location("myreceipts");
+        res.redirect("myreceipts");
+    } else {
+        req.login = "Buyer-Signup";
+        res.render('buyer-signup.jade');
     }
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
@@ -109,16 +98,15 @@ router.get('/buyer-signup', function(req, res) {
 
 // Process the signup form
 router.post('/seller-signup', passport.authenticate('local-signup', {
-        successRedirect : '/POSterminal', // redirect to the secure profile section
-        failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+                successRedirect : '/POSterminal', // redirect to the secure profile section
+                failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
+                failureFlash : true // allow flash messages
 }));
 
 router.post('/buyer-signup', passport.authenticate('local-signup', {
-
-        successRedirect : '/myreceipts', // redirect to the secure profile section
-        failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+            successRedirect : '/myreceipts', // redirect to the secure profile section
+            failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
+            failureFlash : true // allow flash messages
 }));
 
 // =====================================
@@ -157,6 +145,14 @@ var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
 
+    //Start listening port to receive notifications
+    watcher = new MongoWatch({format: 'pretty'});
+ 
+    console.log("Setting up watcher to watch over for events");
+    watcher.watch('invoicedetail.invoicedetails', function(event) {
+        console.log('something changed:', event);
+    });
+
     console.log("Buyer : " + req.user.local.email);
 
     //Look up the invoice database using the buyer's username
@@ -166,9 +162,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
         } else {
             res.render('myreceipts', {myreceipt_: invoice});
         }
-    });
-    
-    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+    });    
 });
 
 router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
@@ -225,11 +219,9 @@ router.get('/helloworld', function(req, res) {
 });
 
 router.get('/POSterminal', isLoggedIn, function(req, res) {
-    
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
-
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal',  { "receipt_no" : req.session.current_receipt_no , title:'POSterminal' });
+    res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
 });
 
 //Notification that billing has started - start building json object
