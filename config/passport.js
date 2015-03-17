@@ -36,7 +36,6 @@ module.exports = function(passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
         passwordField : 'password',
-        typeField     : 'customertype',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
@@ -44,7 +43,6 @@ module.exports = function(passport) {
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-        console.log("passport: " + email);
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -66,7 +64,6 @@ module.exports = function(passport) {
                 newUser.local.password = newUser.generateHash(password);
 
                 //Needs to be removed & set in seller-signup.jade - UMA TO TAKE A LOOK.
-                req.body.customertype = "Seller";
 
                 if (req.body.customertype == "Seller") {
                     // Insert into sellerDB
@@ -75,12 +72,12 @@ module.exports = function(passport) {
                     temp_seller_details.seller_name         =   req.body.companyname;
                     temp_seller_details.seller_email        =   req.body.email;
                     temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images" + req.body.sellerlogo;
-                    temp_seller_details.seller_st_addr      =   req.body.streetAddress; 
+                    temp_seller_details.seller_st_addr      =   req.body.streetAddress;
                     temp_seller_details.seller_city         =   req.body.city;
                     temp_seller_details.seller_state        =   req.body.state;
                     temp_seller_details.seller_zipcode      =   req.body.zip;
                     //temp_seller_details.seller_categories =   req.body.  //Future item
-                    temp_seller_details.customer_flag       =   "Seller";
+                    temp_seller_details.customer_flag       =   req.body.customertype;
 
                     console.log("temp_seller_details : " + temp_seller_details);
     
@@ -92,7 +89,7 @@ module.exports = function(passport) {
                             // And forward to success page
                             console.log("Seller added to DB");
                             // Change login from Seller-Signup to Seller-Loggedin
-                            req.login = "Seller-Loggedin";  
+                            req.login = "Seller-Loggedin";
                         }
                     });
                 } else if (req.body.customertype == "Buyer") {
@@ -108,7 +105,7 @@ module.exports = function(passport) {
                 });
             }
 
-        });    
+        });
 
         });
 

@@ -162,7 +162,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
         } else {
             res.render('myreceipts', {myreceipt_: invoice});
         }
-    });    
+    });
 });
 
 router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
@@ -218,41 +218,25 @@ router.get('/helloworld', function(req, res) {
     res.render('helloworld', { title: 'Hello, World!' });
 });
 
-router.get('/POSterminal', isLoggedIn, function(req, res) {
+router.get('/POSterminal', isLoggedIn, function(req, res) { //ACCESSED DURING FIRST REQUEST
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
+    req.session.save(); // ADDED TO RETAIN SESSSION
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
     res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
 });
 
-//Notification that billing has started - start building json object
-/* router.post('/start-billing', function(req, res) {
 
-    // Create an instance of the Invoice Details Schema
-    var temp_invoice_details = new InvoiceDetails();
+router.post('/new-billing', isLoggedIn, function(req, res) { // NEEDED FOR NEW BILLING IN AJAX
+    req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
+    req.session.save(); // ADDED TO RETAIN SESSSION
+    res.setHeader("Content-Type", "text/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.end('{"success" : "Updated Successfully","receipt_no" : "' + req.session.current_receipt_no +  '", "status" : 200}');
 
-    temp_invoice_details.seller_username = req.user._id;    //extract currently logged in seller
-    //temp_invoice_details.buyer_username = <Needs to be filled somehow>; //For future updates. Needs flash login of Buyer.
-    temp_invoice_details.transaction_id = Date.now();       //uniquely generate transaction id - time based
-    temp_invoice_details.transaction_date = new Date();     //Get current date for date for transaction
-
-    req.session.current_transaction = temp_seller_data.transaction_id;
-    console.log("Start billing: " + req.session.current_transaction);
-
-    temp_seller_data.save(function(error, data){
-        if(error){
-            res.json(error);
-        }
-        else{
-            //temp_seller_data.close();
-            res.location("/POSterminal");
-            // And forward to success page
-            res.redirect("POSterminal");
-        }
-    });
-}); */
+});
 
 //Notification that billing has stopped - insert json into db
-router.post('/stop-billing', function(req, res) {
+router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONSISTENCY
 
     // Create an instance of the Invoice Details Schema
     var temp_invoice_details = new InvoiceDetail();
@@ -277,13 +261,14 @@ router.post('/stop-billing', function(req, res) {
     temp_invoice_details.save(function(error, data){
          if(error){
              console.log("error case" + error);
-             res.send("There was a problem adding the information to the database." + error);
+             res.end('{"fail" : "Failed with error : ' + error + ', "status" : 200}');
+             //res.send("There was a problem adding the information to the database." + error);
          }
          else{
              //res.location("POSterminal");
              // And forward to success page
-             console.log("Transaction Completed");
-             res.redirect("POSterminal");
+            console.log("Transaction Completed");
+            res.end('{"success" : "Updated Successfully", "status" : 200}');
          }
     });
 });
