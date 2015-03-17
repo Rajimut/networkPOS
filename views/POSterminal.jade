@@ -6,50 +6,36 @@ block content
 
 block holder
 
-  .col-md-12
-          h2 POS terminal
-          h3.pull-right Receipt # #{receipt_no}
-        |               
-  form#trans_complete.form(method='post', role='form', action= '/stop-billing')
-    .row.form-inline
-      .col-md-12
-       fieldset
-        .form-group
-          label.text-center
-            strong Order Date:
-            br
-            div.form-control(type='text', name='transaction_date') #{new Date().toLocaleDateString()}
-        .form-group
-          label.text-center
-            strong Time:
-            br
-            div.form-control(type='text', name='transaction_time') #{new Date().toLocaleTimeString()}
-        .form-group 
-            label(for='time')   
-          |              
-        .form-group
-          label.text-center
-            strong Billed To:
-            br
-            input.form-control(type='text', name='buyer_name')
-            |                              
-        .form-group
-            label(for='time')     
-          |             
-        .form-group
-          label.text-center
-            strong Payment Method:
-            br 
-            select.form-control(name='paymenttype')
-              option Creditcard
-              |   
-              option Visa
-              |   
-              option Cash
-              |   
-              option Apple Pay
-              |   
-              option Wallet
+  .row-fluid
+    div.col-md-4.col-xs-12.col-sm-6
+      h4 Receipt # 
+        span#receipt_no #{receipt_no}
+    div.col-md-8.col-xs-12.col-sm-6
+      div.text-primary.text-right
+        h5 #{new Date().toLocaleDateString()}
+        h4#clock
+
+  form#trans_complete.form(method='post', role='form', action= '/post-billing')
+    .row
+      .col-md-6.col-sm-6.text-left
+        div.input-group
+          span.input-group-addon
+            strong Billed to
+          input.form-control(type='text', name='buyer_name')
+      .col-md-6.col-sm-6.text-right        
+        div.input-group
+          span.input-group-addon
+            strong Method:
+          select.form-control(name='paymenttype')
+            option Creditcard
+            |   
+            option Visa
+            |   
+            option Cash
+            |   
+            option Apple Pay
+            |   
+            option Wallet
                        
     .row
       .col-md-12
@@ -88,13 +74,13 @@ block holder
                   tr#addr0
                     //- input(name='_csrf', type='hidden') 
                     td
-                      input.form-control(placeholder='56779GH7', name='itemcode[0]', type='text')
+                      input.form-control(placeholder='567797', name='itemcode[0]', type='text')
                     |            
                     td
                       input.form-control(placeholder='Cafe Latte', name='itemname[0]', type='text')
                     |            
                     td
-                      div.form-control.category( placeholder='', name='category[0]')
+                      div.form-control.category( placeholder='', name='category[0]', value='' )
                     |            
                     td
                      .input-group
@@ -102,12 +88,12 @@ block holder
                       input.form-control.price(placeholder='$12.00', name='unitprice[0]')
                     |            
                     td
-                      input.form-control.qty(placeholder='2', name='quantity[0]', value=1)
+                      input.form-control.qty(placeholder='1', name='quantity[0]', value=1)
                     |            
                     td
                      .input-group
                       span.input-group-addon $
-                      div.form-control.subtotal.text-right( placeholder='' ,name='subtotal_ln[0]') 0.00
+                      div.form-control.subtotal.text-right( placeholder='' ,name='subtotal_ln[0]', value='0.00') 0.00
                     |           
                     td.text-center
                         | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
@@ -123,16 +109,16 @@ block holder
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='beforetax') 0.00
+                        div.form-control(name='beforetax', value='0.00') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
-                    td.thick-line(colspan='5')
+                    td.thick-line(colspan='5', value='0.00')
                       strong.pull-right Tax (8.75%) 
                     |    
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='tax') 0.00
+                        div.form-control(name='tax', value='0.00') 0.00
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                   tr
                     td.thick-line(colspan='5')
@@ -141,26 +127,49 @@ block holder
                     td.thick-line.text-right
                       div.input-group
                         span.input-group-addon $
-                        div.form-control(name='aftertax') 0.00
+                        div.form-control(name='aftertax', value='0.00') 0.00
                     |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-          div.row-fluid
-          .form-group
-            .col-md-12.text-center
-              button#transaction_btn.btn.btn-primary.btn-lg(type='submit') Transaction Complete
-                |   
+
+          .row.btn-toolbar.text-center
+                  button#transaction_btn.btn.btn-primary.btn-lg(type='submit') Post Bill
+                  button#new_receipt.btn.btn-danger.btn-lg(disabled) New Bill
+                  button#print_receipt.btn.btn-info.btn-lg(disabled) Print receipt
+
+
+      
             
 
         script(type='text/javascript').
+          function updateTime() {
+          var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            //- var d = new Date;
+            //- var hours = d.getHours();
+            //- var mins = d.getMinutes();
+            //- var secs = d.getSeconds();
+            //- if(hours > 12){
+            //-     var hour = (hours - 12);
+            //-     var ampm = "PM";
+            //- }
+            //- else{
+            //-     var hour = hours;
+            //-     var ampm = "AM";
+            //- } 
+            //- var time = hour + ":" + mins + ':' + secs + ' ' + ampm;
+            $("#clock").html(myDate);
+            }
           $(document).ready(function(){
+            updateTime();
+            clock = window.setInterval(updateTime, 1000);
             var i=1;
           $("#add_row").on("click", function(){
+                if ($(this).attr("disabled")==true ) return;
                 $('#summaryrow').before('<tr id="addr'+(i)+'"></tr>');
-                $('#addr'+(i)).html("<td><input name='itemcode["+i+"]' type='text' placeholder='  AAA56779GH7' class='form-control input-md' /> </td>"
+                $('#addr'+(i)).html("<td><input name='itemcode["+i+"]' type='text' placeholder='567797' class='form-control input-md' /> </td>"
                     + "<td><input  name='itemname["+i+"]' type='text' placeholder='Cafe Latte'  class='form-control input-md'></td>"
-                    + "<td><div class='form-control category' name='category["+i+"]'></div></td>"
-                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><input  name='unitprice["+i+"]'  placeholder='$12.00'  class='price form-control input-md'></div></td>"
+                    + "<td><div class='form-control category' value='' name='category["+i+"]'></div></td>"
+                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><input  name='unitprice["+i+"]'  placeholder='$12.00' value='0.00'  class='price form-control input-md'></div></td>"
                     + "<td><input  name='quantity["+i+"]' placeholder='2'  value='1' class='qty form-control input-md'></td>"
-                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00'  class='subtotal Text-right form-control input-md'>0.00</div></td>"
+                    + "<td><div class='input-group'><span class ='input-group-addon'>$</span><div  name='subtotal_ln["+i+"]'  placeholder='0.00' value='0.00'  class='subtotal Text-right form-control input-md'>0.00</div></td>"
                     + "<td class='text-center'><a id='delete_row_"+i+"'  type='text' placeholder='Mobile'  class='btn btn-danger fa fa-trash-o fa-lg'></td>");
                     //- + "<td class='text-center'><a id='add_row'  type='text' placeholder='Mobile'  class='btn btn-success btn-sm pull-right'>+</td>");
 
@@ -171,6 +180,7 @@ block holder
             });
 
           $(document).on("click",'[id^=delete_row]',function(){
+              if ($(this).attr("disabled")==true ) return;
               var i = $(this).attr('id').replace(/delete_row_/, '');
 
               if(i>=1){
@@ -197,11 +207,9 @@ block holder
                $("#tab_logic  [name='aftertax']").text((1.0875*total).toFixed(2));
               });
 
-          $(document).on("keyup","#tab_logic [name*='unitprice'], #tab_logic [name*='quantity']",function(){
+          $(document).on("keyup","#tab_logic [name*='unitprice'], #tab_logic [name*='quantity'], [name*='itemcode']",function(){
 
             this.value = this.value.replace(/[^0-9\.]/g,''); // TO ENSURE NUMERIC IS ENTERED
-            //- this.value=parseFloat($.trim(this));
-            //- console.log((this).text());
             var E=jQuery(this).parents('tr').filter(':first');
             var subT=parseInt(E.find("[name*='quantity']").val(),10) * parseFloat(E.find("[name*='unitprice']").val());
             if ($.isNumeric(subT))
@@ -231,10 +239,12 @@ block holder
 
 
             $(document).on('ready', function() {
+
             $('form#trans_complete').bind('submit', function(event){
             event.preventDefault();
             if ($("#tab_logic  [name='aftertax']").text()== '0.00') return true;
-            //console.log($('#tab_logic  #total').text());
+            $('#transaction_btn').text('Posting'); //  CHANGE BUTTON NAME
+            $('#transaction_btn').attr("disabled","disabled"); // DISABLE BUTTON TO PREVENT ACCIDENTAL POSTING
 
 
 
@@ -278,18 +288,66 @@ block holder
             //bill_detail.push(obj);
             //-  PUSH AJAX
             //UPON SUCCESS - REMOVE CONTENT AND GIVE SUCCESS MESSAGE
-            console.log('JSON ' + JSON.stringify(bill_detail));
-            $.ajax({
-            url: '/stop-billing',
+            var _post_req = $.ajax({
+            url: '/post-billing',
             type: 'POST',
-            dataType   : 'json',
+            dataType   : 'json', //EXPECTING JSON TO BE RETURNED
             contentType: 'application/json; charset=UTF-8',
-            data: JSON.stringify(bill_detail) ,
-            success: function(data){
-                console.log(data);
-            }
+            data: JSON.stringify(bill_detail) 
+            });
+
+            _post_req.success(function(data){
+                $('#transaction_btn').text('Success'); //  CHANGE BUTTON NAME
+                $('#trans_complete [name]').prop('disabled',true);
+                $('[id^=delete_row], [id^=add_row]').attr("disabled",true);
+                $('#new_receipt').removeAttr('disabled');
+                $('#print_receipt').removeAttr('disabled');
+
+
+                
+            })
+
+            _post_req.fail(function(jqXHR, textStatus) {
+            console.log("Request failed: " + textStatus); // MESSAGE AREA WITH ERROR
+            $('#transaction_btn').removeAttr('disabled'); // DISABLE BUTTON TO PREVENT ACCIDENTAL POSTING
+            $('#transaction_btn').text('Post Bill');
+
             });
 
               });
             });
+
+          $('#new_receipt').click(function(event) {
+            event.preventDefault();
+
+            var _post_req = $.ajax({
+            url: '/new-billing',
+            type: 'POST',
+            dataType   : 'json', //EXPECTING JSON TO BE RETURNED
+            contentType: 'application/json; charset=UTF-8'
+            });
+
+            _post_req.success(function(data){
+
+            $('#receipt_no').text(data['receipt_no']);
+            $('#transaction_btn').text('Post Bill'); //  CHANGE BUTTON NAME
+            $('#transaction_btn').attr("disabled",false); //  CHANGE BUTTON NAME
+            $('#trans_complete [name]').prop('disabled',false);
+            $('[id^=delete_row], [id^=add_row]').attr("disabled",false);
+            $('#new_receipt').attr('disabled',true);
+            $('#print_receipt').attr('disabled',true);
+            $('[id^=addr]:not(:first)').remove(); // REMOVE ALL OTHER NEW ROWS
+
+            $('#trans_complete').find('input:text, input:password, input:file, textarea').val(''); // RESET FORM
+            $('#trans_complete').find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');   // RESET FORM   
+            $('div[name]').each(function(){
+                $(this).text($(this).attr('value')); //RESET FORM
+              });
+
+             })
+
+            //window.location.reload(true);
+
+         
+          });
 

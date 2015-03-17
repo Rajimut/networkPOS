@@ -3,10 +3,10 @@ var router      = express();
 var passport    = require('passport');
 var _           = require('underscore');
 var crypto      = require('crypto');
+var MongoWatch  = require('mongo-watch');
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
-var Receipt = require('../models/receipt');
 
 module.exports = function (router, passport) {
 
@@ -30,7 +30,13 @@ router.post('/seller', function(req, res) {
 /* POST to Buyer login form */
 router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('buyer-login', { message: req.flash('loginMessage') });
+    if (req.isAuthenticated()) {
+        req.login = "Buyer-Loggedin";
+        res.location("myreceipts");
+        res.redirect("myreceipts");
+    } else {
+        res.render('buyer-login', { message: req.flash('loginMessage') });
+    }
 });
 
 // Process the login form
@@ -43,7 +49,13 @@ router.post('/buyer-login', passport.authenticate('local-login', {
 /* POST to Seller login form */
 router.get('/seller-login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('seller-login', { message: req.flash('loginMessage') });
+    if (req.isAuthenticated()) {
+        req.login = "Seller-Loggedin";
+        res.location("POSterminal");
+        res.redirect("POSterminal");
+    } else {
+        res.render('seller-login', { message: req.flash('loginMessage') });
+    }
 });
 
 // Process the login form
@@ -58,28 +70,43 @@ router.post('/seller-login', passport.authenticate('local-login', {
 // =====================================
 // show the signup form
 router.get('/seller-signup', function(req, res) {
-    res.render('seller-signup.jade');
+    if (req.isAuthenticated()) {
+        req.login = "Seller-Loggedin";
+        res.location("POSterminal");
+        res.redirect("POSterminal");
+    } else {
+        req.login = "Seller-Signup";
+        res.render('seller-signup.jade');
+    }
+
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 router.get('/buyer-signup', function(req, res) {
-    res.render('buyer-signup.jade');
+    if (req.isAuthenticated()) {
+        req.login = "Buyer-Loggedin";
+        res.location("myreceipts");
+        res.redirect("myreceipts");
+    } else {
+        req.login = "Buyer-Signup";
+        res.render('buyer-signup.jade');
+    }
     // render the page and pass in any flash data if it exists
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
 // Process the signup form
 router.post('/seller-signup', passport.authenticate('local-signup', {
-        successRedirect : '/POSterminal', // redirect to the secure profile section
-        failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+                successRedirect : '/POSterminal', // redirect to the secure profile section
+                failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
+                failureFlash : true // allow flash messages
 }));
 
 router.post('/buyer-signup', passport.authenticate('local-signup', {
-        successRedirect : '/myreceipts', // redirect to the secure profile section
-        failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+            successRedirect : '/myreceipts', // redirect to the secure profile section
+            failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
+            failureFlash : true // allow flash messages
 }));
 
 // =====================================
@@ -118,6 +145,14 @@ var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
 
+    //Start listening port to receive notifications
+    watcher = new MongoWatch({format: 'pretty'});
+ 
+    console.log("Setting up watcher to watch over for events");
+    watcher.watch('invoicedetail.invoicedetails', function(event) {
+        console.log('something changed:', event);
+    });
+
     console.log("Buyer : " + req.user.local.email);
 
     //Look up the invoice database using the buyer's username
@@ -128,8 +163,6 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
             res.render('myreceipts', {myreceipt_: invoice});
         }
     });
-    
-    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
 });
 
 router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
@@ -185,43 +218,25 @@ router.get('/helloworld', function(req, res) {
     res.render('helloworld', { title: 'Hello, World!' });
 });
 
-router.get('/POSterminal', isLoggedIn, function(req, res) {
-    
+router.get('/POSterminal', isLoggedIn, function(req, res) { //ACCESSED DURING FIRST REQUEST
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
-
+    req.session.save(); // ADDED TO RETAIN SESSSION
     console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal',  { "receipt_no" : req.session.current_receipt_no , title:'POSterminal' });
+    res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
 });
 
-//Notification that billing has started - start building json object
-/* router.post('/start-billing', function(req, res) {
 
-    // Create an instance of the Invoice Details Schema
-    var temp_invoice_details = new InvoiceDetails();
+router.post('/new-billing', isLoggedIn, function(req, res) { // NEEDED FOR NEW BILLING IN AJAX
+    req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
+    req.session.save(); // ADDED TO RETAIN SESSSION
+    res.setHeader("Content-Type", "text/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.end('{"success" : "Updated Successfully","receipt_no" : "' + req.session.current_receipt_no +  '", "status" : 200}');
 
-    temp_invoice_details.seller_username = req.user._id;    //extract currently logged in seller
-    //temp_invoice_details.buyer_username = <Needs to be filled somehow>; //For future updates. Needs flash login of Buyer.
-    temp_invoice_details.transaction_id = Date.now();       //uniquely generate transaction id - time based
-    temp_invoice_details.transaction_date = new Date();     //Get current date for date for transaction
-
-    req.session.current_transaction = temp_seller_data.transaction_id;
-    console.log("Start billing: " + req.session.current_transaction);
-
-    temp_seller_data.save(function(error, data){
-        if(error){
-            res.json(error);
-        }
-        else{
-            //temp_seller_data.close();
-            res.location("/POSterminal");
-            // And forward to success page
-            res.redirect("POSterminal");
-        }
-    });
-}); */
+});
 
 //Notification that billing has stopped - insert json into db
-router.post('/stop-billing', function(req, res) {
+router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONSISTENCY
 
     // Create an instance of the Invoice Details Schema
     var temp_invoice_details = new InvoiceDetail();
@@ -246,13 +261,14 @@ router.post('/stop-billing', function(req, res) {
     temp_invoice_details.save(function(error, data){
          if(error){
              console.log("error case" + error);
-             res.send("There was a problem adding the information to the database." + error);
+             res.end('{"fail" : "Failed with error : ' + error + ', "status" : 200}');
+             //res.send("There was a problem adding the information to the database." + error);
          }
          else{
              //res.location("POSterminal");
              // And forward to success page
-             console.log("Transaction Completed");
-             res.redirect("POSterminal");
+            console.log("Transaction Completed");
+            res.end('{"success" : "Updated Successfully", "status" : 200}');
          }
     });
 });

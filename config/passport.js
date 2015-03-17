@@ -3,6 +3,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
 var User            = require('../models/user');
+var SellerDB        = require('../models/seller-details');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -42,7 +43,6 @@ module.exports = function(passport) {
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-        console.log("passport: " + email);
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -63,6 +63,40 @@ module.exports = function(passport) {
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password);
 
+                //Needs to be removed & set in seller-signup.jade - UMA TO TAKE A LOOK.
+
+                if (req.body.customertype == "Seller") {
+                    // Insert into sellerDB
+                    var temp_seller_details = new SellerDB();
+
+                    temp_seller_details.seller_name         =   req.body.companyname;
+                    temp_seller_details.seller_email        =   req.body.email;
+                    temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images" + req.body.sellerlogo;
+                    temp_seller_details.seller_st_addr      =   req.body.streetAddress;
+                    temp_seller_details.seller_city         =   req.body.city;
+                    temp_seller_details.seller_state        =   req.body.state;
+                    temp_seller_details.seller_zipcode      =   req.body.zip;
+                    //temp_seller_details.seller_categories =   req.body.  //Future item
+                    temp_seller_details.customer_flag       =   req.body.customertype;
+
+                    console.log("temp_seller_details : " + temp_seller_details);
+    
+                    temp_seller_details.save(function(error, data){
+                        if (error){
+                            console.log("error case" + error);
+                            res.send("There was a problem adding the information to the seller database." + error);
+                        } else {
+                            // And forward to success page
+                            console.log("Seller added to DB");
+                            // Change login from Seller-Signup to Seller-Loggedin
+                            req.login = "Seller-Loggedin";
+                        }
+                    });
+                } else if (req.body.customertype == "Buyer") {
+                    // Insert into buyerDB
+                    req.login = "Buyer_Loggedin";
+                }
+
                 // save the user
                 newUser.save(function(err) {
                     if (err)
@@ -71,7 +105,7 @@ module.exports = function(passport) {
                 });
             }
 
-        });    
+        });
 
         });
 

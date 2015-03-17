@@ -9,10 +9,19 @@ block holder
     div.row-fluid
       form.login-form.form-horizontal(method='post', role='form')
         input(name='_csrf', type='hidden')
+        input(name='customertype', type='hidden', value='Seller')
         .form-group
           label.col-sm-4 Company Name
           .col-sm-8
             input.form-control(placeholder='Registered name of the Company', required='required', name='companyname', type='text')
+        .form-group
+          label.col-sm-4 Email
+          .col-sm-8
+            input.form-control(placeholder='Enter email', required='required', name='email', type='email')
+        .form-group
+          label.col-sm-4 Password
+          .col-sm-8
+            input.form-control(placeholder='Enter Password', required='required', name='password', type='password')
         .form-group
           label.col-sm-4 Company Logo
           .col-sm-8
