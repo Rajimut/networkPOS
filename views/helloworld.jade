@@ -1,18 +1,48 @@
 extends layout
 block holder
-    .fileupload.fileupload-new(data-provides='fileupload')
-      span.btn.btn-default.btn-file
-        |          
-        input(type='file')
-      |     
-      span.fileupload-preview
-      |     
-      a.close.fileupload-exists(href='#', data-dismiss='fileupload', style='float: none') &times;
-
-    script(type='text/javascript').
-     !function(e){var t=function(t,n){this.$element=e(t),this.type=this.$element.data(&quot;uploadtype&quot;)||(this.$element.find(&quot;.thumbnail&quot;).length&gt;0?&quot;image&quot;:&quot;file&quot;),this.$input=this.$element.find(&quot;:file&quot;);if(this.$input.length===0)return;this.name=this.$input.attr(&quot;name&quot;)||n.name,this.$hidden=this.$element.find(&apos;input[type=hidden][name=&quot;&apos;+this.name+&apos;&quot;]&apos;),this.$hidden.length===0&amp;&amp;(this.$hidden=e(&apos;
-        input(type='hidden')
-            &apos;),this.$element.prepend(this.$hidden)),this.$preview=this.$element.find(&quot;.fileupload-preview&quot;);var r=this.$preview.css(&quot;height&quot;);this.$preview.css(&quot;display&quot;)!=&quot;inline&quot;&amp;&amp;r!=&quot;0px&quot;&amp;&amp;r!=&quot;none&quot;&amp;&amp;this.$preview.css(&quot;line-height&quot;,r),this.original={exists:this.$element.hasClass(&quot;fileupload-exists&quot;),preview:this.$preview.html(),hiddenVal:this.$hidden.val()},this.$remove=this.$element.find(&apos;[data-dismiss=&quot;fileupload&quot;]&apos;),this.$element.find(&apos;[data-trigger=&quot;fileupload&quot;]&apos;).on(&quot;click.fileupload&quot;,e.proxy(this.trigger,this)),this.listen()};t.prototype={listen:function(){this.$input.on(&quot;change.fileupload&quot;,e.proxy(this.change,this)),e(this.$input[0].form).on(&quot;reset.fileupload&quot;,e.proxy(this.reset,this)),this.$remove&amp;&amp;this.$remove.on(&quot;click.fileupload&quot;,e.proxy(this.clear,this))},change:function(e,t){if(t===&quot;clear&quot;)return;var n=e.target.files!==undefined?e.target.files[0]:e.target.value?{name:e.target.value.replace(/^.+\\/,&quot;&quot;)}:null;if(!n){this.clear();return}this.$hidden.val(&quot;&quot;),this.$hidden.attr(&quot;name&quot;,&quot;&quot;),this.$input.attr(&quot;name&quot;,this.name);if(this.type===&quot;image&quot;&amp;&amp;this.$preview.length&gt;0&amp;&amp;(typeof n.type!=&quot;undefined&quot;?n.type.match(&quot;image.*&quot;):n.name.match(/\.(gif|png|jpe?g)$/i))&amp;&amp;typeof FileReader!=&quot;undefined&quot;){var r=new FileReader,i=this.$preview,s=this.$element;r.onload=function(e){i.html(&apos;
-     img(src="'+e.target.result+'")
-     &quot;),s.addClass(&quot;fileupload-exists&quot;).removeClass(&quot;fileupload-new&quot;)},r.readAsDataURL(n)}else this.$preview.text(n.name),this.$element.addClass(&quot;fileupload-exists&quot;).removeClass(&quot;fileupload-new&quot;)},clear:function(e){this.$hidden.val(&quot;&quot;),this.$hidden.attr(&quot;name&quot;,this.name),this.$input.attr(&quot;name&quot;,&quot;&quot;);if(navigator.userAgent.match(/msie/i)){var t=this.$input.clone(!0);this.$input.after(t),this.$input.remove(),this.$input=t}else this.$input.val(&quot;&quot;);this.$preview.html(&quot;&quot;),this.$element.addClass(&quot;fileupload-new&quot;).removeClass(&quot;fileupload-exists&quot;),e&amp;&amp;(this.$input.trigger(&quot;change&quot;,[&quot;clear&quot;]),e.preventDefault())},reset:function(e){this.clear(),this.$hidden.val(this.original.hiddenVal),this.$preview.html(this.original.preview),this.original.exists?this.$element.addClass(&quot;fileupload-exists&quot;).removeClass(&quot;fileupload-new&quot;):this.$element.addClass(&quot;fileupload-new&quot;).removeClass(&quot;fileupload-exists&quot;)},trigger:function(e){this.$input.trigger(&quot;click&quot;),e.preventDefault()}},e.fn.fileupload=function(n){return this.each(function(){var r=e(this),i=r.data(&quot;fileupload&quot;);i||r.data(&quot;fileupload&quot;,i=new t(this,n)),typeof n==&quot;string&quot;&amp;&amp;i[n]()})},e.fn.fileupload.Constructor=t,e(document).on(&quot;click.fileupload.data-api&quot;,&apos;[data-provides=&quot;fileupload&quot;]&apos;,function(t){var n=e(this);if(n.data(&quot;fileupload&quot;))return;n.fileupload(n.data());var r=e(t.target).closest(&apos;[data-dismiss=&quot;fileupload&quot;],[data-trigger=&quot;fileupload&quot;]&apos;);r.length&gt;0&amp;&amp;(r.trigger(&quot;click.fileupload&quot;),t.preventDefault())})}(window.jQuery)
-  
+    table(data-toggle='table', data-cache='false', data-height='299', data-show-columns='true', data-show-refresh='true', data-show-toggle='true', data-search='true', data-pagination='true')
+        thead
+            tr
+              //- th(data-field='state', data-radio='true')
+              //- |    
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='false') Item ID
+              |         
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='false') Item Name
+              |         
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='false') Item Price
+          |     
+        tbody
+            tr#tr_id_1.tr-class-1
+              td#td_id_1.td-class-1 1
+              |         
+              td Item 1
+              |         
+              td $1
+            |     
+            tr#tr_id_2.tr-class-2
+              td#td_id_2.td-class-2 2
+              |         
+              td Item 2
+              |         
+              td $2
+            |     
+            tr#tr_id_3.tr-class-3
+              td#td_id_3.td-class-3 3
+              |         
+              td Item 3
+              |         
+              td $3
+            |     
+            tr#tr_id_4.tr-class-4
+              td#td_id_4.td-class-4 4
+              |         
+              td Item 4
+              |         
+              td $4
+            |     
+            tr#tr_id_5.tr-class-5
+              td#td_id_5.td-class-5 5
+              |         
+              td Item 5
+              |         
+              td $5

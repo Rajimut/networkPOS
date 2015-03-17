@@ -84,7 +84,7 @@ block holder
           li
             a(role='menuitem', tabindex='-2',href='#') $16 - $20  
 
-      table#receipts(data-toggle='table', data-cache='false', data-height='399', data-show-columns='true', data-show-refresh='true', data-show-toggle='true', data-search='true', data-pagination='true')
+      table#receipts(data-toggle='table', data-cache='false', data-height='399', data-show-columns='true', data-show-refresh='true', data-show-toggle='true', data-search='true', data-pagination='true', data-click-to-select='true')
         thead
             tr
               //- th(data-field='state', data-radio='true')
@@ -127,3 +127,16 @@ block holder
               .children( '.dropdown-toggle' ).dropdown( 'toggle' );
               return false;
               });
+          $(function () {
+            $('#basic-events-table').next().click(function () {
+            $(this).hide();
+            var $result = $('#events-result');
+            $('#receipts').bootstrapTable({
+            onDblClickRow: function (row) {
+            $result.text('Event: onDblClickRow, data: ' + JSON.stringify(row));
+            },
+            }).on('all.bs.table', function (e, name, args) {
+            console.log('Event:', name, ', data:', args);
+            });
+            });
+            });
