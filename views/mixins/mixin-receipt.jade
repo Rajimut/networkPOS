@@ -3,7 +3,7 @@
  .text-center
      h4 Recepit #: #{receipt.seller_name}
  .row
-   .col-xs-6.col-sm-6.col-md-6
+   .col-md-6.col-sm-6.col-xs-6.text-left
      address
        |                         
        br
@@ -17,19 +17,17 @@
        |  (213) 484-6829
        br
    |                 
-   .col-xs-6.col-sm-6.col-md-6.text-right
+   .col-md-6.col-sm-6.col-xs-6.text-right
      p
-       em Date: #{moment(receipt.transaction_date).format('MMM Do YY')}
+       i Date: #{moment(receipt.transaction_date).format('MMM Do YY')}
      |                     
      p
-       em Receipt #: #{receipt.transaction_id}
+       i Receipt #: #{receipt.transaction_id}
      |     
      p
-       em Payment Type:  #{receipt.paymenttype}  
- |             
+       i Payment Type:  #{receipt.paymenttype}             
  .row
-   .text-center
-     h3 Receipt
+   h3.text-center Receipt
    |                 
    |                 
    table.table.table-hover
@@ -37,7 +35,7 @@
        tr
          th Product
          |                             
-         th Quantity
+         th Qty
          |                             
          th.text-center Price
          |                             
@@ -69,7 +67,8 @@
           strong Total:       
         td(colspan=2).col-md-3.text-right
           strong $ #{_.str.numberFormat(receipt.aftertax, 2)} USD       
-             
+    .col-xs-12.col-sm-12.col-md-12.text-center
+          button.btn.btn-default.text-center(type='button', data-dismiss='modal') Close       
    
 
    //- button.btn.btn-success.btn-lg.btn-block(type='button')

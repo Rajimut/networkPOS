@@ -5,12 +5,13 @@ block content
   +seller-nav(['active','','','','',''])
 
 block holder
-
   .row-fluid
-    div.col-md-4.col-xs-12.col-sm-6
+    div.col-lg-4.col-md-4.col-xs-12.col-sm-4.col-md-push-4.col-sm-push-4
+      img.center-block(src='img/Sample_logo_500px.png',  width='200px',alt='Responsive image')    
+    div.col-lg-4.col-md-4.col-xs-6.col-sm-4.col-md-pull-4.col-sm-pull-4
       h4 Receipt # 
         span#receipt_no #{receipt_no}
-    div.col-md-8.col-xs-12.col-sm-6
+    div.col-lg-4.col-md-4.col-xs-6.col-sm-4
       div.text-primary.text-right
         h5 #{new Date().toLocaleDateString()}
         h4#clock
