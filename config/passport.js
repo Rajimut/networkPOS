@@ -4,6 +4,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 // load up the user model
 var User            = require('../models/user');
 var SellerDB        = require('../models/seller-details');
+var buyerDB         = require('../models/buyer-details');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -63,15 +64,13 @@ module.exports = function(passport) {
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password);
 
-                //Needs to be removed & set in seller-signup.jade - UMA TO TAKE A LOOK.
-
                 if (req.body.customertype == "Seller") {
                     // Insert into sellerDB
                     var temp_seller_details = new SellerDB();
 
                     temp_seller_details.seller_name         =   req.body.companyname;
                     temp_seller_details.seller_email        =   req.body.email;
-                    temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images" + req.body.sellerlogo;
+                    temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.body.sellerlogo;
                     temp_seller_details.seller_st_addr      =   req.body.streetAddress;
                     temp_seller_details.seller_city         =   req.body.city;
                     temp_seller_details.seller_state        =   req.body.state;
@@ -94,7 +93,33 @@ module.exports = function(passport) {
                     });
                 } else if (req.body.customertype == "Buyer") {
                     // Insert into buyerDB
-                    req.login = "Buyer_Loggedin";
+                    var temp_buyer_details = new BuyerDB();
+
+                    temp_buyer_details.buyer_name       =   req.body.buyername;
+                    temp_buyer_details.buyer_email      =   req.body.email;
+                    temp_buyer_details.buyer_pic        =   "/var/mushroomDB/buyer/images/" + req.body.buyerpic;
+                    temp_buyer_details.buyer_sex        =   req.body.buyersex;
+                    temp_buyer_details.buyer_dob        =   req.body.buyerdob;
+                    temp_buyer_details.buyer_st_addr    =   req.body.streetAddress;
+                    temp_buyer_details.buyer_city       =   req.body.city;
+                    temp_buyer_details.buyer_state      =   req.body.state;
+                    temp_buyer_details.buyer_zipcode    =   req.body.zip;
+                    temp_buyer_details.buyer_sharedata  =   req.body.sharedata;
+                    temp_buyer_details.customer_flag    =   req.body.customertype;
+
+                    console.log("temp_buyer_details : " + temp_buyer_details);
+    
+                    temp_buyer_details.save(function(error, data){
+                        if (error){
+                            console.log("error case" + error);
+                            res.send("There was a problem adding the information to the buyer database." + error);
+                        } else {
+                            // And forward to success page
+                            console.log("Buyer added to DB");
+                            // Change login from Seller-Signup to Seller-Loggedin
+                            req.login = "Buyer-Loggedin";
+                        }
+                    });
                 }
 
                 // save the user
