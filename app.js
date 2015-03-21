@@ -21,7 +21,8 @@ var mongo = require('mongodb');
 var monk = require('monk');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+
+
 
 // Added by Raji- To include stylus - RAJI
 function compile(str, path) {
@@ -40,6 +41,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // console.log(views);
 app.set('view engine', 'jade');
+
 
 // EDIT BY MUTHU RAJI
 
@@ -65,7 +67,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// TEST MODULE
+var test = require('./routes/test');
+app.use('/reset', test);
+// TEST MODULE
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
@@ -87,7 +92,7 @@ app.use(function(req,res,next){
 require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 app.use('/', routes);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

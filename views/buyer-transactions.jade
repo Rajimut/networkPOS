@@ -5,6 +5,13 @@ block content
 
 
 block holder
+  div#receiptModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        //-.modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true')
+          //- h4#myModalLabel.modal-title Modal title
+        .modal-body
   .col-md-12
     //- .panel.panel-default
     //-   .panel-heading My latest receipts  
@@ -112,13 +119,34 @@ block holder
               |         
               td #{val.aftertax}
             |     
-        
-      
+  .row#sync2
+    each val in buyertransactions_
+      | 
+      .col-lg-2.col-md-2.col-sm-3.col-xs-6           
+        div.item 
+          img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='70%',alt='Responsive image')    
+          |  #{val.paymenttype}
+          p
+          | $#{val.aftertax}             
+          p                    
+          span.small #{val.transaction_date.toDateString()}
+          p   
+          div
+            a.btn.btn-xs.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details                              
+    
         script(type='text/javascript').
           //- $('#receipts').bootstrapTable({ smartDisplay:true,
           //-   pagination:true,sidePagination:true,clickToSelect: true
           //-   //data: !{myreceipt_}
           //-   });
+          $(document).on('click', '.detailreceipt', function() {
+            //- e.preventDefault();
+            var receipt_ID = $(this).attr('receipt-id');
+            console.log('hel '+receipt_ID);
+            $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
+              $('#receiptModal').modal();
+            });
+            });
           $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
               var $target = $( event.currentTarget );
               $target.closest( '.btn-group' )

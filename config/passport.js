@@ -63,6 +63,7 @@ module.exports = function(passport) {
                 // set the user's local credentials
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password);
+                
 
                 if (req.body.customertype == "Seller") {
                     // Insert into sellerDB

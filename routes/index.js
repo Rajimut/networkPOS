@@ -133,14 +133,12 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
-var config = require( __dirname + '/receipt.json');
-var file = __dirname + '/receipt.json';
-var fs = require("fs");
-var data = JSON.parse(fs.readFileSync(file, "utf8"));
-console.dir(data);
-data = JSON.stringify(data);
-
-var Myreceipt_data = JSON.parse(fs.readFileSync(__dirname + '/myreceipt.json', "utf8"));
+// var config = require( __dirname + '/receipt.json');
+// var file = __dirname + '/receipt.json';
+// var fs = require("fs");
+// var data = JSON.parse(fs.readFileSync(file, "utf8"));
+// console.dir(data);
+// data = JSON.stringify(data);
 
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
@@ -180,7 +178,7 @@ router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
         }
     });
     
-    //res.render('myreceipts', {myreceipt_: Myreceipt_data, json_data: data});
+   
 });
 
 router.get('/buyer-transactions', isLoggedIn, function(req, res) {
@@ -192,6 +190,23 @@ router.get('/buyer-transactions', isLoggedIn, function(req, res) {
             res.render('buyer-transactions', {buyertransactions_: invoice});
         }
     });
+});
+
+router.get('/buyer-apps', isLoggedIn, function(req, res) {
+    //res.render('buyer-transactions', {json_data: data});
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('buyer-apps.jade');
+        }
+    });
+});
+router.get('/buyer-app-store', isLoggedIn, function(req, res) {
+    //res.render('buyer-transactions', {json_data: data});
+        res.location("buyer-app-store");
+        //res.redirect("buyer-app-store");
+        res.render('buyer-app-store.jade');
 });
 
 // =====================================
@@ -249,7 +264,7 @@ router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONS
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
     temp_invoice_details.seller_name        = req.user.local.email;             //extract currently logged in seller
-    temp_invoice_details.buyer_name         = req.body.buyer_name;  //For future updates. Needs flash login of Buyer.
+    temp_invoice_details.buyer_name         = req.body.buyer_name;  //EMAIL AddressFor future updates. Needs flash login of Buyer.
     temp_invoice_details.paymenttype        = req.body.paymenttype;
     temp_invoice_details.tax                = req.body.tax;
     temp_invoice_details.beforetax          = req.body.beforetax;
@@ -273,51 +288,7 @@ router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONS
     });
 });
 
-/* GET Userlist page. */
-router.get('/userlist', function(req, res) {
-    var db = req.db;
-    console.log("DB name :" + db);
-    var collection = db.get('usercollection');
-    collection.find({},{},function(e,docs){
-        res.render('userlist', {
-            "userlist" : docs
-        });
-    });
-});
-
-/* GET New User page. */
-router.get('/newuser', function(req, res) {
-    res.render('newuser', { title: 'Add New User' });
-});
 
 /* POST to Add User Service */
-router.post('/adduser', function(req, res) {
 
-    // Set our internal DB variable
-    var db = req.db;
-
-    // Get our form values. These rely on the "name" attributes
-    var userName = req.body.username;
-    var userEmail = req.body.useremail;
-
-    // Set our collection
-    var collection = db.get('usercollection');
-    console.log(collection + "username: " + userName + " email: " + userEmail);
-    // Submit to the DB
-    collection.insert({
-        "username" : userName,
-        "email" : userEmail
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        }
-        else {
-            // If it worked, set the header so the address bar doesn't still say /adduser
-            res.location("userlist");
-            // And forward to success page
-            res.redirect("userlist");
-        }
-    });
-});
 };
