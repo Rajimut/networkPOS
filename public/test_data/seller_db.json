@@ -1,0 +1,44 @@
+[{
+  "seller_name": "Target",
+  "seller_email": "target@mushrooms.com",
+  "seller_password": "seller",
+  "seller_st_addr": "72213 Welch Drive",
+  "seller_city": "Al ‘Azīzīyah",
+  "seller_zipcode": "77056",
+  "seller_country": "Iraq",
+  "customer_flag": "seller",
+  "seller_category": "Retail"
+},
+{
+  "seller_name": "Walmart",
+  "seller_email": "walmart@mushrooms.com",
+  "seller_password": "seller",
+  "seller_st_addr": "34 Canary Junction",
+  "seller_city": "Fangxian",
+  "seller_zipcode": "77056",
+  "seller_country": "China",
+  "customer_flag": "seller",
+  "seller_category": "Big Store"
+},
+{
+  "seller_name": "Starbucks",
+  "seller_email": "starbucks@mushrooms.com",
+  "seller_password": "seller",
+  "seller_st_addr": "54056 Summer Ridge Road",
+  "seller_city": "Kafr Kannā",
+  "seller_zipcode": "77056",
+  "seller_country": "Israel",
+  "customer_flag": "seller",
+  "seller_category": "Coffee Shop"
+},
+{
+  "seller_name": "Ruggles Green",
+  "seller_email": "ruggles@mushrooms.com",
+  "seller_password": "seller",
+  "seller_st_addr": "853 Ilene Hill",
+  "seller_city": "Luleå",
+  "seller_zipcode": "77056",
+  "seller_country": "Sweden",
+  "customer_flag": "seller",
+  "seller_category": "Restaurant"
+}]

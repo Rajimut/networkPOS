@@ -19,6 +19,7 @@ var buyerdbSchema = new Schema({
     buyer_city       :   String,
     buyer_state      :   String,
     buyer_zipcode    :   String,
+    buyer_country    :   String,
     buyer_sharedata  :   String, // Is the buyer willing to share his abstract data for analytics
     customer_flag    :   String  // Set to either Buyer or Seller for appropriate DB retrieval
 });
