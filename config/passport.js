@@ -6,6 +6,10 @@ var User            = require('../models/user');
 var SellerDB        = require('../models/seller-details');
 var buyerDB         = require('../models/buyer-details');
 
+//var multer          = require('multer');
+var fs = require('fs');
+var util = require('util');
+
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
@@ -14,6 +18,21 @@ module.exports = function(passport) {
     // =========================================================================
     // required for persistent login sessions
     // passport needs ability to serialize and unserialize users out of session
+
+    /*Configure the multer.
+
+    passport.use(multer({ dest: '/var/mushroomDB/seller/images/',
+        rename: function (fieldname, filename) {
+            return filename+Date.now();
+        },
+        onFileUploadStart: function (file) {
+            console.log(file.originalname + ' is starting ...')
+        },
+        onFileUploadComplete: function (file) {
+            console.log(file.fieldname + ' uploaded to  ' + file.path)
+            done=true;
+        }
+    })); */
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -72,36 +91,38 @@ module.exports = function(passport) {
                     temp_seller_details.seller_name         =   req.body.companyname;
                     temp_seller_details.seller_email        =   req.body.email;
 
-                    ins = fs.createReadStream(req.body.path);
-                    ous = fs.createWriteStream(__dirname + '/directory were u want to store image/' + files.photo.filename);
-                    util.pump(ins, ous, function(err) {
+                    console.log("Upload file : " + req.body.companylogo + "  " + req.body.path);
+
+                    ins = fs.createReadStream(req.body.companylogo);
+                    ous = fs.createWriteStream('/var/mushroomDB/seller/images/' + req.body.companylogo);
+                    
+                    ins.pipe(ous, function(err) {
+                      //util.pump(ins, ous, function(err) {
                       if (err) {
                           next(err);
                       } else {
-                          res.redirect('/photos');
-                      }
-                    });
+                          temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.body.sellerlogo;
+                          temp_seller_details.seller_st_addr      =   req.body.streetAddress;
+                          temp_seller_details.seller_city         =   req.body.city;
+                          temp_seller_details.seller_state        =   req.body.state;
+                          temp_seller_details.seller_zipcode      =   req.body.zip;
+                          //temp_seller_details.seller_categories =   req.body.  //Future item
+                          temp_seller_details.customer_flag       =   req.body.customertype;
 
-                    temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.body.sellerlogo;
-                    temp_seller_details.seller_st_addr      =   req.body.streetAddress;
-                    temp_seller_details.seller_city         =   req.body.city;
-                    temp_seller_details.seller_state        =   req.body.state;
-                    temp_seller_details.seller_zipcode      =   req.body.zip;
-                    //temp_seller_details.seller_categories =   req.body.  //Future item
-                    temp_seller_details.customer_flag       =   req.body.customertype;
-
-                    console.log("temp_seller_details : " + temp_seller_details);
+                          console.log("temp_seller_details : " + temp_seller_details);
     
-                    temp_seller_details.save(function(error, data){
-                        if (error){
-                            console.log("error case" + error);
-                            res.send("There was a problem adding the information to the seller database." + error);
-                        } else {
-                            // And forward to success page
-                            console.log("Seller added to DB");
-                            // Change login from Seller-Signup to Seller-Loggedin
-                            req.login = "Seller-Loggedin";
-                        }
+                          temp_seller_details.save(function(error, data){
+                            if (error){
+                                console.log("error case" + error);
+                                res.send("There was a problem adding the information to the seller database." + error);
+                            } else {
+                                // And forward to success page
+                                console.log("Seller added to DB");
+                                // Change login from Seller-Signup to Seller-Loggedin
+                                req.login = "Seller-Loggedin";
+                            }
+                          });
+                      }
                     });
                 } else if (req.body.customertype == "Buyer") {
                     // Insert into buyerDB

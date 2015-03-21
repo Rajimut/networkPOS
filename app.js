@@ -22,8 +22,6 @@ var monk = require('monk');
 
 var routes = require('./routes/index');
 
-
-
 // Added by Raji- To include stylus - RAJI
 function compile(str, path) {
   return stylus(str)
