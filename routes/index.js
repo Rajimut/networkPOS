@@ -194,6 +194,23 @@ router.get('/buyer-transactions', isLoggedIn, function(req, res) {
     });
 });
 
+router.get('/buyer-apps', isLoggedIn, function(req, res) {
+    //res.render('buyer-transactions', {json_data: data});
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('buyer-apps.jade');
+        }
+    });
+});
+router.get('/buyer-app-store', isLoggedIn, function(req, res) {
+    //res.render('buyer-transactions', {json_data: data});
+        res.location("buyer-app-store");
+        //res.redirect("buyer-app-store");
+        res.render('buyer-app-store.jade');
+});
+
 // =====================================
 // LOGOUT ==============================
 // =====================================

@@ -1,0 +1,23 @@
+extends layout
+include mixins/navbar-buyer.jade
+//- include mixins/mixin-receipt.jade
+block content
+  +buyer-nav(['','','','','active',''])
+
+block holder
+    div.row-fluid
+      .pull-right
+          a(href='/buyer-app-store') App store 
+      .page-header.h3 My Apps 
+    #apps
+      .row
+        .col-lg-3.col-md-4.col-sm-4.col-xs-6          
+          div
+            img.img-responsive.center-block.pull-left(src='img/buyer-apps/cookbook.jpg',  width='110px',alt='Responsive image')                          
+          h4.text-center
+            p
+            |  Recipes            
+            p                    
+            span.small Add
+            p   
+            a.btn.btn-xs.btn-success(href='#') Details
