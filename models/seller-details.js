@@ -8,9 +8,9 @@ seller_db.on('error', console.error.bind(console, 'connection error:'));
 seller_db.once('open', function callback () {
 });
 
-var categorylistSchema = new Schema({
-    category         :   String //category of products sold
-});
+// var categorylistSchema = new Schema({
+//     category         :   String //category of products sold
+// });
 
 // define the schema for our seller details model
 var sellerdbSchema = new Schema({
@@ -21,7 +21,8 @@ var sellerdbSchema = new Schema({
     seller_city         :   String,
     seller_state        :   String,
     seller_zipcode      :   String,
-    seller_categories   :   [categorylistSchema], // Array of category of products sold.
+    seller_country      :   String,
+    seller_category     :   String, // This should be seller category : coffee shop retalier etc. Product level category should be in item detail. // Array of category of products sold.
     customer_flag       :   String // Set to either Buyer or Seller for appropriate DB retrieval.
 });
 
