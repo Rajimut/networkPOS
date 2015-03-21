@@ -70,6 +70,17 @@ module.exports = function(passport) {
 
                     temp_seller_details.seller_name         =   req.body.companyname;
                     temp_seller_details.seller_email        =   req.body.email;
+
+                    ins = fs.createReadStream(req.body.path);
+                    ous = fs.createWriteStream(__dirname + '/directory were u want to store image/' + files.photo.filename);
+                    util.pump(ins, ous, function(err) {
+                      if (err) {
+                          next(err);
+                      } else {
+                          res.redirect('/photos');
+                      }
+                    });
+
                     temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.body.sellerlogo;
                     temp_seller_details.seller_st_addr      =   req.body.streetAddress;
                     temp_seller_details.seller_city         =   req.body.city;
