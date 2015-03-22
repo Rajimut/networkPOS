@@ -7,7 +7,10 @@ var MongoWatch  = require('mongo-watch');
 
 //Define Models for each Schema created
 var InvoiceDetail = require('../models/invoice-detail');
-
+var SellerDB        = require('../models/seller-details');
+var buyerDB         = require('../models/buyer-details');
+var User            = require('../models/user');
+var fs = require('fs');
 module.exports = function (router, passport) {
 
 /* GET home page. */
@@ -96,18 +99,102 @@ router.get('/buyer-signup', function(req, res) {
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
-// Process the signup form
-router.post('/seller-signup', passport.authenticate('local-signup', {
-                successRedirect : '/POSterminal', // redirect to the secure profile section
-                failureRedirect : '/seller-signup', // redirect back to the signup page if there is an error
-                failureFlash : true // allow flash messages
-}));
+router.post('/seller-signup',
+    passport.authenticate('local-signup', { failureRedirect: '/seller-signup', failureFlash: false }),
+            function(req, res) {
 
-router.post('/buyer-signup', passport.authenticate('local-signup', {
-            successRedirect : '/myreceipts', // redirect to the secure profile section
-            failureRedirect : '/buyer-signup', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
-}));
+                var temp_seller_details = new SellerDB();
+
+                temp_seller_details.seller_name         =   req.body.companyname;
+                temp_seller_details.seller_email        =   req.body.email;
+
+                console.log("Upload file : " + req.body.companylogo + "  " + req.body.path);
+                console.log(req.files);
+
+                fs.readFile(req.files.img_companylogo.path, function (err, data) {
+                    var newPath = '/var/mushroomDB/seller/images/' + req.files.img_companylogo.name;
+                    fs.writeFile(newPath, data, function (err) {
+                    if (err) throw err; // DELETE USER
+
+                      temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.files.img_companylogo.name;
+                      temp_seller_details.seller_st_addr      =   req.body.streetAddress;
+                      temp_seller_details.seller_city         =   req.body.city;
+                      temp_seller_details.seller_state        =   req.body.state;
+                      temp_seller_details.seller_zipcode      =   req.body.zip;
+                      //temp_seller_details.seller_categories =   req.body.  //Future item
+                      temp_seller_details.customer_flag       =   req.body.customertype;
+                        
+                    User.update({'local.email':req.body.email}, {$set:{'local.customer_flag':req.body.customertype}},function(err){console.log('error : ' + err);});
+
+
+
+                      temp_seller_details.save(function(error, data){
+                        if (error){
+                            console.log("error case" + error);
+                            // DELETE USER
+                            res.send("There was a problem adding the information to the seller database." + error);
+                        } else {
+                            // And forward to success page
+                            console.log("Seller added to DB");
+                            // Change login from Seller-Signup to Seller-Loggedin
+                            req.login = "Seller-Loggedin";
+                        }
+                        });
+                    });
+                });
+                res.redirect('/POSterminal');
+            });
+
+router.post('/buyer-signup',
+    passport.authenticate('local-signup', { customerflag:'buyer', failureRedirect: '/buyer-signup', failureFlash: false }),
+            function(req, res) {
+
+                var temp_buyer_details = new SellerDB();
+
+
+                temp_buyer_details.buyer_name       =   req.body.buyername;
+                temp_buyer_details.buyer_email      =   req.body.email;
+                // temp_buyer_details.buyer_pic        =   "/var/mushroomDB/buyer/images/" + req.files.img_companylogo.name;
+                temp_buyer_details.buyer_sex        =   req.body.buyersex;
+                temp_buyer_details.buyer_dob        =   req.body.buyerdob;
+                temp_buyer_details.buyer_st_addr    =   req.body.streetAddress;
+                temp_buyer_details.buyer_city       =   req.body.city;
+                temp_buyer_details.buyer_state      =   req.body.state;
+                temp_buyer_details.buyer_zipcode    =   req.body.zip;
+                temp_buyer_details.buyer_sharedata  =   req.body.sharedata;
+                temp_buyer_details.customer_flag    =   req.body.customertype;
+
+
+                User.update({'local.email':req.body.email}, {$set:{'local.customer_flag':req.body.customertype}},function(err){console.log('error : ' + err);});
+
+                // NEED TO ADD LOGIC FOR BUYER PROFILE PIC
+                // PHOTO UPLOAD ON DIRECTORY AVAILABILITY
+                // ERROR CHECKING ON IMAGES
+                // FLOW TO BE DEFINED
+
+                // fs.readFile(req.files.img_companylogo.path, function (err, data) {
+                //     var newPath = '/var/mushroomDB/seller/images/' + req.files.img_companylogo.name;
+                //     fs.writeFile(newPath, data, function (err) {
+                //     if (err) throw err; // DELETE USER
+
+                      temp_buyer_details.save(function(error, data){
+                        if (error){
+                            console.log("error case" + error);
+                            // DELETE USER
+                            res.send("There was a problem adding the information to the seller database." + error);
+                        } else {
+                            // And forward to success page
+                            console.log("Seller added to DB");
+                            // Change login from Seller-Signup to Seller-Loggedin
+                            req.login = "Seller-Loggedin";
+                        }
+                        });
+                //     });
+                // });
+                res.redirect('/myreceipts');
+            });
+
+
 
 // =====================================
 // PROFILE SECTION =====================

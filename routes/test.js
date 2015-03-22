@@ -20,12 +20,14 @@ function error_fn (err, p) {
             }
 
 test.post('/', function(req, res) {
+    console.log (req.body.action);
     var user_db = new UserDb();
     switch (req.body.action){
         case "seller_db":
         var seller_db = new SellerDB();
 
         seller_db.collection.remove( function (err) {
+            console.log('Seller Db reset error + ' + err);
         if (err) throw err;
         });
 

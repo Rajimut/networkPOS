@@ -15,6 +15,7 @@ var morgan = require('morgan');
 var session = require('express-session');
 var configDB = require('./config/database.js');
 var mongoose = require('mongoose');
+var multer = require('multer');
 
 // Linking to Mongo
 var mongo = require('mongodb');
@@ -60,11 +61,13 @@ app.use(stylus.middleware( //added by RAJI
   compile: compile //added by RAJI
   }
 ));
-app.use(bodyParser({ mapParams: true }));
+
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false ,mapParams: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(multer({ dest: './img/'}));
 // TEST MODULE
 var test = require('./routes/test');
 app.use('/reset', test);

@@ -30,7 +30,7 @@ block holder
     event.preventDefault();
     console.log($(this).attr('data-action'));
     var _post_req = $.ajax({
-    url: '/test',
+    url: '/reset',
     type: 'POST',
     data   : JSON.stringify({action: $(this).attr('data-action')}), //EXPECTING JSON TO BE RETURNED
     contentType: 'application/json; charset=UTF-8'

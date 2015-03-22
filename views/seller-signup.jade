@@ -7,7 +7,7 @@ block holder
         span.fa.fa-sign-in
         |  Signup
     div.row-fluid
-      form.login-form.form-horizontal(method='post', role='form')
+      form.login-form.form-horizontal(method='post',  enctype='multipart/form-data')
         input(name='_csrf', type='hidden')
         input(name='customertype', type='hidden', value='Seller')
         .form-group
@@ -26,7 +26,7 @@ block holder
           label.col-sm-4 Company Logo
           .col-sm-8
             .btn.btn-default.btn-sm.fileupload.fileupload-new(data-provides='fileupload')        
-              input(type='file', name='companylogo')    
+              input(type='file', name='img_companylogo')    
             a.close.fileupload-exists.pull-right(href='#', data-dismiss='fileupload', style='float: none') &times;
         .form-group
           label.col-sm-4 Street address
@@ -50,7 +50,7 @@ block holder
              .fileupload.fileupload-new(data-provides='fileupload')
               span.btn.btn-default.btn-sm.btn-file
                 |          
-                input(type='file', name='location png')
+                input(type='file', name='img_location')
               |     
               span.fileupload-preview
               |     
