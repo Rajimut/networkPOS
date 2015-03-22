@@ -17,6 +17,7 @@ module.exports = (function() {
     });
 
 function error_fn (err, p) {
+    //console.log('deleted..');
             }
 
 test.post('/', function(req, res) {
@@ -36,7 +37,6 @@ test.post('/', function(req, res) {
         if (err) throw err;
 
         obj = JSON.parse(data);
-        console.log(obj[0]);
         
         for (var obj_in in obj)
         {
@@ -46,11 +46,12 @@ test.post('/', function(req, res) {
             var newUser            = new UserDb();
             newUser.local.email    = obj[obj_in].seller_email;
             newUser.local.password = newUser.generateHash(obj[obj_in].seller_password);
+            newUser.local.customer_flag = 'Seller';
             newUser.save();
         }
 
         });
-
+        console.log('Seller Db Reset Successful');
         break;
 
         case "buyer_db":
@@ -75,10 +76,12 @@ test.post('/', function(req, res) {
             var newUser            = new UserDb();
             newUser.local.email    = obj[obj_in].buyer_email;
             newUser.local.password = newUser.generateHash(obj[obj_in].buyer_password);
+            newUser.local.customer_flag = 'Buyer';
             newUser.save();
         }
 
         });
+        console.log('Buyer Db Reset Successful');
         break;
 
         case "items_db":

@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
 // Configuration
-var config_db = mongoose.createConnection('localhost','users',27021);
+var config_db = mongoose.createConnection('localhost','Users',27021);
 config_db.on('error', console.error.bind(console, 'connection error:'));
 config_db.once('open', function callback () {
 });
