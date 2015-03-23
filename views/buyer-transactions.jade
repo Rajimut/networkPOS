@@ -118,53 +118,112 @@ block holder
               td #{val.transaction_id}
               |         
               td #{val.aftertax}
+  div.row  
+    #sorts.button-group
+        //-input#quicksearch(type='text', placeholder='Search')
+          |            
+        .btn-group.col-xs-6.col-md-2.col-sm-2.col-lg-2     
+          button.btn-block.dropdown-toggle.button.is-checked(type='button', data-toggle='dropdown', aria-expanded='true') 
+            span(data-bind='label') Sorter
+            span.caret
             |     
-  .row#sync2
-    each val in buyertransactions_
-      | 
-      .col-lg-2.col-md-2.col-sm-3.col-xs-6           
-        div.item 
-          img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='70%',alt='Responsive image')    
-          |  #{val.paymenttype}
-          p
-          | $#{val.aftertax}             
-          p                    
-          span.small #{val.transaction_date.toDateString()}
-          p   
-          div
-            a.btn.btn-xs.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details                              
-    
-        script(type='text/javascript').
-          //- $('#receipts').bootstrapTable({ smartDisplay:true,
-          //-   pagination:true,sidePagination:true,clickToSelect: true
-          //-   //data: !{myreceipt_}
-          //-   });
-          $(document).on('click', '.detailreceipt', function() {
-            //- e.preventDefault();
-            var receipt_ID = $(this).attr('receipt-id');
-            console.log('hel '+receipt_ID);
-            $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
-              $('#receiptModal').modal();
-            });
-            });
-          $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
-              var $target = $( event.currentTarget );
-              $target.closest( '.btn-group' )
-              .find( '[data-bind="label"]' ).text( $target.text() )
-              .end()
-              .children( '.dropdown-toggle' ).dropdown( 'toggle' );
-              return false;
-              });
-          $(function () {
-            $('#basic-events-table').next().click(function () {
-            $(this).hide();
-            var $result = $('#events-result');
-            $('#receipts').bootstrapTable({
-            onDblClickRow: function (row) {
-            $result.text('Event: onDblClickRow, data: ' + JSON.stringify(row));
-            },
-            }).on('all.bs.table', function (e, name, args) {
-            console.log('Event:', name, ', data:', args);
-            });
-            });
-            });
+          ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+            li
+              button.button.is-checked(data-sort-value='original-order')  default
+            |       
+            li
+              button.button(data-sort-value='name') name
+            |       
+            li
+              button.button(data-sort-value='price') Price Inc 
+            |   
+            li
+              button.button(data-sort-value='priceDecending') price Dec     
+            |       
+            li
+              button.button(data-sort-value='date') Date 
+      #container
+        each val in buyertransactions_
+          |     
+          div.element-item
+            .text-hide.name  #{val.seller_name}
+            .text-hide.priceDecending #{val.aftertax.toFixed(0)}
+            //-.text-hide.priceDecending  #{val.aftertax} 
+            //-p.weight #{val.aftertax}
+            //-h3.pull-right  $                            
+            p.price #{val.aftertax.toFixed(0)}           
+            p                    
+            p.date #{val.transaction_date.toDateString()}
+            br
+            br
+            img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
+            p   
+            a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
+  
+  script(type='text/javascript').
+    $(document).on('click', '.detailreceipt', function() {
+      //- e.preventDefault();
+      var receipt_ID = $(this).attr('receipt-id');
+      console.log('hel '+receipt_ID);
+      $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
+        $('#receiptModal').modal();
+      });
+      });
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+        var $target = $( event.currentTarget );
+        $target.closest( '.btn-group' )
+        .find( '[data-bind="label"]' ).text( $target.text() )
+        .end()
+        .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        return false;
+        });
+    $(function () {
+      $('#basic-events-table').next().click(function () {
+      $(this).hide();
+      var $result = $('#events-result');
+      $('#receipts').bootstrapTable({
+      onDblClickRow: function (row) {
+      $result.text('Event: onDblClickRow, data: ' + JSON.stringify(row));
+      },
+      }).on('all.bs.table', function (e, name, args) {
+      console.log('Event:', name, ', data:', args);
+      });
+      });
+      });
+    var $container = $('#container');
+    $container.isotope({
+      // options
+      itemSelector: '.element-item',
+      layoutMode: 'fitRows',
+      getSortData: {
+        name: '.name',
+        price: '.price parseInt',
+        priceDecending: '.priceDecending parseInt',
+         // text from querySelector
+        //category: '[data-category]', // value of attribute
+        date: function( itemElem ) { // function
+          var date = $( itemElem ).find('.date').text();
+          return parseFloat( date.replace( /[\(\)]/g, '') );
+          }
+        }
+      });
+    $container.isotope({
+      sortAscending: {
+          name: true,
+          price: true,
+          date: false,
+          priceDecending: false
+        } 
+      });
+    $('#sorts').on( 'click', 'button', function() {
+      var sortValue = $(this).attr('data-sort-value');
+      $container.isotope({ sortBy: sortValue });
+      });
+    $('.button-group').each( function( i, buttonGroup ) {
+      var $buttonGroup = $( buttonGroup );
+      $buttonGroup.on( 'click', 'button', function() {
+        $buttonGroup.find('.is-checked').removeClass('is-checked');
+        $( this ).addClass('is-checked');
+      });
+    });
+

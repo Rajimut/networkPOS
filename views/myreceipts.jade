@@ -96,8 +96,9 @@ block holder
       itemsMobile : [479,1],
       slideSpeed : 1000,
       navigation: true,
-      pagination:true,
+      pagination:false,
       afterAction : syncPosition,
+      //paginationNumbers : true,
       responsiveRefreshRate : 200,
       });
        
@@ -108,7 +109,8 @@ block holder
       itemsTablet : [768,4],
       itemsMobile : [479,3],
       slideSpeed : 2000,
-      pagination:true,
+      //pagination:true,
+      paginationNumbers : true,
       responsiveRefreshRate : 200,
       afterInit : function(el){
       el.find(".owl-item").eq(0).addClass("synced");

@@ -316,8 +316,14 @@ function isLoggedIn(req, res, next) {
 }
 
 /* GET Hello World page. */
-router.get('/helloworld', function(req, res) {
-    res.render('helloworld', { title: 'Hello, World!' });
+router.get('/helloworld', isLoggedIn, function(req, res)  {
+        InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('helloworld', {buyertransactions_: invoice});
+        }
+    });
 });
 
 router.get('/POSterminal', isLoggedIn, function(req, res) { //ACCESSED DURING FIRST REQUEST
