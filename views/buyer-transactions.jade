@@ -1,3 +1,5 @@
+
+
 extends layout
 include mixins/navbar-buyer.jade
 block content
@@ -113,16 +115,16 @@ block holder
               |         
               td #{val.seller_name}
               |   
-              td #{val.paymenttype}
+              //- td #{val.paymenttype}
               |    
               td #{val.transaction_id}
               |         
               td #{val.aftertax}
   div.row  
-    #sorts.button-group
+    div#sorts.button-group
         //-input#quicksearch(type='text', placeholder='Search')
           |            
-        .btn-group.col-xs-6.col-md-2.col-sm-2.col-lg-2     
+        .btn-group   
           button.btn-block.dropdown-toggle.button.is-checked(type='button', data-toggle='dropdown', aria-expanded='true') 
             span(data-bind='label') Sorter
             span.caret
@@ -142,14 +144,26 @@ block holder
             |       
             li
               button.button(data-sort-value='date') Date 
-      #container
+    div#filters
+      div.ui-group
+        h3 Payment Type
+        |     
+        .button-group.js-radio-button-group(data-filter-group='paymenttype')
+          button.button.is-checked(data-filter='') All
+          |       
+          button.button(data-filter='.Creditcard') Creditcard
+          |       
+          button.button(data-filter='.Visa') Visa
+          |       
+          button.button(data-filter='.Cash') Cash          
+      div#container
         each val in buyertransactions_
           |     
-          div.element-item
+          div.element-item(class='#{val.paymenttype}')
             .text-hide.name  #{val.seller_name}
             .text-hide.priceDecending #{val.aftertax.toFixed(0)}
             //-.text-hide.priceDecending  #{val.aftertax} 
-            //-p.weight #{val.aftertax}
+            p.weight #{val.paymenttype}
             //-h3.pull-right  $                            
             p.price #{val.aftertax.toFixed(0)}           
             p                    
@@ -159,7 +173,7 @@ block holder
             img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
             p   
             a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
-  
+
   script(type='text/javascript').
     $(document).on('click', '.detailreceipt', function() {
       //- e.preventDefault();
@@ -190,40 +204,60 @@ block holder
       });
       });
       });
-    var $container = $('#container');
-    $container.isotope({
-      // options
-      itemSelector: '.element-item',
-      layoutMode: 'fitRows',
-      getSortData: {
-        name: '.name',
-        price: '.price parseInt',
-        priceDecending: '.priceDecending parseInt',
-         // text from querySelector
-        //category: '[data-category]', // value of attribute
-        date: function( itemElem ) { // function
-          var date = $( itemElem ).find('.date').text();
-          return parseFloat( date.replace( /[\(\)]/g, '') );
+    $(function () {
+      var $container = $('#container').isotope({
+        // options
+        itemSelector: '.element-item',
+        layoutMode: 'fitRows',
+        getSortData: {
+          name: '.name',
+          price: '.price parseInt',
+          priceDecending: '.priceDecending parseInt',
+           // text from querySelector
+          //category: '[data-category]', // value of attribute
+          date: function( itemElem ) { // function
+            var date = $( itemElem ).find('.date').text();
+            return parseFloat( date.replace( /[\(\)]/g, '') );
+            }
           }
-        }
-      });
-    $container.isotope({
-      sortAscending: {
-          name: true,
-          price: true,
-          date: false,
-          priceDecending: false
-        } 
-      });
-    $('#sorts').on( 'click', 'button', function() {
-      var sortValue = $(this).attr('data-sort-value');
-      $container.isotope({ sortBy: sortValue });
-      });
-    $('.button-group').each( function( i, buttonGroup ) {
-      var $buttonGroup = $( buttonGroup );
-      $buttonGroup.on( 'click', 'button', function() {
-        $buttonGroup.find('.is-checked').removeClass('is-checked');
-        $( this ).addClass('is-checked');
-      });
-    });
+        });
+      $container.isotope({
+        sortAscending: {
+            name: true,
+            price: true,
+            date: false,
+            priceDecending: false
+          } 
+        });
 
+      var filters = {};
+
+      $('#filters').on( 'click', '.button', function() {
+        var $this = $(this);
+        //- get group key
+        var $buttonGroup = $this.parents('.button-group');
+        var filterGroup = $buttonGroup.attr('data-filter-group');
+        //- set filter for group
+        filters[ filterGroup ] = $this.attr('data-filter');
+        //- combine filters
+        var filterValue = '';
+        for ( var prop in filters ) {
+          filterValue += filters[ prop ];
+        }
+        $container.isotope({ filter: filterValue });
+        });
+        //- set filter for Isotop
+
+      $('#sorts').on( 'click', 'button', function() {
+        var sortValue = $(this).attr('data-sort-value');
+        $container.isotope({ sortBy: sortValue });
+        });
+
+      $('.button-group').each( function( i, buttonGroup ) {
+        var $buttonGroup = $( buttonGroup );
+        $buttonGroup.on( 'click', 'button', function() {
+          $buttonGroup.find('.is-checked').removeClass('is-checked');
+          $( this ).addClass('is-checked');
+          });
+        });
+        });
