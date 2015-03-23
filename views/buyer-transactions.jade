@@ -14,6 +14,71 @@ block holder
           button.close(type='button', data-dismiss='modal', aria-hidden='true')
           //- h4#myModalLabel.modal-title Modal title
         .modal-body
+
+  div.row  
+    div#sorts.button-group
+        //-input#quicksearch(type='text', placeholder='Search')
+          |            
+        .btn-group   
+          button.btn-block.dropdown-toggle.button.is-checked(type='button', data-toggle='dropdown', aria-expanded='true') 
+            span(data-bind='label') Sorter
+            span.caret
+            |     
+          ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+            li
+              button.button.is-checked(data-sort-value='original-order')  default
+            |       
+            li
+              button.button(data-sort-value='name') name
+            |       
+            li
+              button.button(data-sort-value='price') Price Inc 
+            |   
+            li
+              button.button(data-sort-value='priceDecending') price Dec     
+            |       
+            li
+              button.button(data-sort-value='date') Date 
+    div#filters
+      div.ui-group
+        .button-group.js-radio-button-group.pull-right(data-filter-group='paymenttype')
+          button.button.is-checked(data-filter='') All
+          |       
+          button.button(data-filter='.Cred') Creditcard
+          |       
+          button.button(data-filter='.Visa') Visa
+          |       
+          button.button(data-filter='.Cash') Cash  
+          |       
+          button.button(data-filter='.Wall') Wallet 
+          |       
+          button.button(data-filter='.Appl') Apple Pay 
+      div.ui-group
+        .button-group.js-radio-button-group(data-filter-group='price')        
+          button.button.is-checked(data-filter='') All
+          |    
+          button.button(data-filter='numberLesserThan50') $0 - $50
+          |      
+          button.button(data-filter='numberbetween50and100') $50 - $100     
+          |    
+          button.button(data-filter='numberbetween100and200') $100 - $200
+          |    
+          button.button(data-filter='numberGreaterThan200') $200 & above
+
+      div#container
+        each val in buyertransactions_
+          |     
+          div.element-item(class='#{val.paymenttype.substring(0,4)}')
+            .text-hide.name  #{val.seller_name}
+            .text-hide.priceDecending #{val.aftertax.toFixed(0)}
+            p.weight #{val.paymenttype}                           
+            p.price #{val.aftertax.toFixed(0)}        
+            p                    
+            p.date #{val.transaction_date.toDateString()}
+            br
+            img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
+            p   
+            a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
   .col-md-12
     //- .panel.panel-default
     //-   .panel-heading My latest receipts  
@@ -119,60 +184,7 @@ block holder
               |    
               td #{val.transaction_id}
               |         
-              td #{val.aftertax}
-  div.row  
-    div#sorts.button-group
-        //-input#quicksearch(type='text', placeholder='Search')
-          |            
-        .btn-group   
-          button.btn-block.dropdown-toggle.button.is-checked(type='button', data-toggle='dropdown', aria-expanded='true') 
-            span(data-bind='label') Sorter
-            span.caret
-            |     
-          ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
-            li
-              button.button.is-checked(data-sort-value='original-order')  default
-            |       
-            li
-              button.button(data-sort-value='name') name
-            |       
-            li
-              button.button(data-sort-value='price') Price Inc 
-            |   
-            li
-              button.button(data-sort-value='priceDecending') price Dec     
-            |       
-            li
-              button.button(data-sort-value='date') Date 
-    div#filters
-      div.ui-group
-        h3 Payment Type
-        |     
-        .button-group.js-radio-button-group(data-filter-group='paymenttype')
-          button.button.is-checked(data-filter='') All
-          |       
-          button.button(data-filter='.Creditcard') Creditcard
-          |       
-          button.button(data-filter='.Visa') Visa
-          |       
-          button.button(data-filter='.Cash') Cash          
-      div#container
-        each val in buyertransactions_
-          |     
-          div.element-item(class='#{val.paymenttype}')
-            .text-hide.name  #{val.seller_name}
-            .text-hide.priceDecending #{val.aftertax.toFixed(0)}
-            //-.text-hide.priceDecending  #{val.aftertax} 
-            p.weight #{val.paymenttype}
-            //-h3.pull-right  $                            
-            p.price #{val.aftertax.toFixed(0)}           
-            p                    
-            p.date #{val.transaction_date.toDateString()}
-            br
-            br
-            img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
-            p   
-            a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
+              td #{val.aftertax}             
 
   script(type='text/javascript').
     $(document).on('click', '.detailreceipt', function() {
@@ -219,6 +231,24 @@ block holder
             var date = $( itemElem ).find('.date').text();
             return parseFloat( date.replace( /[\(\)]/g, '') );
             }
+          },
+        filter: function() {
+          var isMatched = true;
+          var $this = $(this);
+          for ( var prop in filters ) {
+            var filter = filters[ prop ];
+            // use function if it matches
+            filter = filterFns[ filter ] || filter;
+            // test each filter
+            if ( filter ) {
+              isMatched = isMatched && $(this).is( filter );
+              }
+            // break if not matched
+            if ( !isMatched ) {
+              break;
+              }
+            }
+            return isMatched;
           }
         });
       $container.isotope({
@@ -229,9 +259,26 @@ block holder
             priceDecending: false
           } 
         });
-
+      var filterFns = {
+        // show if number is greater than 50
+        numberGreaterThan200: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 200;
+          },
+        numberbetween100and200: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 100 && parseInt( price, 10 ) < 200;
+          },
+        numberbetween50and100: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 50 && parseInt( price, 10 ) < 100;
+          },
+        numberLesserThan50: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) < 50;
+          }
+        }; 
       var filters = {};
-
       $('#filters').on( 'click', '.button', function() {
         var $this = $(this);
         //- get group key
@@ -240,11 +287,7 @@ block holder
         //- set filter for group
         filters[ filterGroup ] = $this.attr('data-filter');
         //- combine filters
-        var filterValue = '';
-        for ( var prop in filters ) {
-          filterValue += filters[ prop ];
-        }
-        $container.isotope({ filter: filterValue });
+        $container.isotope('arrange');
         });
         //- set filter for Isotop
 
@@ -260,4 +303,4 @@ block holder
           $( this ).addClass('is-checked');
           });
         });
-        });
+      }); 

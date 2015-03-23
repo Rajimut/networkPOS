@@ -1,61 +1,124 @@
 extends layout
 block holder
   h1 Isotope - sorting
-  #sorts.button-group
-      button.button.is-checked(data-sort-value='original-order') original order
+  h1 Isotope - combination filters
+  #filters
+      .ui-group
+        h3 Color
+        |     
+        .button-group.js-radio-button-group(data-filter-group='color')
+          button.button.is-checked(data-filter='') any
+          |       
+          button.button(data-filter='.red') red
+          |       
+          button.button(data-filter='.blue') blue
+          |       
+          button.button(data-filter='.yellow') yellow
       |   
-      button.button(data-sort-value='name') name
+      .ui-group
+        h3 Size
+        |     
+        .button-group.js-radio-button-group(data-filter-group='size')
+          button.button.is-checked(data-filter='') any
+          |       
+          button.button(data-filter='.small') small
+          |       
+          button.button(data-filter='.wide') wide
+          |       
+          button.button(data-filter='.big') big
+          |       
+          button.button(data-filter='.tall') tall
       |   
-      button.button(data-sort-value='symbol') symbol
+      .ui-group
+        h3 Shape
+        |     
+        .button-group.js-radio-button-group(data-filter-group='shape')
+          button.button.is-checked(data-filter='') any
+          |       
+          button.button(data-filter='.round') round
+          |       
+          button.button(data-filter='.square') square
+    #container
+      .color-shape.small.round.red
       |   
-      button.button(data-sort-value='number') number
+      .color-shape.small.round.blue
       |   
-      button.button(data-sort-value='weight') weight
+      .color-shape.small.round.yellow
       |   
-      button.button(data-sort-value='category') category
-    div#container
-      each val in buyertransactions_
-        .element-item(data-category='transition')
-          h1.name #{val.transaction_id}
-          |     
-          p.symbol 
-          |     
-          p.number #{val.aftertax}
-          |     
-          p.weight #{val.aftertax}
-          |    
-          div
-              a.btn.btn-xs.btn-success(receipt-id='#{val.transaction_id}') Details   
+      .color-shape.small.square.red
+      |   
+      .color-shape.small.square.blue
+      |   
+      .color-shape.small.square.yellow
+      |   
+      .color-shape.wide.round.red
+      |   
+      .color-shape.wide.round.blue
+      |   
+      .color-shape.wide.round.yellow
+      |   
+      .color-shape.wide.square.red
+      |   
+      .color-shape.wide.square.blue
+      |   
+      .color-shape.wide.square.yellow
+      |   
+      .color-shape.big.round.red
+      |   
+      .color-shape.big.round.blue
+      |   
+      .color-shape.big.round.yellow
+      |   
+      .color-shape.big.square.red
+      |   
+      .color-shape.big.square.blue
+      |   
+      .color-shape.big.square.yellow
+      |   
+      .color-shape.tall.round.red
+      |   
+      .color-shape.tall.round.blue
+      |   
+      .color-shape.tall.round.yellow
+      |   
+      .color-shape.tall.square.red
+      |   
+      .color-shape.tall.square.blue
+      |   
+      .color-shape.tall.square.yellow
+
 
   script(type='text/javascript').
     var $container = $('#container');
     $container.isotope({
-        itemSelector: '.element-item',
-        layoutMode: 'fitRows',
-        getSortData: {
-          name: '.name',
-          symbol: '.symbol',
-          number: '.number parseInt',
-          category: '[data-category]',
-          weight: function( itemElem ) {
-            var weight = $( itemElem ).find('.weight').text();
-            return parseFloat( weight.replace( /[\(\)]/g, '') );
-          }
-        }
+        itemSelector: '.color-shape'
       });
 
     // bind sort button click
-    $('#sorts').on( 'click', 'button', function() {
-      var sortValue = $(this).attr('data-sort-value');
-      $container.isotope({ sortBy: sortValue });
-    });
+    var filters = {};
 
-    // change is-checked class on buttons
+    $('#filters').on( 'click', '.button', function() {
+      var $this = $(this);
+      //- get group key
+      var $buttonGroup = $this.parents('.button-group');
+      var filterGroup = $buttonGroup.attr('data-filter-group');
+      //- set filter for group
+      filters[ filterGroup ] = $this.attr('data-filter');
+      //- combine filters
+      var filterValue = '';
+      for ( var prop in filters ) {
+        filterValue += filters[ prop ];
+      }
+      //- set filter for Isotope
+    $container.isotope({ filter: filterValue });
+      });
+
+        //- change is-checked class on buttons
     $('.button-group').each( function( i, buttonGroup ) {
       var $buttonGroup = $( buttonGroup );
       $buttonGroup.on( 'click', 'button', function() {
         $buttonGroup.find('.is-checked').removeClass('is-checked');
         $( this ).addClass('is-checked');
+        });
       });
-    });
       
