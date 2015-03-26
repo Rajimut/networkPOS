@@ -1,0 +1,77 @@
+extends layout
+include mixins/navbar-buyer.jade
+block content
+  +buyer-nav(['','active','','','','',''])
+
+
+block holder
+  div#receiptModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        //-.modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true')
+          //- h4#myModalLabel.modal-title Modal title
+        .modal-body
+
+  div.row 
+    table#receipts(data-toggle='table', data-cache='false', data-height='399', data-show-columns='true', data-show-refresh='true', data-show-toggle='true', data-search='true', data-pagination='true', data-click-to-select='true')
+      thead
+          tr   
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Item Name
+            |         
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Quantity
+            |    
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Unit Price
+            |    
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='false') Subtotal 
+            |         
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Date
+            |                 
+            th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') 
+      tbody
+        each val in buyeritems  
+          each item_detail in val.item_details
+            tr#tr_id_1.tr-class-1
+              td#td_id_1.td-class-1 #{item_detail.itemname}
+              |                             
+              td #{item_detail.quantity}
+              |                             
+              td #{_.str.numberFormat(item_detail.unitprice, 2)}
+              |                             
+              td #{_.str.numberFormat(item_detail.subtotal_ln, 2)}          
+              |         
+              td #{val.transaction_date.toDateString()}
+              |        
+              td
+                a.btn.btn-xs.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details    
+
+  script(type='text/javascript').
+    $(document).on('click', '.detailreceipt', function() {
+      //- e.preventDefault();
+      var receipt_ID = $(this).attr('receipt-id');
+      console.log('hel '+receipt_ID);
+      $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
+        $('#receiptModal').modal();
+      });
+      });
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+        var $target = $( event.currentTarget );
+        $target.closest( '.btn-group' )
+        .find( '[data-bind="label"]' ).text( $target.text() )
+        .end()
+        .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        return false;
+        });
+    $(function () {
+      $('#basic-events-table').next().click(function () {
+      $(this).hide();
+      var $result = $('#events-result');
+      $('#receipts').bootstrapTable({
+      onDblClickRow: function (row) {
+      $result.text('Event: onDblClickRow, data: ' + JSON.stringify(row));
+      },
+      }).on('all.bs.table', function (e, name, args) {
+      console.log('Event:', name, ', data:', args);
+      });
+      });
+      });

@@ -15,20 +15,23 @@ mixin buyer-nav(navlist)
         ul.nav.navbar-nav.navbar-right
           li(class=navlist[0])
             a(href='/buyer-login') My Dashboard
-          |                                                 
+          |       
           li(class=navlist[1])
+            a(href='/buyer-items') My items
+          |                                                   
+          li(class=navlist[2])
             a(href='/myreceipts') My Receipts
           | 
-          li(class=navlist[2])
+          li(class=navlist[3])
             a(href='/buyer-transactions') Recent Transactions
           |   
-          li(class=navlist[3])
+          li(class=navlist[4])
             a(href='/buyer-login') Insights
           |     
-          li(class=navlist[4])
+          li(class=navlist[5])
             a(href='/buyer-apps') My APPs
           | 
-          li(class=navlist[5])
+          li(class=navlist[6])
             a(href='/buyer-profile') Profile
           li
             a(href='/logout') Logout 
