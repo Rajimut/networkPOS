@@ -16,6 +16,8 @@ var session = require('express-session');
 var configDB = require('./config/database.js');
 var mongoose = require('mongoose');
 var multer = require('multer');
+GLOBAL.Imgasset_path='/var/mushroomDB/images/'; // PLACE WHERE IMAGES ARE STORED
+// FILE PERMISSIONS NEED TO BE CHECKED AND ASSIGNED
 
 // Linking to Mongo
 var mongo = require('mongodb');
@@ -48,6 +50,7 @@ app.set('view engine', 'jade');
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use('/img', express.static('/public/img'));
+app.use('/imgassets', express.static(GLOBAL.Imgasset_path));// USED TO SERVE IMAGES FROM DRIVE
 app.use(
   function crossOrigin(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");

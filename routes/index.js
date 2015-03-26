@@ -109,14 +109,14 @@ router.post('/seller-signup',
                 temp_seller_details.seller_email        =   req.body.email;
 
                 console.log("Upload file : " + req.body.companylogo + "  " + req.body.path);
-                console.log(req.files);
+
 
                 fs.readFile(req.files.img_companylogo.path, function (err, data) {
-                    var newPath = '/var/mushroomDB/seller/images/' + req.files.img_companylogo.name;
+                    var newPath = GLOBAL.Imgasset_path + req.files.img_companylogo.name;
                     fs.writeFile(newPath, data, function (err) {
                     if (err) throw err; // DELETE USER
 
-                      temp_seller_details.seller_logo         =   "/var/mushroomDB/seller/images/" + req.files.img_companylogo.name;
+                      temp_seller_details.seller_logo         =   req.files.img_companylogo.name;
                       temp_seller_details.seller_st_addr      =   req.body.streetAddress;
                       temp_seller_details.seller_city         =   req.body.city;
                       temp_seller_details.seller_state        =   req.body.state;
@@ -202,6 +202,7 @@ router.post('/buyer-signup',
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
 
+
 router.get('/buyer-profile', isLoggedIn, function(req, res) {
     res.render('buyer-profile.jade', {
         user : req.user // get the user out of session and pass to template
@@ -238,7 +239,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
         console.log('something changed:', event);
     });
 
-    console.log("Buyer : " + req.user.local.email);
+
 
     //Look up the invoice database using the buyer's username
     InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
@@ -329,8 +330,17 @@ router.get('/helloworld', isLoggedIn, function(req, res)  {
 router.get('/POSterminal', isLoggedIn, function(req, res) { //ACCESSED DURING FIRST REQUEST
     req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
     req.session.save(); // ADDED TO RETAIN SESSSION
-    console.log("req.session.current_receipt_no" + req.session.current_receipt_no);
-    res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal' });
+
+    SellerDB.find({ 'seller_email' : req.user.local.email}, function(err,sellerinfo) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            var image_logo='';
+            if ( typeof sellerinfo[0]!='undefined'){image_logo=sellerinfo[0].seller_logo;}
+            res.render('POSterminal', { "receipt_no" : req.session.current_receipt_no, title: 'POSterminal',
+                "Seller_name": req.user, "seller_img": image_logo});
+        }
+    });
 });
 
 
