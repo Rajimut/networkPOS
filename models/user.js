@@ -14,7 +14,8 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
-        customer_flag: String
+        customer_flag: String,
+        user_id      : mongoose.Schema.ObjectId
     },
     facebook         : {
         id           : String,

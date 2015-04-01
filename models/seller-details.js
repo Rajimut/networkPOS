@@ -1,19 +1,21 @@
 // load the things we need
-var seller_mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
-var Schema = seller_mongoose.Schema, ObjectId = Schema.ObjectId;
+// PROMISE LIBRARY USED FOR ASYNC FLOW
+var promise = require("bluebird");
 
-var seller_db = seller_mongoose.createConnection('localhost:27020/sellerDB'); //connect to seller DB
-seller_db.on('error', console.error.bind(console, 'connection error:'));
-seller_db.once('open', function callback () {
-});
+// mongoose.connection.on('error', function(err){});
+// require fs for uploading images
+var fs = require('fs');
 
-// var categorylistSchema = new Schema({
-//     category         :   String //category of products sold
+var seller_db = mongoose.createConnection('localhost:27020/sellerDB'); //connect to seller DB
+// seller_db.on('error', console.error.bind(console, 'connection error:'));
+// seller_db.once('open', function callback () {
 // });
+var User            = require('../models/user');
 
 // define the schema for our seller details model
-var sellerdbSchema = new Schema({
+var sellerSchema = new mongoose.Schema({
     seller_name         :   String,
     seller_email        :   String,
     seller_logo         :   String,
@@ -26,5 +28,33 @@ var sellerdbSchema = new Schema({
     customer_flag       :   String // Set to either Buyer or Seller for appropriate DB retrieval.
 });
 
+
+
+sellerSchema.pre('save', function(next) {
+    // SET USER TYPE FLAG AFTER SIGNUP
+    var self = this;
+    User.update({'local.email':self.seller_email},
+        {$set:{'local.customer_flag':self.customer_flag}},function(err){
+
+
+            if (!err) {next();}
+            else
+            {
+            console.log('error : ' + err);
+            }
+
+        });
+
+
+});
+sellerSchema.statics.seller_id = function(_email, cb) {
+
+    return this.findOne({ 'seller_email': _email }, cb);
+
+};
+
+var SellerModel = seller_db.model('SellerDB', sellerSchema);
+promise.promisifyAll(SellerModel);
+promise.promisifyAll(SellerModel.prototype);
 // create the model for seller and expose it to our app
-module.exports = seller_db.model('SellerDB', sellerdbSchema);
+module.exports = SellerModel;

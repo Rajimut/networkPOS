@@ -4,18 +4,35 @@ var passport    = require('passport');
 var _           = require('underscore');
 var crypto      = require('crypto');
 var MongoWatch  = require('mongo-watch');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
+
 
 //Define Models for each Schema created
-var InvoiceDetail = require('../models/invoice-detail');
+
 var SellerDB        = require('../models/seller-details');
 var buyerDB         = require('../models/buyer-details');
 var User            = require('../models/user');
+var InvoiceDetail = require('../models/invoice-detail');
+//var InvoiceDetail = require('../models/test-model');
 var fs = require('fs');
+
 module.exports = function (router, passport) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Welcome' });
+});
+
+router.get('/mongo-test', function(req, res, next) {
+
+    console.log('count ' + InvoiceDetail.modelName );
+    InvoiceDetail.find({'_id': ObjectId('551a18dfef76be05735fd5df')}).populate('seller_id', '', SellerDB)
+    .exec(function (err, seller) {
+        console.log('TTTT '+ seller);
+    });
+
+  res.render('mongo-test', { title: 'Welcome' });
 });
 
 /* POST customer is a Buyer */
@@ -123,23 +140,19 @@ router.post('/seller-signup',
                       temp_seller_details.seller_zipcode      =   req.body.zip;
                       //temp_seller_details.seller_categories =   req.body.  //Future item
                       temp_seller_details.customer_flag       =   req.body.customertype;
-                        
-                    User.update({'local.email':req.body.email}, {$set:{'local.customer_flag':req.body.customertype}},function(err){console.log('error : ' + err);});
+                      
+                      temp_seller_details.saveAsync()
+                      .then(function (err, data){
 
-
-
-                      temp_seller_details.save(function(error, data){
-                        if (error){
-                            console.log("error case" + error);
-                            // DELETE USER
-                            res.send("There was a problem adding the information to the seller database." + error);
-                        } else {
-                            // And forward to success page
                             console.log("Seller added to DB");
-                            // Change login from Seller-Signup to Seller-Loggedin
                             req.login = "Seller-Loggedin";
-                        }
-                        });
+
+                      })
+                      .catch(function (err){
+                        console.log("error case" + err);
+                        res.send("There was a problem adding the information to the seller database." + err);
+                      });
+
                     });
                 });
                 res.redirect('/POSterminal');
@@ -210,9 +223,17 @@ router.get('/buyer-profile', isLoggedIn, function(req, res) {
 });
 
 router.get('/seller-profile', isLoggedIn, function(req, res) {
-    res.render('seller-profile.jade', {
-        user : req.user // get the user out of session and pass to template
+    
+    SellerDB.find({ 'seller_email' : req.user.local.email}, function(err,sellerinfo) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            var image_logo='';
+            if ( typeof sellerinfo[0]!='undefined'){image_logo=sellerinfo[0].seller_logo;}
+            res.render('seller-profile', { "seller" : sellerinfo[0]});
+        }
     });
+
 });
 
 router.get('/graphicalview', isLoggedIn, function(req, res) {
@@ -221,12 +242,7 @@ router.get('/graphicalview', isLoggedIn, function(req, res) {
     });
 });
 
-// var config = require( __dirname + '/receipt.json');
-// var file = __dirname + '/receipt.json';
-// var fs = require("fs");
-// var data = JSON.parse(fs.readFileSync(file, "utf8"));
-// console.dir(data);
-// data = JSON.stringify(data);
+
 
 // Method to pull receipts for a certain buyer
 router.get('/myreceipts', isLoggedIn, function(req, res) {
@@ -239,30 +255,32 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
         console.log('something changed:', event);
     });
 
-
-
-    //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+    InvoiceDetail.find({'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo', SellerDB)
+    .exec(function (err, invoice) {
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {
             res.render('myreceipts', {myreceipt_: invoice});
         }
     });
+
+
 });
 
 router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
     var receipt_id = req.params.transaction_id;
     console.log('incoming id ' + req.params.transaction_id);
 //  finding by string not working from Browser. Using _id need to find a better approach. Uma
-    //Look up the invoice database using the buyer's username
-    InvoiceDetail.find({'transaction_id' :receipt_id}, function(err,invoice) {
+
+    InvoiceDetail.find({'transaction_id' :receipt_id}).populate('seller_id', '', SellerDB)
+    .exec(function (err, invoice) {
         // console.log('id is '+ invoice + ' kk ' + req.params._id);
         if (err) {
             return res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {
             
             res.render('mixins/mixin-receipt.jade', {receipt: invoice[0]});
+            console.log(invoice[0]);
         }
     });
     
@@ -368,7 +386,7 @@ router.post('/new-billing', isLoggedIn, function(req, res) { // NEEDED FOR NEW B
 router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONSISTENCY
 
     // Create an instance of the Invoice Details Schema
-    var temp_invoice_details = new InvoiceDetail();
+    var temp_invoice_details = new InvoiceDetail(req.body);
 
     temp_invoice_details.transaction_id     = req.session.current_receipt_no;  //uniquely generate transaction id - time based
 
@@ -378,14 +396,8 @@ router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONS
     //extract information from form
     temp_invoice_details.transaction_date   = new Date();               //Get current date for date for transaction
     temp_invoice_details.seller_name        = req.user.local.email;             //extract currently logged in seller
-    temp_invoice_details.buyer_name         = req.body.buyer_name;  //EMAIL AddressFor future updates. Needs flash login of Buyer.
-    temp_invoice_details.paymenttype        = req.body.paymenttype;
-    temp_invoice_details.tax                = req.body.tax;
-    temp_invoice_details.beforetax          = req.body.beforetax;
-    temp_invoice_details.aftertax           = req.body.aftertax;
-    temp_invoice_details.item_details       = req.body.item_details;
 
-    console.log("temp_invoice_details : " + temp_invoice_details);
+
     
     temp_invoice_details.save(function(error, data){
          if(error){
@@ -396,6 +408,7 @@ router.post('/post-billing', isLoggedIn, function(req, res) { //RENAMED FOR CONS
          else{
              //res.location("POSterminal");
              // And forward to success page
+            console.log("temp_invoice_details : " + temp_invoice_details);
             console.log("Transaction Completed");
             res.end('{"success" : "Updated Successfully", "status" : 200}');
          }

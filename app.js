@@ -21,7 +21,6 @@ GLOBAL.Imgasset_path='/var/mushroomDB/images/'; // PLACE WHERE IMAGES ARE STORED
 
 // Linking to Mongo
 var mongo = require('mongodb');
-var monk = require('monk');
 
 var routes = require('./routes/index');
 
@@ -74,6 +73,8 @@ app.use(multer({ dest: './img/'}));
 // TEST MODULE
 var test = require('./routes/test');
 app.use('/reset', test);
+// var mongotest = require('./routes/mongo-test');
+// app.use('/mongo-test', mongotest);
 // TEST MODULE
 require('./config/passport')(passport); // pass passport for configuration
 

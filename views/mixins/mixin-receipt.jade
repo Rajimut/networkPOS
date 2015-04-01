@@ -1,15 +1,15 @@
 .well
- img.img-responsive(src='img/Sample_logo_500px.png', alt='Responsive image')
+ img.center-block(src='imgassets/#{receipt.seller_id.seller_logo}', height='70px', alt='Responsive image')
  .text-center
-     h4 Recepit #: #{receipt.seller_name}
+     h4 Recepit #: #{receipt.seller_id.seller_name}
  .row
    .col-md-6.col-sm-6.col-xs-6.text-left
      address
        |                         
        br
-       |2135 Sunset Blvd
+       |#{receipt.seller_id.seller_st_addr}
        br
-       | Los Angeles, CA 90026
+       | #{receipt.seller_id.seller_city}, #{receipt.seller_id.seller_state} #{receipt.seller_id.seller_zipcode}
        |                         
        br
        |                         
