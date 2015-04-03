@@ -10,7 +10,7 @@ block holder
   //- div.test
   //-   each val in myreceipt_
   //-     each val_ in val.item_details
-  //-       div p #{val_}
+  //-       div p #{invoice_}
   div#receiptModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
     .modal-dialog
       .modal-content
@@ -31,7 +31,7 @@ block holder
   .row
     .col-md-12
       #sync1.owl-carousel
-        each val in myreceipt_
+        each invoice in myreceipt_
           |              
           div.item
             .row
@@ -42,37 +42,37 @@ block holder
               .col-md-4.col-sm-12.col-xs-12.col-md-pull-4
                 .row.text-center
                   h4.col-xs-6.col-sm-6.col-md-12.text-responsive 
-                    img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='55%',alt='Responsive image')
+                    img.img-responsive.center-block(src='imgassets/#{invoice.seller_id.seller_logo}',  width='55%',alt='Responsive image')
                   h3.col-xs-6.col-sm-6.col-md-12  
-                    | $#{val.aftertax}             
+                    | $#{invoice.aftertax}             
                   h4.col-xs-6.col-sm-6.col-md-12
-                    em Receipt #: #{val.transaction_id}
+                    em Receipt #: #{invoice.transaction_id}
                   h4.col-xs-6.col-sm-6.col-md-12
-                    em #{val.transaction_date.toDateString()},     #{val.paymenttype}
+                    em #{invoice.transaction_date.toDateString()},     #{invoice.paymenttype}
                   p
                   |                                     
                   |                                                                           
                 div
-                  a.btn.btn-lg.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details
-                  //- (href='#receiptModal', data-toggle='modal',data-receipt-id='#{val.transaction_id}', data-target='#receiptModal') Details
+                  a.btn.btn-lg.btn-success.detailreceipt(receipt-id='#{invoice.transaction_id}') Details
+                  //- (href='#receiptModal', data-toggle='modal',data-receipt-id='#{invoice.transaction_id}', data-target='#receiptModal') Details
 
       .row  
         #sync2.owl-carousel
-          each val in myreceipt_
+          each invoice in myreceipt_
             |           
             div.item 
-              img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='70%',alt='Responsive image')    
+              img.center-block(src='imgassets/#{invoice.seller_id.seller_logo}', height='75px',alt='Responsive image')    
               h1 
-              //-|  #{val.seller_name}
+              //-|  #{invoice.seller_name}
               h1
-              | $#{val.aftertax}             
+              | $#{invoice.aftertax}             
               h1                      
-              span.large #{val.transaction_date.toDateString()}
+              span.large #{invoice.transaction_date.toDateString()}
               p
               p                                                                 
               //.col-xs-12.col-sm-12.col-md-12.text-center        
                 div
-                  a.btn.btn-lg.btn-success.detailreceipt(receipt-id='#{val.transaction_id}') Details
+                  a.btn.btn-lg.btn-success.detailreceipt(receipt-id='#{invoice.transaction_id}') Details
 
   script(type='text/javascript').
     $(document).on('click', '.detailreceipt', function() {

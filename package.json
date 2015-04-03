@@ -2,35 +2,30 @@
   "name": "mushrooms",
   "version": "0.0.0",
   "private": true,
-
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
-     "express": "3.0.0alpha4",
-    "jade": "*",
+    "express": "~4.12.3",
+    "jade": "~1.9.1",
     "stylus": "*",
     "nib": "*",
-    "body-parser": "~1.10.2",
+    "body-parser": "~1.12.2",
     "cookie-parser": "~1.3.3",
-    "debug": "~2.1.1",
-    "express": "~4.11.1",
+    "debug": "~2.1.3",
     "express.io": "*",
-    "jade": "~1.9.1",
-    "morgan": "~1.5.1",
+    "morgan": "~1.5.2",
     "serve-favicon": "~2.2.0",
     "mongodb": "*",
-    "monk": "*",
-    "ejs" : "~0.8.5",
-    "mongoose" : "~3.8.1",
-    "passport" : "~0.1.17",
-    "passport-local" : "~0.1.6",
-    "connect-flash" : "~0.1.1",
-    "bcrypt-nodejs" : "latest",
-    "method-override": "~1.0.0",
-    "express-session": "~1.0.0",
+    "mongoose": "~4.0.1",
+    "passport": "~0.2.1",
+    "passport-local": "~1.0.0",
+    "connect-flash": "~0.1.1",
+    "bcrypt-nodejs": "latest",
+    "express-session": "~1.10.4",
     "underscore": "*",
     "mongo-watch": "*",
-    "multer": "*"
+    "multer": "*",
+    "bluebird": "~2.9.21"
   }
 }

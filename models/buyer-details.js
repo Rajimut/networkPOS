@@ -1,15 +1,17 @@
 // load the things we need
-var buyer_mongoose = require('mongoose');
+var mongoose = require('mongoose');
+var Buyer_db = mongoose.createConnection('localhost:27020/buyerDB'); //connect to buyer DB
 
-var Schema = buyer_mongoose.Schema, ObjectId = Schema.ObjectId;
 
-var buyer_db = buyer_mongoose.createConnection('localhost:27020/buyerDB'); //connect to buyer DB
-buyer_db.on('error', console.error.bind(console, 'connection error:'));
-buyer_db.once('open', function callback () {
-});
+// PROMISE LIBRARY USED FOR ASYNC FLOW
+var promise = require("bluebird");
+// mongoose.connection.on('error', function(err){});
+// buyer_db.on('error', console.error.bind(console, 'connection error:'));
+// buyer_db.once('open', function callback () {
+// });
 
 // define the schema for our buyer details model
-var buyerdbSchema = new Schema({
+var buyerSchema = new mongoose.Schema({
     buyer_name       :   String,
     buyer_email      :   String,
     buyer_pic        :   String,
@@ -24,5 +26,15 @@ var buyerdbSchema = new Schema({
     customer_flag    :   String  // Set to either Buyer or Seller for appropriate DB retrieval
 });
 
-// create the model for buyer and expose it to our app
-module.exports = buyer_db.model('BuyerDB', buyerdbSchema);
+buyerSchema.statics.buyer_id = function(_email, cb) {
+
+    return this.findOne({ 'buyer_email': _email }, cb);
+    // RETURNS BUYER ID WHEN PRESENTED WITH EMAIL
+
+};
+
+var BuyerModel = Buyer_db.model('BuyerDB', buyerSchema);
+promise.promisifyAll(BuyerModel);
+promise.promisifyAll(BuyerModel.prototype);
+// create the model for seller and expose it to our app
+module.exports = BuyerModel;

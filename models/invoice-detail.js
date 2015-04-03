@@ -1,12 +1,14 @@
 // load the things we need
-var invoice_mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
-var Schema = invoice_mongoose.Schema, ObjectId = Schema.ObjectId;
+// PROMISE LIBRARY USED FOR ASYNC FLOW
+var promise = require("bluebird");
 
-var invoice_db = invoice_mongoose.createConnection('localhost:27020/invoicedetail'); //connect to invoice DB
-invoice_db.on('error', console.error.bind(console, 'connection error:'));
-invoice_db.once('open', function callback () {
-});
+var Schema = mongoose.Schema, ObjectId = Schema.Types.ObjectId;
+var SellerDB       = require('../models/seller-details');
+var BuyerDB         = require('../models/buyer-details');
+
+var invoice_db = mongoose.createConnection('localhost:27020/invoiceDB'); //connect to invoice DB
 
 var itemdetailSchema = new Schema({
     itemcode         :   Number,
@@ -16,11 +18,16 @@ var itemdetailSchema = new Schema({
     quantity         :   Number,
     subtotal_ln      :   Number
 });
+var testSchema = new Schema({
 
+    name:String
+});
 // define the schema for our invoice details model
 var invoicedetailSchema = new Schema({
     seller_name      :   String,
+    seller_id        :   { type: ObjectId, ref: 'SellerDB' },
     buyer_name       :   String,
+    buyer_id         :   { type: ObjectId, ref: 'BuyerDB '},
     transaction_id   :   String,
     transaction_date :   Date,
     paymenttype      :   String,
@@ -30,5 +37,39 @@ var invoicedetailSchema = new Schema({
     aftertax         :   Number
 });
 
+
+invoicedetailSchema.pre('save', function(next) {
+    // SET SELLER AND BUYER IDs BEFORE SAVING
+     var self = this;
+     SellerDB.seller_idAsync(self.seller_name)
+     .then( function (seller)
+        {
+        self.seller_id=seller._id;
+        return seller;
+        })
+     .then (function (buyer){
+
+    return BuyerDB.buyer_idAsync(self.buyer_name)
+     .then( function (buyer){
+        self.buyer_id=buyer._id;
+        return buyer;
+     });
+    })
+     .finally(function ( es){
+        next();
+
+     })
+     .catch(
+        function (e) {
+        console.log ('errr ' + e );
+        //next(e);
+
+     });
+
+});
+
+var InvoiceModel = invoice_db.model('InvoiceDetail', invoicedetailSchema);
 // create the model for seller and expose it to our app
-module.exports = invoice_db.model('InvoiceDetail', invoicedetailSchema);
+promise.promisifyAll(InvoiceModel);
+promise.promisifyAll(InvoiceModel.prototype);
+module.exports = InvoiceModel;
