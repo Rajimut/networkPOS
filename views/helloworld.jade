@@ -1,124 +1,306 @@
-extends layout
-block holder
-  h1 Isotope - sorting
-  h1 Isotope - combination filters
-  #filters
-      .ui-group
-        h3 Color
-        |     
-        .button-group.js-radio-button-group(data-filter-group='color')
-          button.button.is-checked(data-filter='') any
-          |       
-          button.button(data-filter='.red') red
-          |       
-          button.button(data-filter='.blue') blue
-          |       
-          button.button(data-filter='.yellow') yellow
-      |   
-      .ui-group
-        h3 Size
-        |     
-        .button-group.js-radio-button-group(data-filter-group='size')
-          button.button.is-checked(data-filter='') any
-          |       
-          button.button(data-filter='.small') small
-          |       
-          button.button(data-filter='.wide') wide
-          |       
-          button.button(data-filter='.big') big
-          |       
-          button.button(data-filter='.tall') tall
-      |   
-      .ui-group
-        h3 Shape
-        |     
-        .button-group.js-radio-button-group(data-filter-group='shape')
-          button.button.is-checked(data-filter='') any
-          |       
-          button.button(data-filter='.round') round
-          |       
-          button.button(data-filter='.square') square
-    #container
-      .color-shape.small.round.red
-      |   
-      .color-shape.small.round.blue
-      |   
-      .color-shape.small.round.yellow
-      |   
-      .color-shape.small.square.red
-      |   
-      .color-shape.small.square.blue
-      |   
-      .color-shape.small.square.yellow
-      |   
-      .color-shape.wide.round.red
-      |   
-      .color-shape.wide.round.blue
-      |   
-      .color-shape.wide.round.yellow
-      |   
-      .color-shape.wide.square.red
-      |   
-      .color-shape.wide.square.blue
-      |   
-      .color-shape.wide.square.yellow
-      |   
-      .color-shape.big.round.red
-      |   
-      .color-shape.big.round.blue
-      |   
-      .color-shape.big.round.yellow
-      |   
-      .color-shape.big.square.red
-      |   
-      .color-shape.big.square.blue
-      |   
-      .color-shape.big.square.yellow
-      |   
-      .color-shape.tall.round.red
-      |   
-      .color-shape.tall.round.blue
-      |   
-      .color-shape.tall.round.yellow
-      |   
-      .color-shape.tall.square.red
-      |   
-      .color-shape.tall.square.blue
-      |   
-      .color-shape.tall.square.yellow
 
+
+extends layout
+include mixins/navbar-buyer.jade
+block content
+  +buyer-nav(['','','','active','','',''])
+
+
+block holder
+  div#receiptModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='basicModal', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        //-.modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true')
+          //- h4#myModalLabel.modal-title Modal title
+        .modal-body
+
+  div.row  
+    div#sorts.button-group
+        //-input#quicksearch(type='text', placeholder='Search')
+          |            
+        .btn-group   
+          button.btn-block.dropdown-toggle.button.is-checked(type='button', data-toggle='dropdown', aria-expanded='true') 
+            span(data-bind='label') Sorter
+            span.caret
+            |     
+          ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+            li
+              button.button.is-checked(data-sort-value='original-order')  default
+            |       
+            li
+              button.button(data-sort-value='name') name
+            |       
+            li
+              button.button(data-sort-value='price') Price Inc 
+            |   
+            li
+              button.button(data-sort-value='priceDecending') price Dec     
+            |       
+            li
+              button.button(data-sort-value='date') Date 
+    div#filters
+      div.ui-group
+        .button-group.js-radio-button-group.pull-right(data-filter-group='paymenttype')
+          button.button.is-checked(data-filter='') All
+          |       
+          button.button(data-filter='.Cred') Creditcard
+          |       
+          button.button(data-filter='.Visa') Visa
+          |       
+          button.button(data-filter='.Cash') Cash  
+          |       
+          button.button(data-filter='.Wall') Wallet 
+          |       
+          button.button(data-filter='.Appl') Apple Pay 
+      div.ui-group
+        .button-group.js-radio-button-group(data-filter-group='price')        
+          button.button.is-checked(data-filter='') All
+          |    
+          button.button(data-filter='numberLesserThan50') $0 - $50
+          |      
+          button.button(data-filter='numberbetween50and100') $50 - $100     
+          |    
+          button.button(data-filter='numberbetween100and200') $100 - $200
+          |    
+          button.button(data-filter='numberGreaterThan200') $200 & above
+
+      div#container
+        each val in buyertransactions_
+          |     
+          div.element-item(class='#{val.paymenttype.substring(0,4)}')
+            .text-hide.name  #{val.seller_name}
+            .text-hide.priceDecending #{val.aftertax.toFixed(0)}
+            p.weight #{val.paymenttype}                           
+            p.price #{val.aftertax.toFixed(0)}        
+            p                    
+            p.date #{val.transaction_date.toDateString()}
+            br
+            img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
+            p   
+            a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
+  .col-md-12
+    //- .panel.panel-default
+    //-   .panel-heading My latest receipts  
+    //-   .panel-body
+    div.row
+      .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
+        button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+          span(data-bind='label') Location
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Location')
+          li
+            a(role='menuitem', tabindex='-1',href='#') Austin
+          |       
+          li
+            a(role='menuitem', tabindex='-1',href='#') Houston
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') San Jose
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Chennai
+
+      .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
+        button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+          span(data-bind='label') Categories
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='Categories')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Restaurants
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cafes
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Pharmacy
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Clothing
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Salons
+
+      .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
+        button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+          span(data-bind='label') Payment type
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='paymenttype')
+          li
+            a(role='menuitem', tabindex='-2',href='#') Creditcard
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Visa
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Cash
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') Apple Pay    
+      .btn-group.col-xs-12.col-md-6.col-sm-6.col-lg-3
+        button.btn.btn-block.btn-default.dropdown-toggle.form-control(type='button', data-toggle='dropdown', aria-expanded='true')
+          span(data-bind='label') Amount
+          span.caret
+        |     
+        ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+          li
+            a(role='menuitem', tabindex='-2',href='#') $0 - $5
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $6 - $10
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $11 - $15  
+          |       
+          li
+            a(role='menuitem', tabindex='-2',href='#') $16 - $20  
+
+      table#receipts(data-toggle='table', data-cache='false', data-height='399', data-show-columns='true', data-show-refresh='true', data-show-toggle='true', data-search='true', data-pagination='true', data-click-to-select='true')
+        thead
+            tr
+              //- th(data-field='state', data-radio='true')
+              //- |    
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Date
+              |         
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Shop Name
+              |    
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Payment Type
+              |    
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='false') Receipt #
+              |         
+              th(data-halign='center', data-align='center', data-sortable='true', data-switchable='true') Amount
+          |     
+        tbody
+          each val in buyertransactions_
+            tr#tr_id_1.tr-class-1
+              td#td_id_1.td-class-1 #{val.transaction_date.toDateString()}
+              |         
+              td #{val.seller_name}
+              |   
+              //- td #{val.paymenttype}
+              |    
+              td #{val.transaction_id}
+              |         
+              td #{val.aftertax}             
 
   script(type='text/javascript').
-    var $container = $('#container');
-    $container.isotope({
-        itemSelector: '.color-shape'
+    $(document).on('click', '.detailreceipt', function() {
+      //- e.preventDefault();
+      var receipt_ID = $(this).attr('receipt-id');
+      console.log('hel '+receipt_ID);
+      $('#receiptModal .modal-body').load('/singlereceipt/' + receipt_ID, function() {
+        $('#receiptModal').modal();
       });
-
-    // bind sort button click
-    var filters = {};
-
-    $('#filters').on( 'click', '.button', function() {
-      var $this = $(this);
-      //- get group key
-      var $buttonGroup = $this.parents('.button-group');
-      var filterGroup = $buttonGroup.attr('data-filter-group');
-      //- set filter for group
-      filters[ filterGroup ] = $this.attr('data-filter');
-      //- combine filters
-      var filterValue = '';
-      for ( var prop in filters ) {
-        filterValue += filters[ prop ];
-      }
-      //- set filter for Isotope
-    $container.isotope({ filter: filterValue });
       });
-
-        //- change is-checked class on buttons
-    $('.button-group').each( function( i, buttonGroup ) {
-      var $buttonGroup = $( buttonGroup );
-      $buttonGroup.on( 'click', 'button', function() {
-        $buttonGroup.find('.is-checked').removeClass('is-checked');
-        $( this ).addClass('is-checked');
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+        var $target = $( event.currentTarget );
+        $target.closest( '.btn-group' )
+        .find( '[data-bind="label"]' ).text( $target.text() )
+        .end()
+        .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        return false;
         });
+    $(function () {
+      $('#basic-events-table').next().click(function () {
+      $(this).hide();
+      var $result = $('#events-result');
+      $('#receipts').bootstrapTable({
+      onDblClickRow: function (row) {
+      $result.text('Event: onDblClickRow, data: ' + JSON.stringify(row));
+      },
+      }).on('all.bs.table', function (e, name, args) {
+      console.log('Event:', name, ', data:', args);
       });
-      
+      });
+      });
+    $(function () {
+      var $container = $('#container').isotope({
+        // options
+        itemSelector: '.element-item',
+        layoutMode: 'fitRows',
+        getSortData: {
+          name: '.name',
+          price: '.price parseInt',
+          priceDecending: '.priceDecending parseInt',
+           // text from querySelector
+          //category: '[data-category]', // value of attribute
+          date: function( itemElem ) { // function
+            var date = $( itemElem ).find('.date').text();
+            return parseFloat( date.replace( /[\(\)]/g, '') );
+            }
+          },
+        filter: function() {
+          var isMatched = true;
+          var $this = $(this);
+          for ( var prop in filters ) {
+            var filter = filters[ prop ];
+            // use function if it matches
+            filter = filterFns[ filter ] || filter;
+            // test each filter
+            if ( filter ) {
+              isMatched = isMatched && $(this).is( filter );
+              }
+            // break if not matched
+            if ( !isMatched ) {
+              break;
+              }
+            }
+            return isMatched;
+          }
+        });
+      $container.isotope({
+        sortAscending: {
+            name: true,
+            price: true,
+            date: false,
+            priceDecending: false
+          } 
+        });
+      var filterFns = {
+        // show if number is greater than 50
+        numberGreaterThan200: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 200;
+          },
+        numberbetween100and200: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 100 && parseInt( price, 10 ) < 200;
+          },
+        numberbetween50and100: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) >= 50 && parseInt( price, 10 ) < 100;
+          },
+        numberLesserThan50: function() {
+          var price = $(this).find('.price').text();
+          return parseInt( price, 10 ) < 50;
+          }
+        }; 
+      var filters = {};
+      $('#filters').on( 'click', '.button', function() {
+        var $this = $(this);
+        //- get group key
+        var $buttonGroup = $this.parents('.button-group');
+        var filterGroup = $buttonGroup.attr('data-filter-group');
+        //- set filter for group
+        filters[ filterGroup ] = $this.attr('data-filter');
+        //- combine filters
+        $container.isotope('arrange');
+        });
+        //- set filter for Isotop
+
+      $('#sorts').on( 'click', 'button', function() {
+        var sortValue = $(this).attr('data-sort-value');
+        $container.isotope({ sortBy: sortValue });
+        });
+
+      $('.button-group').each( function( i, buttonGroup ) {
+        var $buttonGroup = $( buttonGroup );
+        $buttonGroup.on( 'click', 'button', function() {
+          $buttonGroup.find('.is-checked').removeClass('is-checked');
+          $( this ).addClass('is-checked');
+          });
+        });
+      }); 
