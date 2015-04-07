@@ -289,7 +289,14 @@ router.get('/singlereceipt/:transaction_id', isLoggedIn, function(req, res) {
 
 router.get('/buyer-transactions', isLoggedIn, function(req, res) {
     //res.render('buyer-transactions', {json_data: data});
-    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
+    watcher = new MongoWatch({format: 'pretty'});
+ 
+    console.log("Setting up watcher to watch over for events");
+    watcher.watch('invoicedetail.invoicedetails', function(event) {
+        console.log('something changed:', event);
+    });
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo', SellerDB) 
+    .exec(function (err, invoice){
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {

@@ -44,7 +44,9 @@ block holder
                   h4.col-xs-6.col-sm-6.col-md-12.text-responsive 
                     img.img-responsive.center-block(src='imgassets/#{invoice.seller_id.seller_logo}',  width='55%',alt='Responsive image')
                   h3.col-xs-6.col-sm-6.col-md-12  
-                    | $#{invoice.aftertax}             
+                    | $#{invoice.aftertax}  
+                  p  
+                    | #{invoice.seller_id.seller_name}             
                   h4.col-xs-6.col-sm-6.col-md-12
                     em Receipt #: #{invoice.transaction_id}
                   h4.col-xs-6.col-sm-6.col-md-12
@@ -61,7 +63,7 @@ block holder
           each invoice in myreceipt_
             |           
             div.item 
-              img.center-block(src='imgassets/#{invoice.seller_id.seller_logo}', height='75px',alt='Responsive image')    
+              img.center-block(src='imgassets/#{invoice.seller_id.seller_logo}', height='40px', width='155px',alt='Responsive image')    
               h1 
               //-|  #{invoice.seller_name}
               h1

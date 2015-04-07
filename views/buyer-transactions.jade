@@ -76,9 +76,9 @@ block holder
             p                    
             p.date #{val.transaction_date.toDateString()}
             br
-            img.img-responsive.center-block(src='img/Sample_logo_500px.png',  width='90%',alt='Responsive image')    
+            img.center-block(src='imgassets/#{val.seller_id.seller_logo}', height='40px', width='130px',alt='Responsive image')      
             p   
-            a.btn.btn-xs.btn-success.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
+            a.btn.btn-xs.btn-primary.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
   .col-md-12
     //- .panel.panel-default
     //-   .panel-heading My latest receipts  

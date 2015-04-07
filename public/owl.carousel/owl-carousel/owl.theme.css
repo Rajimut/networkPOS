@@ -50,7 +50,7 @@
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
 	border-radius: 20px;
-	background: #fff;
+	background: #869791;
 }
 
 .owl-theme .owl-controls .owl-page.active span,
@@ -64,8 +64,7 @@
 .owl-theme .owl-controls .owl-page span.owl-numbers{
 	height: auto;
 	width: auto;
-	color: #0B0080;
-	text-decoration:underline;
+	color: #fff;
 	padding: 2px 10px;
 	font-size: 12px;
 	-webkit-border-radius: 30px;
