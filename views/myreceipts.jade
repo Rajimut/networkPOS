@@ -42,10 +42,10 @@ block holder
               .col-md-4.col-sm-12.col-xs-12.col-md-pull-4
                 .row.text-center
                   h4.col-xs-6.col-sm-6.col-md-12.text-responsive 
-                    img.img-responsive.center-block(src='imgassets/#{invoice.seller_id.seller_logo}',  width='55%',alt='Responsive image')
+                    img.center-block(src='imgassets/#{invoice.seller_id.seller_logo}',  width='75%', height= '8%', alt='Responsive image')
                   h3.col-xs-6.col-sm-6.col-md-12  
-                    | $#{invoice.aftertax}  
-                  p  
+                    | $#{invoice.aftertax.toFixed(1)}  
+                  h4  
                     | #{invoice.seller_id.seller_name}             
                   h4.col-xs-6.col-sm-6.col-md-12
                     em Receipt #: #{invoice.transaction_id}
@@ -67,7 +67,7 @@ block holder
               h1 
               //-|  #{invoice.seller_name}
               h1
-              | $#{invoice.aftertax}             
+              | $#{invoice.aftertax.toFixed(1)}             
               h1                      
               span.large #{invoice.transaction_date.toDateString()}
               p

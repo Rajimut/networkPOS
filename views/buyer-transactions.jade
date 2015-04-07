@@ -40,6 +40,7 @@ block holder
             li
               button.button(data-sort-value='date') Date 
     div#filters
+      br
       div.ui-group
         .button-group.js-radio-button-group.pull-right(data-filter-group='paymenttype')
           button.button.is-checked(data-filter='') All
@@ -64,21 +65,41 @@ block holder
           button.button(data-filter='numberbetween100and200') $100 - $200
           |    
           button.button(data-filter='numberGreaterThan200') $200 & above
-
+      div.ui-group
+        br
+        p Shop's Name:
+        .btn-group 
+          .button-group.dropdown-toggle.button.is-checked(data-filter-group='name',type='button', data-toggle='dropdown', aria-expanded='true')
+            span(data-bind='label') All
+            span.caret
+            |     
+          ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu2')
+            li
+              button.button(data-filter='')  All
+            |   
+            li
+              button.button(data-filter='.Starbucks')  Starbucks
+            |   
+            li
+              button.button(data-filter='.Target')  Target 
+            |   
+            li
+              button.button(data-filter='.Walmart')  Walmart     
       div#container
         each val in buyertransactions_
           |     
-          div.element-item(class='#{val.paymenttype.substring(0,4)}')
-            .text-hide.name  #{val.seller_name}
-            .text-hide.priceDecending #{val.aftertax.toFixed(0)}
+          div.element-item(class='#{val.paymenttype.substring(0,4)}', class='#{val.seller_id.seller_name}')
+            .text-hide.name  #{val.seller_id.seller_name}
+            .text-hide.priceDecending #{val.aftertax.toFixed(3)}
             p.weight #{val.paymenttype}                           
-            p.price #{val.aftertax.toFixed(0)}        
+            p.price #{val.aftertax.toFixed(1)}        
             p                    
             p.date #{val.transaction_date.toDateString()}
             br
-            img.center-block(src='imgassets/#{val.seller_id.seller_logo}', height='40px', width='130px',alt='Responsive image')      
-            p   
+            img.center-block(src='imgassets/#{val.seller_id.seller_logo}', height='30px', width='120px',alt='Responsive image')      
             a.btn.btn-xs.btn-primary.detailreceipt.pull-right(receipt-id='#{val.transaction_id}') Details
+            br
+            p   
   .col-md-12
     //- .panel.panel-default
     //-   .panel-heading My latest receipts  

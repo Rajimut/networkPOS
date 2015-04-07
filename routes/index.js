@@ -255,7 +255,7 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
         console.log('something changed:', event);
     });
 
-    InvoiceDetail.find({'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo', SellerDB)
+    InvoiceDetail.find({'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo seller_name', SellerDB)
     .exec(function (err, invoice) {
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
@@ -295,7 +295,7 @@ router.get('/buyer-transactions', isLoggedIn, function(req, res) {
     watcher.watch('invoicedetail.invoicedetails', function(event) {
         console.log('something changed:', event);
     });
-    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo', SellerDB) 
+    InvoiceDetail.find({ 'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo seller_name', SellerDB) 
     .exec(function (err, invoice){
         if (err) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
