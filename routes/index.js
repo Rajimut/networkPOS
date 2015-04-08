@@ -52,8 +52,8 @@ router.get('/buyer-login', function(req, res) {
     // render the page and pass in any flash data if it exists
     if (req.isAuthenticated()) {
         req.login = "Buyer-Loggedin";
-        res.location("myreceipts");
-        res.redirect("myreceipts");
+        res.location("buyer-dashboard");
+        res.redirect("buyer-dashboard");
     } else {
         res.render('buyer-login', { message: req.flash('loginMessage') });
     }
@@ -61,7 +61,7 @@ router.get('/buyer-login', function(req, res) {
 
 // Process the login form
 router.post('/buyer-login', passport.authenticate('local-login', {
-        successRedirect : '/myreceipts', // redirect to the secure profile section
+        successRedirect : '/buyer-dashboard', // redirect to the secure profile section
         failureRedirect : '/buyer-login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
 }));
@@ -261,6 +261,28 @@ router.get('/myreceipts', isLoggedIn, function(req, res) {
             res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
         } else {
             res.render('myreceipts', {myreceipt_: invoice});
+        }
+    });
+
+
+});
+
+router.get('/buyer-dashboard', isLoggedIn, function(req, res) {
+
+    //Start listening port to receive notifications
+    watcher = new MongoWatch({format: 'pretty'});
+ 
+    console.log("Setting up watcher to watch over for events");
+    watcher.watch('invoicedetail.invoicedetails', function(event) {
+        console.log('something changed:', event);
+    });
+
+    InvoiceDetail.find({'buyer_name' : req.user.local.email}).populate('seller_id', 'seller_logo seller_name', SellerDB)
+    .exec(function (err, invoice) {
+        if (err) {
+            res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+        } else {
+            res.render('buyer-dashboard', {buyerdashboard_: invoice});
         }
     });
 
