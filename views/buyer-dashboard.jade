@@ -523,7 +523,7 @@ block holder
       .attr("y", 15)
       .attr("class","title")
       .attr("text-anchor", "middle")
-      .text("Overall Sales Breakdown 2012")
+      .text("Overall Expenditure Breakdown 2012")
       ;
       }
       dsBarChart();
@@ -588,7 +588,7 @@ block holder
       .attr("y", 15)
       .attr("class","title")
       .attr("text-anchor", "middle")
-      .text(group + "'s Sales Breakdown 2012")
+      .text(group + "- Spending Breakdown 2012")
       ;
       }
       /*
@@ -721,7 +721,7 @@ block holder
       .text(function(d) { return d.category + ": " + formatAsInteger(d.measure); })
       ;
       svg.append("text")
-      .text("Performance 2012")
+      .text("Spendings Performance 2012")
       .attr("id","lineChartTitle1")
       .attr("x",margin.left + ((width + margin.right)/2))
       .attr("y", 10)
