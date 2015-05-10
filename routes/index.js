@@ -116,6 +116,11 @@ router.get('/buyer-signup', function(req, res) {
     //res.render('signup', { message: req.flash('signupMessage') });
 });
 
+router.get('/partials/desktop/:name', function (req, res)
+ { var name = req.params.name;
+   res.render('angular/desktop/' + name);
+});
+
 router.post('/seller-signup',
     passport.authenticate('local-signup', { failureRedirect: '/seller-signup', failureFlash: false }),
             function(req, res) {
@@ -338,6 +343,8 @@ router.get('/buyer-items', isLoggedIn, function(req, res) {
     });
 });
 
+
+
 router.get('/buyer-apps', isLoggedIn, function(req, res) {
     //res.render('buyer-transactions', {json_data: data});
     InvoiceDetail.find({ 'buyer_name' : req.user.local.email}, function(err,invoice) {
@@ -362,6 +369,7 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
