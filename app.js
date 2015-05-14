@@ -23,7 +23,7 @@ GLOBAL.Imgasset_path='/var/mushroomDB/images/'; // PLACE WHERE IMAGES ARE STORED
 var mongo = require('mongodb');
 
 var routes = require('./routes/index');
-
+var angular_routes = require('./routes/route-angular');
 // Added by Raji- To include stylus - RAJI
 function compile(str, path) {
   return stylus(str)
@@ -92,6 +92,11 @@ app.use(function(req,res,next){
     req.db = db;
     next();
 }); */
+
+// routes ======================================================================
+require('./routes/route-angular.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
+app.use('/partials/*', angular_routes);
 
 // routes ======================================================================
 require('./routes/index.js')(app, passport); // load our routes and pass in our app and fully configured passport
