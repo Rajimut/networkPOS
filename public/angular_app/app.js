@@ -1,4 +1,4 @@
-var app = angular.module('HelloWorld', ['ngRoute']);
+var app = angular.module('HelloWorld', ['ngRoute', 'app.directives.addRow']);
 app.config(function ($routeProvider) {
   //- var _isNotMobile = (function() {
   //-   var check = false;
@@ -16,13 +16,13 @@ app.config(function ($routeProvider) {
   })();
   //- $locationProvider.html5Mode(true);
   $routeProvider
-    .when('/',
+    .when('/POSdesktop',
       {
 
-      templateUrl: (_isNotMobile )? 'partials/desktop/View1Helloworld':'partials/desktop/View2Helloworld',
+      templateUrl: (_isNotMobile )? 'partials/desktop/POSdesktop':'partials/desktop/View2Helloworld',
       controller: (_isNotMobile )?'SimpleController':'SimpleController'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/POSdesktop'
       });
     });

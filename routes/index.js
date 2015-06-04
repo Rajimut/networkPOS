@@ -475,6 +475,30 @@ module.exports = function(router, passport) {
         });
     });
 
+    router.get('/POSterminalAngular', isLoggedIn, function(req, res) { //ACCESSED DURING FIRST REQUEST
+        req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based
+        req.session.save(); // ADDED TO RETAIN SESSSION
+
+        SellerDB.find({
+            'seller_email': req.user.local.email
+        }, function(err, sellerinfo) {
+            if (err) {
+                res.send("There was an error looking up records for buyer " + req.user.local.email + ":" + err);
+            } else {
+                var image_logo = '';
+                if (typeof sellerinfo[0] != 'undefined') {
+                    image_logo = sellerinfo[0].seller_logo;
+                }
+                res.render('POSterminalAngular', {
+                    "receipt_no": req.session.current_receipt_no,
+                    title: 'POSterminal',
+                    "Seller_name": req.user,
+                    "seller_img": image_logo
+                });
+            }
+        });
+    });
+
 
     router.post('/new-billing', isLoggedIn, function(req, res) { // NEEDED FOR NEW BILLING IN AJAX
         req.session.current_receipt_no = crypto.randomBytes(3).toString('hex'); //Date.now();  //uniquely generate transaction id - time based

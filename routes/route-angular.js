@@ -15,10 +15,21 @@ var InvoiceDetail = require('../models/invoice-detail');
 var fs = require('fs');
 
 module.exports = function(router, passport) {
-    router.get('/partials/desktop/:name', function(req, res) {
 
-            var name = req.params.name;
-            res.render('angular/desktop/' + name);
+    function isLoggedIn(req, res, next) {
+
+        // if user is authenticated in the session, carry on 
+        if (req.isAuthenticated())
+            return next();
+
+        // if they aren't redirect them to the home page
+        res.redirect('/');
+    }
+
+    router.get('/partials/desktop/:name', isLoggedIn,function(req, res) {
+
+        var name = req.params.name;
+        res.render('angular/desktop/' + name);
 
     });
 };
