@@ -16,13 +16,13 @@ app.config(function ($routeProvider) {
   })();
   //- $locationProvider.html5Mode(true);
   $routeProvider
-    .when('/POSdesktop',
+    .when('/',
       {
 
-      templateUrl: (_isNotMobile )? 'partials/desktop/POSdesktop':'partials/desktop/View2Helloworld',
+      templateUrl: (_isNotMobile )? 'partials/desktop/POSdesktop':'partials/desktop/POSmobile',
       controller: (_isNotMobile )?'SimpleController':'SimpleController'
-      })
-      .otherwise({
-        redirectTo: '/POSdesktop'
       });
+      // .otherwise({
+      //   redirectTo: '/POSdesktop'
+      // });
     });

@@ -8,7 +8,7 @@ var promise = require("bluebird");
 // require fs for uploading images
 var fs = require('fs');
 
-var seller_db = mongoose.createConnection('localhost:27020/sellerDB'); //connect to seller DB
+var seller_db = mongoose.createConnection('mongodb://localhost:27020/sellerDB'); //connect to seller DB
 // seller_db.on('error', console.error.bind(console, 'connection error:'));
 // seller_db.once('open', function callback () {
 // });
