@@ -36,29 +36,29 @@ form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' 
     |             
     hr
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.coldcoffee)') Cold Coffee
+    button.buttons.btn.btn-primary(ng-click='add(food.E7D)') Cold Coffee
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.hotcoffee)') Hot Coffee
+    button.buttons.btn.btn-primary(ng-click='add(food.E8C)') Hot Coffee
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.coke)') Coke
+    button.buttons.btn.btn-primary(ng-click='add(food.W9E)') Coke
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.dietcoke)') Diet Coke
+    button.buttons.btn.btn-primary(ng-click='add(food.P0W)') Diet Coke
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.pepsi)') Pepsi  
+    button.buttons.btn.btn-primary(ng-click='add(food.Y1H)') Pepsi  
   .box
     .text-info Breakfast
     |             
     hr
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.pizza)') Pizza
+    button.buttons.btn.btn-primary(ng-click='add(food.A2A)') Pizza
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.donut)') Donuts
+    button.buttons.btn.btn-primary(ng-click='add(food.B3A)') Donuts
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.tortilla)') Tortilla
+    button.buttons.btn.btn-primary(ng-click='add(food.D4A)') Tortilla
     |             
-    button.buttons.btn.btn-primary(ng-click='add(food.burger)') Burger
+    button.buttons.btn.btn-primary(ng-click='add(food.F5B)') Burger
     |             
-    button.buttons.btn.btn-success(ng-click='add(food.samosa)') Samosas
+    button.buttons.btn.btn-success(ng-click='add(food.G6C)') Samosas
   |                      
   .row
     .col-md-12
@@ -97,8 +97,18 @@ form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' 
                 tr#addr(ng-repeat='item in order')
                   //- input(name='_csrf', type='hidden') 
                   td
-                    input.form-control(placeholder='567797', name='itemcode[0]', type='text', value='{{item.item.id}}')
-                  |            
+                    input.form-control(ng-hide='editing', ng-click='editing = true', placeholder='567797', name='itemcode[0]', type='text', ng-model='item.item.id', ng-required='')
+                    .ng-hide(ng-show='editing')
+                      |                     
+                      input(type='text', ng-model = 'item.item.id' placeholder='id', ng-required='')                 
+                      //- label Date:
+                      //- |                     
+                      //- input(type='date', ng-model='bday.date', placeholder='Date', ng-required='')
+                      //- |                     
+                      br
+                      |                     
+                      button.btn(ng-click='editing = false', ng-click='add(food.G6C)') Save
+                  |     
                   td
                     input.form-control(placeholder='Cafe Latte', name='itemname[0]', type='text', value='{{item.item.detail}}')
                   |            
@@ -108,7 +118,7 @@ form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' 
                   td
                    .input-group
                     span.input-group-addon $
-                    input.form-control.price(placeholder='$12.00', name='unitprice[0]', value='{{item.item.price}}')
+                    input.form-control(placeholder='$12.00', name='unitprice[0]', value='{{item.item.price}}')
                   |            
                   td
                     .input-group
@@ -128,7 +138,7 @@ form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' 
                   |    
                   td.text-center
                       | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
-                      a#add_row.btn.btn-success.btn-sm.pull-right(type='button', ng-click='add($index)') +   
+                      a#add_row.btn.btn-success.btn-sm.pull-right(type='button', ng-click='Emptyrow()') +  
                 tr#summaryrow
                   td.thick-line(colspan='5')
                     strong.pull-right Subtotal
@@ -156,11 +166,8 @@ form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' 
                       span.input-group-addon $
                       div.form-control(name='aftertax', value='0.00') ${{getSum()}}
                   |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-
         .row.btn-toolbar.text-center
                 button#transaction_btn.btn.btn-primary.btn-lg(type='submit') Post Bill
                 button#new_receipt.btn.btn-danger.btn-lg(disabled) New Bill
                 button#print_receipt.btn.btn-info.btn-lg(disabled) Print receipt 
-  
-
   .add-row(data="'Apple'")
