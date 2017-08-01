@@ -1,0 +1,15 @@
+{
+      "items": [
+      {
+      "pizza"       : [{"count": 1, "id":"2AFR5", "detail": "Brick Oven Pizza", "price": 15, "category": "pizzas"}],
+      "donut"       : [{"count": 3, "id":"HTR56", "detail": "Glazed Donut","price": 8, "category": "breakfast"}],
+      "tortilla"    : [{"count": 1, "id":"FH78J", "detail": "Tortilla Chips","price": 3, "category": "tortilla"}],
+      "burger"      : [{"count": 1, "id":"HYU87", "detail": "Burger","price": 3, "category": "snacks"}],
+      "samosa"      : [{"count": 1, "id":"JHY89", "detail": "Delicious Samosas","price": 3, "category": "snacks"}],
+      "coldcoffee"  : [{"count": 1, "id":"UH98F", "detail": "Cold Coffee","price": 2, "category": "cold drinks"}],
+      "hotcoffee"   : [{"count": 1, "id":"URS73", "detail": "Hot Coffee","price": 2, "category": "hot drinks"}],
+      "coke"        : [{"count": 1, "id":"93SR3", "detail": "Coke","price": 2, "category": "cold drinks"}],
+      "dietcoke"    : [{"count": 1, "id":"IVT86", "detail": "Diet Coke","price": 2, "category": "cold drinks"}],
+      "pepsi"       : [{"count": 1, "id":"8HT7D", "detail": "Pepsi","price": 2, "category": "cold drinks"}]
+    }]
+    }
