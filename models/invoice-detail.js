@@ -8,7 +8,7 @@ var Schema = mongoose.Schema, ObjectId = Schema.Types.ObjectId;
 var SellerDB       = require('../models/seller-details');
 var BuyerDB         = require('../models/buyer-details');
 
-var invoice_db = mongoose.createConnection('localhost:27020/invoiceDB'); //connect to invoice DB
+var invoice_db = mongoose.createConnection('mongodb://localhost:27020/invoiceDB'); //connect to invoice DB
 
 var itemdetailSchema = new Schema({
     itemcode         :   Number,

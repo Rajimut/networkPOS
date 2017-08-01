@@ -1,0 +1,173 @@
+.row
+  div.col-lg-4.col-md-4.col-xs-12.col-sm-4.col-md-push-4.col-sm-push-4
+    //-img.center-block(src='imgassets/#{seller_img}',  height='75px',alt='Responsive image')    
+  div.col-lg-4.col-md-4.col-xs-6.col-sm-4.col-md-pull-4.col-sm-pull-4
+    h4 Receipt # 
+      span#receipt_no #{receipt_no}
+  div.col-lg-4.col-md-4.col-xs-6.col-sm-4
+    div.text-primary.text-right
+      h5 #{new Date().toLocaleDateString()}
+      h4#clock
+
+form#trans_complete.form(method='post', role='form' /*, action= '/post-billing' */)
+  .row
+    .col-md-6.col-sm-6.text-left
+      div.input-group
+        span.input-group-addon
+          strong Billed to
+        input.form-control(type='text', name='buyer_name')
+    .col-md-6.col-sm-6.text-right        
+      div.input-group
+        span.input-group-addon
+          strong Method:
+        select.form-control(name='paymenttype')
+          option Creditcard
+          |   
+          option Visa
+          |   
+          option Cash
+          |   
+          option Apple Pay
+          |   
+          option Wallet         
+  |           
+  .box.pull-right
+    .text-info Bewerages
+    |             
+    hr
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.E7D)') Cold Coffee
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.E8C)') Hot Coffee
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.W9E)') Coke
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.P0W)') Diet Coke
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.Y1H)') Pepsi  
+  .box
+    .text-info Breakfast
+    |             
+    hr
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.A2A)') Pizza
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.B3A)') Donuts
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.D4A)') Tortilla
+    |             
+    button.buttons.btn.btn-primary(ng-click='add(food.F5B)') Burger
+    |             
+    button.buttons.btn.btn-success(ng-click='add(food.G6C)') Samosas
+  |                      
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          h3.panel-title
+            strong Order summary
+        |     &#x9;&#x9;&#x9;
+        .panel-body
+          .table-responsive
+            table#tab_logic.table.table-bordered.table-hover
+              thead
+                tr
+                  td.text-center.col-md-2
+                    strong Item Code
+                  |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  td.text-center.col-md-3
+                    strong Item Name
+                  |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  td.text-center.col-md-2
+                    strong Category
+                  |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  td.text-center.col-md-2                    
+                    strong Unit Price
+                  |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  td.text-center.col-md-1
+                    strong                Quantity                           
+                  |         &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  td.text-center.col-md-2
+                    strong Subtotal
+                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                  th.text-center
+                          |      
+
+              tbody.expandable
+                tr#addr(ng-repeat='item in order')
+                  //- input(name='_csrf', type='hidden') 
+                  td
+                    input.form-control(ng-hide='editing', ng-click='editing = true', placeholder='567797', name='itemcode[0]', type='text', ng-model='item.item.id', ng-required='')
+                    .ng-hide(ng-show='editing')
+                      |                     
+                      input(type='text', ng-model = 'item.item.id' placeholder='id', ng-required='')                 
+                      //- label Date:
+                      //- |                     
+                      //- input(type='date', ng-model='bday.date', placeholder='Date', ng-required='')
+                      //- |                     
+                      br
+                      |                     
+                      button.btn(ng-click='editing = false', ng-click='add(food.G6C)') Save
+                  |     
+                  td
+                    input.form-control(placeholder='Cafe Latte', name='itemname[0]', type='text', value='{{item.item.detail}}')
+                  |            
+                  td
+                    input.form-control( placeholder='', name='category[0]', value='{{item.item.category}}')
+                  |            
+                  td
+                   .input-group
+                    span.input-group-addon $
+                    input.form-control(placeholder='$12.00', name='unitprice[0]', value='{{item.item.price}}')
+                  |            
+                  td
+                    .input-group
+                      span.input-group-addon(type='button', ng-disabled='', ng-click='subtractItem(item, $index)') -
+                      div.form-control(placeholder='1', name='quantity[0]') {{item.orderedItemCnt}}    
+                      span.input-group-addon(type='button', ng-click='addItem(item, $index)') +
+                      //-span.glyphicon.glyphicon-plus
+                  |            
+                  td
+                   .input-group
+                    span.input-group-addon $
+                    div.form-control.subtotal.text-right( placeholder='' ,name='subtotal_ln[0]', value='0.00') ${{item.totalPrice}}
+                  |           
+                  td.text-center
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                      a#delete_row_0.btn.btn-danger.fa.fa-trash-o.fa-lg(type='button', ng-click='deleteItem($index)')
+                  |    
+                  td.text-center
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;  
+                      a#add_row.btn.btn-success.btn-sm.pull-right(type='button', ng-click='Emptyrow()') +  
+                tr#summaryrow
+                  td.thick-line(colspan='5')
+                    strong.pull-right Subtotal
+                  | 
+                  td.thick-line.text-right
+                    div.input-group
+                      span.input-group-addon $
+                      div.form-control(name='beforetax', value='0.00') ${{getSum()}}
+                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                tr
+                  td.thick-line(colspan='5', value='0.00')
+                    strong.pull-right Tax (8.75%) 
+                  |    
+                  td.thick-line.text-right
+                    div.input-group
+                      span.input-group-addon $
+                      div.form-control(name='tax', value='0.00')
+                |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                tr
+                  td.thick-line(colspan='5')
+                    strong.pull-right Total
+                  |  
+                  td.thick-line.text-right
+                    div.input-group
+                      span.input-group-addon $
+                      div.form-control(name='aftertax', value='0.00') ${{getSum()}}
+                  |     &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+        .row.btn-toolbar.text-center
+                button#transaction_btn.btn.btn-primary.btn-lg(type='submit') Post Bill
+                button#new_receipt.btn.btn-danger.btn-lg(disabled) New Bill
+                button#print_receipt.btn.btn-info.btn-lg(disabled) Print receipt 
+  .add-row(data="'Apple'")

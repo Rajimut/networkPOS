@@ -1,0 +1,45 @@
+.container
+  h2.text-center Desktop View /views 1
+  | &#x9;
+  br
+  | &#x9;
+  label(for='name') Search   :
+  input#name(type='text', data-ng-model='name', name='name')
+  | &#x9;
+  h4
+  | &#x9;
+  style.
+    table, th , td  {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
+    }
+    table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+    }
+    table tr:nth-child(even) {
+    background-color: #ffffff;
+    }
+  | &#x9;
+  | &#x9;
+  table
+    thead
+      td Id Name
+      td First Name
+      td Last Name
+      td Age
+      td Actions
+    tbody(ng-repeat='x in names')
+      tr(ng-repeat="y in x.item_details | filter:name | orderBy:'itemname'")
+        td  {{ y.itemname }} 
+        | &#x9;&#x9;&#x9;&#x9;
+        td  {{ y.quantity }}
+        | &#x9;&#x9;&#x9;&#x9;
+        td  {{ y.unitprice.toFixed(3) }}
+        | &#x9;&#x9;&#x9;&#x9;
+        td  {{ y.subtotal_ln.toFixed(3) }}
+        | &#x9;&#x9;&#x9;&#x9;
+        td  {{ x.transaction_date.toString() }}
+        | &#x9;&#x9;&#x9;&#x9;
+        td
+          button.btn-success  Details 

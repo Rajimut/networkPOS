@@ -1,6 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
-var Buyer_db = mongoose.createConnection('localhost:27020/buyerDB'); //connect to buyer DB
+var Buyer_db = mongoose.createConnection('mongodb://localhost:27020/buyerDB'); //connect to buyer DB
 
 
 // PROMISE LIBRARY USED FOR ASYNC FLOW

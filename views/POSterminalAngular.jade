@@ -1,18 +1,32 @@
 extends layout
-include mixins/navbar-buyer.jade
+//-include mixins/navbar-buyer.jade
 block head
   script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js')
   script(src='https://code.angularjs.org/1.2.3/angular-route.min.js')
 
 block content
-  +buyer-nav(['active','','','','','',''])
 block holder
-  div(ng-app="HelloWorld")
+  div(data-ng-app="HelloWorld")
+    p AngularJs Sample: 
+    div.navbar-inner
+          //- a.brand(href='#/')
+          //-   img(src='Content/Images/people.png', alt='logo')
+          //-   |  Customer Manager
+          //- |                 
+        //- ul.nav.nav-pills(data-ng-controller='SimpleController')
+        //-   li(data-ng-class="{'active':getClass('/POSdesktop')}")
+        //-     a(href='#/POSdesktop') Customers
+        //-   |                     
+        //-   li(data-ng-class="{'active':getClass('/POSdesktop')}")
+        //-     a(href='#/POSdesktop') Orders         
+    div(data-ng-view="") 
     script(src='angular_app/app.js') 
     script(src='angular_app/controllers.js')
-    script(src='angular_app/mongoFactory.js') 
-    p AngularJs Sample:
-    div(data-ng-view="")           
+    script(src='angular_app/mongoFactory.js')
+    script(src='angular_app/directives/addRow.js') 
+    script(data-require='angular.js@1.2.13', data-semver='1.2.13', src='http://code.angularjs.org/1.2.13/angular.js')
+    script(data-require='angular.js@1.2.13', data-semver='1.2.13', src='http://code.angularjs.org/1.2.13/angular-animate.js')
+
 
   //-     HelloWorld = angular.module('HelloWorld', ['ngRoute']); 
   //-     HelloWorld.config(function($routeProvider) {
